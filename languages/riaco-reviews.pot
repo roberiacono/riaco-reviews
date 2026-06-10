@@ -1,0 +1,414 @@
+# Copyright (C) 2026 Roberto Iacono
+# This file is distributed under the GPL v2 or later.
+msgid ""
+msgstr ""
+"Project-Id-Version: RIACO Reviews 1.0.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/riaco-reviews\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2026-06-10T22:36:21+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.12.0\n"
+"X-Domain: riaco-reviews\n"
+
+#. Plugin Name of the plugin
+#: riaco-reviews.php
+msgid "RIACO Reviews"
+msgstr ""
+
+#. Description of the plugin
+#: riaco-reviews.php
+msgid "Collect, manage, and display customer reviews with Grid and Masonry layouts via blocks and shortcodes."
+msgstr ""
+
+#. Author of the plugin
+#: riaco-reviews.php
+msgid "Roberto Iacono"
+msgstr ""
+
+#. Author URI of the plugin
+#: riaco-reviews.php
+msgid "https://riacoplugins.com/"
+msgstr ""
+
+#: includes/Admin.php:29
+msgid "Manage Reviews"
+msgstr ""
+
+#: includes/Admin.php:40
+msgid "Review Details"
+msgstr ""
+
+#: includes/Admin.php:55
+msgid "Author Name"
+msgstr ""
+
+#: includes/Admin.php:60
+msgid "Avatar"
+msgstr ""
+
+#: includes/Admin.php:66
+#: includes/ReviewSource.php:88
+#: includes/ReviewSource.php:111
+msgid "Upload Image"
+msgstr ""
+
+#: includes/Admin.php:70
+#: includes/ReviewSource.php:91
+#: includes/ReviewSource.php:115
+msgid "Remove"
+msgstr ""
+
+#: includes/Admin.php:79
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:180
+msgid "Star Rating"
+msgstr ""
+
+#: includes/Admin.php:91
+#: includes/Admin.php:152
+msgid "Review Date"
+msgstr ""
+
+#: includes/Admin.php:96
+msgid "Source URL"
+msgstr ""
+
+#: includes/Admin.php:100
+msgid "Link to the original review."
+msgstr ""
+
+#: includes/Admin.php:147
+#: includes/PostType.php:20
+msgid "Review"
+msgstr ""
+
+#: includes/Admin.php:148
+msgid "Author"
+msgstr ""
+
+#: includes/Admin.php:149
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:132
+msgid "Rating"
+msgstr ""
+
+#: includes/Admin.php:150
+#: includes/ReviewSource.php:35
+msgid "Source"
+msgstr ""
+
+#: includes/Admin.php:151
+#: includes/ReviewTag.php:20
+msgid "Tag"
+msgstr ""
+
+#: includes/Admin.php:153
+msgid "Added"
+msgstr ""
+
+#. translators: 1: plugin name 2: opening <a> tag 3: closing </a> tag
+#: includes/Admin.php:239
+#, php-format
+msgid "If you like %1$s please leave us a %2$s★★★★★%3$s rating. A huge thanks in advance!"
+msgstr ""
+
+#: includes/PostType.php:19
+#: includes/PostType.php:29
+msgid "Reviews"
+msgstr ""
+
+#: includes/PostType.php:21
+msgid "Add Review"
+msgstr ""
+
+#: includes/PostType.php:22
+msgid "Add New Review"
+msgstr ""
+
+#: includes/PostType.php:23
+msgid "Edit Review"
+msgstr ""
+
+#: includes/PostType.php:24
+msgid "New Review"
+msgstr ""
+
+#: includes/PostType.php:25
+msgid "View Review"
+msgstr ""
+
+#: includes/PostType.php:26
+msgid "Search Reviews"
+msgstr ""
+
+#: includes/PostType.php:27
+#: templates/reviews.php:55
+msgid "No reviews found."
+msgstr ""
+
+#: includes/PostType.php:28
+msgid "No reviews found in trash."
+msgstr ""
+
+#: includes/ReviewSource.php:34
+#: includes/ReviewSource.php:40
+msgid "Sources"
+msgstr ""
+
+#: includes/ReviewSource.php:36
+msgid "Add New Source"
+msgstr ""
+
+#: includes/ReviewSource.php:37
+msgid "Edit Source"
+msgstr ""
+
+#: includes/ReviewSource.php:38
+msgid "Search Sources"
+msgstr ""
+
+#: includes/ReviewSource.php:39
+msgid "No sources found."
+msgstr ""
+
+#: includes/ReviewSource.php:65
+#: includes/ReviewTag.php:50
+msgid "— None —"
+msgstr ""
+
+#: includes/ReviewSource.php:75
+msgid "Manage Sources"
+msgstr ""
+
+#: includes/ReviewSource.php:84
+#: includes/ReviewSource.php:105
+msgid "Logo / Image"
+msgstr ""
+
+#: includes/ReviewSource.php:160
+msgid "Logo"
+msgstr ""
+
+#: includes/ReviewTag.php:19
+#: includes/ReviewTag.php:25
+msgid "Tags"
+msgstr ""
+
+#: includes/ReviewTag.php:21
+msgid "Add New Tag"
+msgstr ""
+
+#: includes/ReviewTag.php:22
+msgid "Edit Tag"
+msgstr ""
+
+#: includes/ReviewTag.php:23
+msgid "Search Tags"
+msgstr ""
+
+#: includes/ReviewTag.php:24
+msgid "No tags found."
+msgstr ""
+
+#: includes/ReviewTag.php:60
+msgid "Manage Tags"
+msgstr ""
+
+#. translators: %d: star rating number from 1 to 5
+#: templates/partials/card.php:70
+#: templates/partials/card.php:122
+#: templates/partials/card.php:200
+#, php-format
+msgid "%d out of 5 stars"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:44
+msgid "Display Settings"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:46
+msgid "Number of Reviews"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:53
+msgid "Layout"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:56
+msgid "Grid"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:57
+msgid "Masonry"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:62
+msgid "Card Style"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:65
+msgid "Default"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:66
+msgid "Modern"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:67
+msgid "Minimal"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:72
+msgid "Card Shadow"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:77
+msgid "Min Card Width (px)"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:86
+msgid "Field Visibility"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:88
+msgid "Show Title"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:93
+msgid "Show Star Rating"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:98
+msgid "Show Author Name"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:103
+msgid "Show Avatar"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:108
+msgid "Show Date"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:114
+msgid "Show Source Logo"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:120
+msgid "Show Tag"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:126
+msgid "Sort Order"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:128
+msgid "Order By"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:131
+msgid "Date"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:133
+msgid "Random"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:139
+msgid "Direction"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:142
+msgid "Newest First"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:143
+msgid "Oldest First"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:150
+msgid "Card Colours"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:153
+msgid "Card Background"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:162
+msgid "Card Text"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:171
+msgid "Card Border / Accent"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:189
+msgid "Tag Background"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:198
+msgid "Tag Text"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:207
+msgid "Typography"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:209
+msgid "Review Text Size (rem)"
+msgstr ""
+
+#: build/reviews-block/index.js:1
+#: src/reviews-block/edit.js:221
+msgid "Line Height"
+msgstr ""
+
+#: build/reviews-block/block.json
+#: src/reviews-block/block.json
+msgctxt "block title"
+msgid "RIACO Reviews"
+msgstr ""
+
+#: build/reviews-block/block.json
+#: src/reviews-block/block.json
+msgctxt "block description"
+msgid "Display a grid or masonry layout of customer reviews."
+msgstr ""
