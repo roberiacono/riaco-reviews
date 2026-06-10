@@ -33,12 +33,14 @@ class Renderer {
 
         // Sanitize display options
         $atts['count']  = max( 1, absint( $atts['count'] ) );
-        $atts['layout'] = in_array( $atts['layout'], [ 'grid', 'masonry' ], true )
-            ? $atts['layout'] : 'grid';
-        $atts['card_style'] = in_array( $atts['card_style'], [ 'default', 'modern' ], true )
-            ? $atts['card_style'] : 'default';
-        $atts['orderby'] = in_array( $atts['orderby'], [ 'date', 'rating', 'rand' ], true )
-            ? $atts['orderby'] : 'date';
+
+        $allowed_layouts     = apply_filters( 'riaco_reviews_layouts',         [ 'grid', 'masonry' ] );
+        $allowed_card_styles = apply_filters( 'riaco_reviews_card_styles',     [ 'default', 'modern' ] );
+        $allowed_orderby     = apply_filters( 'riaco_reviews_orderby_options', [ 'date', 'rating', 'rand' ] );
+
+        $atts['layout']     = in_array( $atts['layout'],     $allowed_layouts,     true ) ? $atts['layout']     : 'grid';
+        $atts['card_style'] = in_array( $atts['card_style'], $allowed_card_styles, true ) ? $atts['card_style'] : 'default';
+        $atts['orderby']    = in_array( $atts['orderby'],    $allowed_orderby,     true ) ? $atts['orderby']    : 'date';
         $atts['order'] = in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
             ? strtoupper( $atts['order'] ) : 'DESC';
 
@@ -56,6 +58,8 @@ class Renderer {
         $line_height = (float) $atts['line_height'];
         $atts['font_size']   = ( $font_size > 0 && $font_size <= 5 ) ? $font_size : '';
         $atts['line_height'] = ( $line_height > 0 && $line_height <= 5 ) ? $line_height : '';
+
+        $atts = apply_filters( 'riaco_reviews_atts', $atts );
 
         // Build CSS custom-property string for per-block colour/typography overrides
         $style_parts = [];
@@ -97,6 +101,8 @@ class Renderer {
         if ( $atts['orderby'] === 'rating' ) {
             $query_args['meta_key'] = '_riaco_review_rating';
         }
+
+        $query_args = apply_filters( 'riaco_reviews_query_args', $query_args, $atts );
 
         $reviews = new \WP_Query( $query_args );
 

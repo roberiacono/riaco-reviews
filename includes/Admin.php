@@ -101,6 +101,7 @@ class Admin implements ServiceInterface {
                 </td>
             </tr>
         </table>
+        <?php do_action( 'riaco_reviews_meta_box_after_fields', $post ); ?>
         <?php
     }
 
@@ -137,6 +138,7 @@ class Admin implements ServiceInterface {
             update_post_meta( $post_id, '_riaco_review_rating', $rating );
         }
 
+        do_action( 'riaco_reviews_save_meta', $post_id );
     }
 
     public function columns( array $columns ): array {

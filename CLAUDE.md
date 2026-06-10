@@ -35,6 +35,13 @@ After adding a new class in `includes/`, the PSR-4 autoloader picks it up automa
 
 The plugin initialises on `plugins_loaded` (not `init`), so all services are available when WordPress fires `init`.
 
+`get_service(string $key)` retrieves a registered service by key (e.g. `'postType'`, `'admin'`, `'blocks'`, `'shortcodes'`, `'reviewSource'`, `'reviewTag'`). Returns `null` if the key is not found.
+
+**Lifecycle actions fired by `Plugin::init()`** (in order):
+
+1. `riaco_reviews_init` — after `load_services()`, before `register()`. Use this to call `set_service()` so third-party services participate in the normal registration pass.
+2. `riaco_reviews_loaded` — after all services are registered. Use this for post-boot setup that doesn't require a registration slot.
+
 ### Rendering pipeline
 
 Both the block and the shortcode converge on `Renderer::render(array $atts): string`, which runs a `WP_Query` and includes the PHP templates via output buffering. The two entry points differ only in how they normalise their attribute keys:
@@ -57,6 +64,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `show_rating` / `showRating` | `true` | |
 | `show_source` / `showSource` | `true` | source logo in card header |
 | `show_tag` / `showTag` | `true` | neutral pill badge |
+| `show_shadow` / `showShadow` | `true` | drop shadow on cards |
 | `count` | `6` | |
 | `layout` | `'grid'` | `'grid'` or `'masonry'` — controls card *arrangement* |
 | `card_style` / `cardStyle` | `'default'` | `'default'` or `'modern'` — controls card *visual design* |
@@ -167,6 +175,52 @@ Frontend card styles use BEM with the `.riaco-reviews__` prefix.
 | `--riaco-font-size` | `0.9375rem` | review text size |
 | `--riaco-line-height` | `1.7` | review text line height |
 | `--riaco-card-min-width` | `280px` | grid column / masonry column width floor |
+
+## Developer hooks
+
+All hooks follow the `riaco_reviews_*` naming convention. Filters return the (possibly modified) first argument; actions receive context but return nothing.
+
+### Plugin lifecycle (`Plugin.php`)
+
+| Hook | Type | Args | Purpose |
+|---|---|---|---|
+| `riaco_reviews_init` | action | `$plugin` | Fires after `load_services()`, before `register()`. Add third-party services here. |
+| `riaco_reviews_loaded` | action | `$plugin` | Fires after all services are registered. |
+
+### Renderer (`Renderer.php`)
+
+| Hook | Type | Args | Purpose |
+|---|---|---|---|
+| `riaco_reviews_layouts` | filter | `string[]` | Extend the allowed `layout` values (default: `['grid','masonry']`). |
+| `riaco_reviews_card_styles` | filter | `string[]` | Extend the allowed `card_style` values (default: `['default','modern']`). |
+| `riaco_reviews_orderby_options` | filter | `string[]` | Extend the allowed `orderby` values (default: `['date','rating','rand']`). |
+| `riaco_reviews_atts` | filter | `$atts` | Override any sanitised display attribute before CSS vars are built. |
+| `riaco_reviews_query_args` | filter | `$query_args, $atts` | Modify the `WP_Query` args before the query runs (tax queries, `post__in`, etc.). |
+
+### Template loop (`templates/reviews.php`)
+
+| Hook | Type | Args | Purpose |
+|---|---|---|---|
+| `riaco_reviews_before_loop` | action | `$atts` | Output before the `.riaco-reviews` wrapper div. |
+| `riaco_reviews_after_loop` | action | `$atts` | Output after the wrapper div. |
+| `riaco_reviews_card_meta` | filter | `$meta, $post_id, $atts` | Add or modify per-review meta before the card template receives it. |
+| `riaco_reviews_card_template_path` | filter | `$path, $card_style, $post_id, $meta` | Return a custom template file path for a given card style. |
+| `riaco_reviews_before_card` | action | `$post_id, $meta, $atts` | Output before each `<article>`. |
+| `riaco_reviews_after_card` | action | `$post_id, $meta, $atts` | Output after each `</article>`. |
+| `riaco_reviews_no_reviews_html` | filter | `$html, $atts` | Replace the "No reviews found" paragraph HTML. |
+
+### Block renderer (`Blocks.php`)
+
+| Hook | Type | Args | Purpose |
+|---|---|---|---|
+| `riaco_reviews_block_render_atts` | filter | `$atts, $attributes` | Map additional block attributes (added via WP core's `register_block_type_args` + `editor.BlockEdit` JS filter) into the snake_case `$atts` array that reaches `Renderer::render()`. |
+
+### Admin meta box (`Admin.php`)
+
+| Hook | Type | Args | Purpose |
+|---|---|---|---|
+| `riaco_reviews_meta_box_after_fields` | action | `$post` | Append `<tr>` rows to the Review Details meta box table. |
+| `riaco_reviews_save_meta` | action | `$post_id` | Save additional review meta after the free plugin's own fields are saved. |
 
 ## Naming conventions
 

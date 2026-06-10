@@ -14,6 +14,7 @@ $container_class = 'riaco-reviews riaco-reviews--' . esc_attr( $layout );
 $inner_class     = 'riaco-reviews__' . esc_attr( $layout );
 $style_attr      = ! empty( $atts['custom_style'] ) ? ' style="' . esc_attr( $atts['custom_style'] ) . '"' : '';
 ?>
+<?php do_action( 'riaco_reviews_before_loop', $atts ); ?>
 <div class="<?php echo $container_class; ?>"<?php echo $style_attr; ?>>
     <div class="<?php echo $inner_class; ?>">
         <?php if ( $reviews->have_posts() ) : ?>
@@ -34,11 +35,25 @@ $style_attr      = ! empty( $atts['custom_style'] ) ? ' style="' . esc_attr( $at
                     'source_url'    => get_post_meta( $post_id, '_riaco_review_source_url',    true ),
                     'tag_name'      => $tag_term ? $tag_term->name : '',
                 ];
-                include RIACO_REVIEWS_DIR . 'templates/partials/card.php';
+                $meta = apply_filters( 'riaco_reviews_card_meta', $meta, $post_id, $atts );
+                do_action( 'riaco_reviews_before_card', $post_id, $meta, $atts );
+                $card_template = apply_filters(
+                    'riaco_reviews_card_template_path',
+                    RIACO_REVIEWS_DIR . 'templates/partials/card.php',
+                    $atts['card_style'],
+                    $post_id,
+                    $meta
+                );
+                include $card_template;
+                do_action( 'riaco_reviews_after_card', $post_id, $meta, $atts );
                 ?>
             <?php endwhile; ?>
         <?php else : ?>
-            <p class="riaco-reviews__empty"><?php esc_html_e( 'No reviews found.', 'riaco-reviews' ); ?></p>
+            <?php
+            $empty_html = '<p class="riaco-reviews__empty">' . esc_html__( 'No reviews found.', 'riaco-reviews' ) . '</p>';
+            echo wp_kses_post( apply_filters( 'riaco_reviews_no_reviews_html', $empty_html, $atts ) );
+            ?>
         <?php endif; ?>
     </div>
 </div>
+<?php do_action( 'riaco_reviews_after_loop', $atts ); ?>

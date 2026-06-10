@@ -64,6 +64,8 @@ class Blocks implements ServiceInterface {
             'tag_text_color'    => $attributes['tagTextColor']     ?? '',
         ];
 
+        $atts = apply_filters( 'riaco_reviews_block_render_atts', $atts, $attributes );
+
         return Renderer::render( $atts );
     }
 }

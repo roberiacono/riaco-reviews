@@ -31,6 +31,7 @@ class Plugin {
 
     public function init(): void {
         $this->load_services();
+        do_action( 'riaco_reviews_init', $this );
         $this->register();
         $this->loaded = true;
         do_action( 'riaco_reviews_loaded', $this );
@@ -47,6 +48,10 @@ class Plugin {
 
     public function set_service( string $key, $service ): void {
         $this->services[ $key ] = $service;
+    }
+
+    public function get_service( string $key ) {
+        return $this->services[ $key ] ?? null;
     }
 
     public function register(): void {
