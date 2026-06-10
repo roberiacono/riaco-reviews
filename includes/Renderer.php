@@ -10,6 +10,7 @@ class Renderer {
         $atts = wp_parse_args( $atts, [
             'count'            => 6,
             'layout'           => 'grid',
+            'card_style'       => 'default',
             'show_author_name' => true,
             'show_avatar'      => true,
             'show_date'        => false,
@@ -24,6 +25,8 @@ class Renderer {
         $atts['count']  = max( 1, absint( $atts['count'] ) );
         $atts['layout'] = in_array( $atts['layout'], [ 'grid', 'masonry' ], true )
             ? $atts['layout'] : 'grid';
+        $atts['card_style'] = in_array( $atts['card_style'], [ 'default', 'quote', 'minimal' ], true )
+            ? $atts['card_style'] : 'default';
         $atts['orderby'] = in_array( $atts['orderby'], [ 'date', 'rating', 'rand' ], true )
             ? $atts['orderby'] : 'date';
         $atts['order'] = in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )

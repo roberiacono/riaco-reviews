@@ -35,6 +35,7 @@ class Blocks implements ServiceInterface {
         $atts = [
             'count'            => $attributes['count']          ?? 6,
             'layout'           => $attributes['layout']         ?? 'grid',
+            'card_style'       => $attributes['cardStyle']      ?? 'default',
             'show_author_name' => $attributes['showAuthorName'] ?? true,
             'show_avatar'      => $attributes['showAvatar']     ?? true,
             'show_date'        => $attributes['showDate']        ?? false,

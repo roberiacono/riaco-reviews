@@ -25,6 +25,7 @@ class Shortcodes implements ServiceInterface {
         $atts = shortcode_atts( [
             'count'            => 6,
             'layout'           => 'grid',
+            'card_style'       => 'default',
             'show_author_name' => 1,
             'show_avatar'      => 1,
             'show_date'        => 0,
@@ -40,6 +41,7 @@ class Shortcodes implements ServiceInterface {
         return Renderer::render( [
             'count'            => absint( $atts['count'] ),
             'layout'           => sanitize_key( $atts['layout'] ),
+            'card_style'       => sanitize_key( $atts['card_style'] ),
             'show_author_name' => (bool) $atts['show_author_name'],
             'show_avatar'      => (bool) $atts['show_avatar'],
             'show_date'        => (bool) $atts['show_date'],

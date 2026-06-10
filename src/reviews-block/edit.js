@@ -12,6 +12,7 @@ export default function Edit( { attributes, setAttributes } ) {
     const {
         count,
         layout,
+        cardStyle,
         showAuthorName,
         showAvatar,
         showDate,
@@ -45,6 +46,16 @@ export default function Edit( { attributes, setAttributes } ) {
                             { label: __( 'Masonry', 'riaco-reviews' ), value: 'masonry' },
                         ] }
                         onChange={ ( value ) => setAttributes( { layout: value } ) }
+                    />
+                    <SelectControl
+                        label={ __( 'Card Style', 'riaco-reviews' ) }
+                        value={ cardStyle }
+                        options={ [
+                            { label: __( 'Default', 'riaco-reviews' ), value: 'default' },
+                            { label: __( 'Quote',   'riaco-reviews' ), value: 'quote'   },
+                            { label: __( 'Minimal', 'riaco-reviews' ), value: 'minimal' },
+                        ] }
+                        onChange={ ( value ) => setAttributes( { cardStyle: value } ) }
                     />
                 </PanelBody>
 
@@ -112,7 +123,7 @@ export default function Edit( { attributes, setAttributes } ) {
                     { __( 'RIACO Reviews', 'riaco-reviews' ) }
                 </p>
                 <p className="riaco-reviews-editor-preview__desc">
-                    { count } { __( 'reviews', 'riaco-reviews' ) } &mdash; { layout } { __( 'layout', 'riaco-reviews' ) }
+                    { count } { __( 'reviews', 'riaco-reviews' ) } &mdash; { layout } { __( 'layout', 'riaco-reviews' ) } &mdash; { cardStyle } { __( 'style', 'riaco-reviews' ) }
                 </p>
                 <p className="riaco-reviews-editor-preview__hint">
                     { __( 'Configure display options in the sidebar.', 'riaco-reviews' ) }

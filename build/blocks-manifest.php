@@ -25,6 +25,10 @@ return array(
 				'type' => 'string',
 				'default' => 'grid'
 			),
+			'cardStyle' => array(
+				'type' => 'string',
+				'default' => 'default'
+			),
 			'showAuthorName' => array(
 				'type' => 'boolean',
 				'default' => true

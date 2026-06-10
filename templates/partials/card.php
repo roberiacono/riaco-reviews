@@ -16,7 +16,7 @@ $has_avatar  = $atts['show_avatar'] && ! empty( $meta['author_avatar'] );
 $has_source  = $atts['show_source'] && ! empty( $meta['source_image'] );
 $has_footer  = $atts['show_author_name'] || $atts['show_date'] || $atts['show_avatar'];
 ?>
-<article class="riaco-reviews__card">
+<article class="riaco-reviews__card riaco-reviews__card--<?php echo esc_attr( $atts['card_style'] ); ?>">
 
     <?php if ( $has_source ) : ?>
         <div class="riaco-reviews__source">
@@ -42,7 +42,9 @@ $has_footer  = $atts['show_author_name'] || $atts['show_date'] || $atts['show_av
         </div>
     <?php endif; ?>
 
-    <div class="riaco-reviews__quote-mark" aria-hidden="true">&ldquo;</div>
+    <?php if ( $atts['card_style'] !== 'minimal' ) : ?>
+        <div class="riaco-reviews__quote-mark" aria-hidden="true">&ldquo;</div>
+    <?php endif; ?>
 
     <div class="riaco-reviews__body">
         <p class="riaco-reviews__text"><?php echo wp_kses_post( $review_text ); ?></p>

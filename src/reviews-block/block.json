@@ -20,6 +20,10 @@
             "type": "string",
             "default": "grid"
         },
+        "cardStyle": {
+            "type": "string",
+            "default": "default"
+        },
         "showAuthorName": {
             "type": "boolean",
             "default": true

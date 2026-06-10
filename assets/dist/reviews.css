@@ -215,6 +215,47 @@
     font-style: italic;
 }
 
+/* ---- Card Style: Quote --------------------------------- */
+.riaco-reviews__card--quote {
+    box-shadow: none;
+    border: 1px solid #ede8e2;
+    text-align: center;
+}
+
+.riaco-reviews__card--quote .riaco-reviews__quote-mark {
+    font-size: 4rem;
+    color: #d4b896;
+    line-height: 1;
+    margin-bottom: 0.25rem;
+}
+
+.riaco-reviews__card--quote .riaco-reviews__rating {
+    justify-content: center;
+}
+
+.riaco-reviews__card--quote .riaco-reviews__footer {
+    justify-content: center;
+}
+
+.riaco-reviews__card--quote .riaco-reviews__card-tag {
+    display: block;
+    text-align: center;
+}
+
+/* ---- Card Style: Minimal ------------------------------- */
+.riaco-reviews__card--minimal {
+    box-shadow: none;
+    border-radius: 0;
+    border-left: 4px solid #f59e0b;
+    padding-left: 1.5rem;
+    background: transparent;
+}
+
+.riaco-reviews__card--minimal .riaco-reviews__footer {
+    border-top: none;
+    padding-top: 0.5rem;
+}
+
 /* ---- Tag ----------------------------------------------- */
 .riaco-reviews__card-tag {
     display: inline-block;
