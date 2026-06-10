@@ -3,7 +3,10 @@
  * Plugin Name: RIACO Reviews
  * Description: Collect, manage, and display customer reviews with Grid and Masonry layouts via blocks and shortcodes.
  * Version: 1.0.0
+ * Requires at least: 6.0
+ * Requires PHP: 7.4
  * Author: Roberto Iacono
+ * Author URI: https://riacoplugins.com/
  * Text Domain: riaco-reviews
  * Domain Path: /languages
  * License: GPL v2 or later

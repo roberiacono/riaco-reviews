@@ -4,6 +4,8 @@
  * Removes all riaco_review posts and plugin options.
  */
 
+if ( ! defined( 'ABSPATH' ) ) exit;
+
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit;
 
 // Delete all riaco_review posts and their meta

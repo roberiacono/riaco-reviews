@@ -63,6 +63,7 @@ if ( 'modern' === $atts['card_style'] ) :
         <?php endif; ?>
 
         <?php if ( $atts['show_rating'] && $rating > 0 ) : ?>
+            <?php /* translators: %d: star rating number from 1 to 5 */ ?>
             <div class="riaco-reviews__rating-compact" aria-label="<?php echo esc_attr( sprintf( __( '%d out of 5 stars', 'riaco-reviews' ), $rating ) ); ?>">
                 <span class="riaco-reviews__star riaco-reviews__star--filled" aria-hidden="true">★</span>
                 <span class="riaco-reviews__rating-value"><?php echo (int) $rating; ?>.0</span>
@@ -135,6 +136,7 @@ if ( 'modern' === $atts['card_style'] ) :
     <?php endif; ?>
 
     <?php if ( $atts['show_rating'] && $rating > 0 ) : ?>
+        <?php /* translators: %d: star rating number from 1 to 5 */ ?>
         <div class="riaco-reviews__rating" aria-label="<?php echo esc_attr( sprintf( __( '%d out of 5 stars', 'riaco-reviews' ), $rating ) ); ?>">
             <?php for ( $i = 1; $i <= 5; $i++ ) : ?>
                 <span class="riaco-reviews__star<?php echo ( $i <= $rating ) ? ' riaco-reviews__star--filled' : ''; ?>" aria-hidden="true">★</span>
