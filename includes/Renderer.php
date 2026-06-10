@@ -8,33 +8,81 @@ class Renderer {
 
     public static function render( array $atts ): string {
         $atts = wp_parse_args( $atts, [
-            'count'            => 6,
-            'layout'           => 'grid',
-            'card_style'       => 'default',
-            'show_author_name' => true,
-            'show_avatar'      => true,
-            'show_date'        => false,
-            'show_rating'      => true,
-            'show_source'      => true,
-            'show_tag'         => true,
-            'orderby'          => 'date',
-            'order'            => 'DESC',
+            'count'             => 6,
+            'layout'            => 'grid',
+            'card_style'        => 'default',
+            'show_author_name'  => true,
+            'show_avatar'       => true,
+            'show_date'         => false,
+            'show_rating'       => true,
+            'show_source'       => true,
+            'show_tag'          => true,
+            'show_title'        => true,
+            'min_width'         => 280,
+            'orderby'           => 'date',
+            'order'             => 'DESC',
+            'card_bg'           => '',
+            'card_text_color'   => '',
+            'card_border_color' => '',
+            'star_color'        => '',
+            'font_size'         => '',
+            'line_height'       => '',
+            'tag_bg'            => '',
+            'tag_text_color'    => '',
         ] );
 
-        // Sanitize
+        // Sanitize display options
         $atts['count']  = max( 1, absint( $atts['count'] ) );
         $atts['layout'] = in_array( $atts['layout'], [ 'grid', 'masonry' ], true )
             ? $atts['layout'] : 'grid';
-        $atts['card_style'] = in_array( $atts['card_style'], [ 'default', 'quote', 'minimal' ], true )
+        $atts['card_style'] = in_array( $atts['card_style'], [ 'default', 'modern' ], true )
             ? $atts['card_style'] : 'default';
         $atts['orderby'] = in_array( $atts['orderby'], [ 'date', 'rating', 'rand' ], true )
             ? $atts['orderby'] : 'date';
         $atts['order'] = in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
             ? strtoupper( $atts['order'] ) : 'DESC';
 
-        foreach ( [ 'show_author_name', 'show_avatar', 'show_date', 'show_rating', 'show_source', 'show_tag' ] as $key ) {
+        foreach ( [ 'show_author_name', 'show_avatar', 'show_date', 'show_rating', 'show_source', 'show_tag', 'show_title' ] as $key ) {
             $atts[ $key ] = filter_var( $atts[ $key ], FILTER_VALIDATE_BOOLEAN );
         }
+
+        // Sanitize colours (hex only)
+        foreach ( [ 'card_bg', 'card_text_color', 'card_border_color', 'star_color', 'tag_bg', 'tag_text_color' ] as $key ) {
+            $atts[ $key ] = ! empty( $atts[ $key ] ) ? ( sanitize_hex_color( $atts[ $key ] ) ?? '' ) : '';
+        }
+
+        // Sanitize typography (positive floats within reasonable bounds)
+        $font_size   = (float) $atts['font_size'];
+        $line_height = (float) $atts['line_height'];
+        $atts['font_size']   = ( $font_size > 0 && $font_size <= 5 ) ? $font_size : '';
+        $atts['line_height'] = ( $line_height > 0 && $line_height <= 5 ) ? $line_height : '';
+
+        // Build CSS custom-property string for per-block colour/typography overrides
+        $style_parts = [];
+        $color_vars  = [
+            'card_bg'           => '--riaco-card-bg',
+            'card_text_color'   => '--riaco-card-text',
+            'card_border_color' => '--riaco-card-border',
+            'star_color'        => '--riaco-star-color',
+            'tag_bg'            => '--riaco-tag-bg',
+            'tag_text_color'    => '--riaco-tag-text',
+        ];
+        foreach ( $color_vars as $att_key => $css_var ) {
+            if ( ! empty( $atts[ $att_key ] ) ) {
+                $style_parts[] = $css_var . ':' . $atts[ $att_key ];
+            }
+        }
+        if ( '' !== $atts['font_size'] ) {
+            $style_parts[] = '--riaco-font-size:' . $atts['font_size'] . 'rem';
+        }
+        if ( '' !== $atts['line_height'] ) {
+            $style_parts[] = '--riaco-line-height:' . $atts['line_height'];
+        }
+        $min_width = absint( $atts['min_width'] );
+        if ( $min_width > 0 && $min_width !== 280 ) {
+            $style_parts[] = '--riaco-card-min-width:' . $min_width . 'px';
+        }
+        $atts['custom_style'] = $style_parts ? implode( ';', $style_parts ) : '';
 
         // Build query
         $query_args = [

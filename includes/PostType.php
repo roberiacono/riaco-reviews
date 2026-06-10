@@ -33,7 +33,7 @@ class PostType implements ServiceInterface {
             'show_in_menu'        => true,
             'show_in_rest'        => false,
             'capability_type'     => 'post',
-            'supports'            => [ 'title', 'editor', 'custom-fields' ],
+            'supports'            => [ 'title', 'editor' ],
             'has_archive'         => false,
             'exclude_from_search' => true,
             'menu_icon'           => 'dashicons-star-filled',

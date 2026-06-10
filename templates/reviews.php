@@ -12,8 +12,9 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 $layout          = $atts['layout'];
 $container_class = 'riaco-reviews riaco-reviews--' . esc_attr( $layout );
 $inner_class     = 'riaco-reviews__' . esc_attr( $layout );
+$style_attr      = ! empty( $atts['custom_style'] ) ? ' style="' . esc_attr( $atts['custom_style'] ) . '"' : '';
 ?>
-<div class="<?php echo $container_class; ?>">
+<div class="<?php echo $container_class; ?>"<?php echo $style_attr; ?>>
     <div class="<?php echo $inner_class; ?>">
         <?php if ( $reviews->have_posts() ) : ?>
             <?php while ( $reviews->have_posts() ) : $reviews->the_post(); ?>

@@ -48,6 +48,14 @@
       "type": "boolean",
       "default": true
     },
+    "showTitle": {
+      "type": "boolean",
+      "default": true
+    },
+    "minWidth": {
+      "type": "integer",
+      "default": 280
+    },
     "orderby": {
       "type": "string",
       "default": "date"
@@ -55,6 +63,38 @@
     "order": {
       "type": "string",
       "default": "DESC"
+    },
+    "cardBg": {
+      "type": "string",
+      "default": ""
+    },
+    "cardTextColor": {
+      "type": "string",
+      "default": ""
+    },
+    "cardBorderColor": {
+      "type": "string",
+      "default": ""
+    },
+    "starColor": {
+      "type": "string",
+      "default": ""
+    },
+    "fontSize": {
+      "type": "string",
+      "default": ""
+    },
+    "lineHeight": {
+      "type": "string",
+      "default": ""
+    },
+    "tagBg": {
+      "type": "string",
+      "default": ""
+    },
+    "tagTextColor": {
+      "type": "string",
+      "default": ""
     }
   },
   "textdomain": "riaco-reviews",

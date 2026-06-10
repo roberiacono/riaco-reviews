@@ -50,24 +50,42 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 
 | Attribute (`snake_case` / `camelCase`) | Default | Notes |
 |---|---|---|
+| `show_title` / `showTitle` | `true` | review post title |
 | `show_author_name` / `showAuthorName` | `true` | |
 | `show_avatar` / `showAvatar` | `true` | falls back to initials if no URL |
 | `show_date` / `showDate` | `false` | |
 | `show_rating` / `showRating` | `true` | |
-| `show_source` / `showSource` | `true` | source logo, top-right of card |
-| `show_tag` / `showTag` | `true` | cream pill badge |
+| `show_source` / `showSource` | `true` | source logo in card header |
+| `show_tag` / `showTag` | `true` | neutral pill badge |
 | `count` | `6` | |
 | `layout` | `'grid'` | `'grid'` or `'masonry'` — controls card *arrangement* |
-| `card_style` / `cardStyle` | `'default'` | `'default'`, `'quote'`, or `'minimal'` — controls card *visual design* |
+| `card_style` / `cardStyle` | `'default'` | `'default'` or `'modern'` — controls card *visual design* |
+| `min_width` / `minWidth` | `280` | minimum card width in px; drives the CSS `--riaco-card-min-width` variable |
 | `orderby` | `'date'` | `'date'`, `'rating'`, or `'rand'` |
 | `order` | `'DESC'` | `'ASC'` or `'DESC'` |
+
+**Colour / typography attributes** (block only, empty = use CSS default):
+
+| Attribute (`snake_case` / `camelCase`) | CSS variable injected |
+|---|---|
+| `card_bg` / `cardBg` | `--riaco-card-bg` |
+| `card_text_color` / `cardTextColor` | `--riaco-card-text` |
+| `card_border_color` / `cardBorderColor` | `--riaco-card-border` |
+| `star_color` / `starColor` | `--riaco-star-color` |
+| `tag_bg` / `tagBg` | `--riaco-tag-bg` |
+| `tag_text_color` / `tagTextColor` | `--riaco-tag-text` |
+| `font_size` / `fontSize` | `--riaco-font-size` (rem) |
+| `line_height` / `lineHeight` | `--riaco-line-height` |
+
+`Renderer::render()` sanitizes these values (hex colours via `sanitize_hex_color()`, typography as bounded floats, `min_width` as a positive integer) and injects them as a `style="…"` attribute on the `.riaco-reviews` wrapper. Non-default `min_width` is also injected as `--riaco-card-min-width`.
 
 ### Gutenberg block
 
 - Source: `src/reviews-block/` — `index.js`, `edit.js`, `editor.scss`, `style.scss`, `block.json`
 - Build output: `build/reviews-block/` (committed? no — regenerate with `npm run build`)
 - The block uses **server-side rendering**: `save()` returns `null`; `Blocks::render()` is the PHP render callback registered in `register_block_type()`.
-- `style.scss` is intentionally empty — frontend styles are loaded separately from `assets/dist/reviews.css` by `Blocks::enqueue_frontend_assets()` (only when the block is present on the page).
+- The editor preview uses `ServerSideRender` — the inspector sidebar has panels for Display Settings, Field Visibility, Sort Order, Card Colours, and Typography.
+- `style.scss` is intentionally empty — frontend styles are loaded separately from `assets/dist/reviews.css` via `wp_enqueue_block_style()` in `Blocks::register_block()`. This hook loads the CSS both on the frontend (when the block is present) and inside the editor canvas iframe, which is required for the `ServerSideRender` preview to be styled correctly.
 - `block.json` `style` field points to `style-index.css` (empty build artifact) so WordPress does not double-load styles.
 
 ### Admin JS
@@ -81,6 +99,8 @@ Each is a self-contained IIFE using `wp.media`. Enqueued by `Admin::enqueue_asse
 ### CPT & meta
 
 Post type: `riaco_review`. Review body = `post_content`; headline = `post_title`.
+
+`public => false`, `show_in_rest => false`, `has_archive => false`, `exclude_from_search => true`. The CPT admin screen supports `title` and `editor` only (no Custom Fields meta box).
 
 All review data is stored as `wp_postmeta` with underscore-prefixed keys:
 
@@ -96,23 +116,57 @@ All review data is stored as `wp_postmeta` with underscore-prefixed keys:
 
 Both taxonomies are flat (non-hierarchical), registered on `riaco_review`, with a custom `meta_box_cb` that renders a single-select dropdown in the review editor.
 
-`riaco_review_source` — source/platform (e.g. "WordPress.org", "G2"). Term meta `_riaco_source_image` stores the logo URL (supports SVG — unlocked for `manage_options` users via `upload_mimes` + `wp_check_filetype_and_ext` filters in `ReviewSource.php`). Managed in **Reviews → Sources**. The logo is displayed in the top-right corner of each frontend card (`.riaco-reviews__source`, `position: absolute`), optionally linked to `_riaco_review_source_url`.
+`riaco_review_source` — source/platform (e.g. "WordPress.org", "G2"). Term meta `_riaco_source_image` stores the logo URL (supports SVG — unlocked for `manage_options` users via `upload_mimes` + `wp_check_filetype_and_ext` filters in `ReviewSource.php`). Managed in **Reviews → Sources**. The logo is displayed in the card header alongside the review title (`.riaco-reviews__source`, inside a flex row), optionally linked to `_riaco_review_source_url`.
 
-`riaco_review_tag` — the product or subject the review refers to. No extra term meta — just the term name. Managed in **Reviews → Tags**. Implemented in `ReviewTag.php`. Displayed on the frontend card as a cream pill badge (`.riaco-reviews__card-tag`); toggled via `show_tag` / `showTag`.
+`riaco_review_tag` — the product or subject the review refers to. No extra term meta — just the term name. Managed in **Reviews → Tags**. Implemented in `ReviewTag.php`. Displayed on the frontend card as a neutral pill badge (`.riaco-reviews__card-tag`, shadcn-inspired: `border-radius: 9999px`, zinc-100 background, `font-weight: 500`, no uppercase); toggled via `show_tag` / `showTag`.
 
 ### CSS
 
-Frontend card styles use BEM with the `.riaco-reviews__` prefix. Layout modifier classes are `.riaco-reviews--grid` and `.riaco-reviews--masonry`. Grid uses CSS Grid; masonry uses CSS `columns` with `break-inside: avoid` on cards. The card has `position: relative` — the source logo uses `position: absolute; top: 1.25rem; right: 1.25rem` to sit in the top-right corner. Colours: amber stars `#f59e0b`, cream quote mark `#f5ece0`, footer rule `#f0ebe3`, tag badge background `#f5ece0`.
+Frontend card styles use BEM with the `.riaco-reviews__` prefix.
 
-Card style modifier classes sit on `<article class="riaco-reviews__card riaco-reviews__card--{style}">` and override base card defaults:
+**Layouts:**
+
+- **Grid** — `grid-template-columns: repeat(auto-fill, minmax(var(--riaco-card-min-width, 280px), 1fr))`. No fixed breakpoints; column count adjusts automatically to the container width and the configured min card width.
+- **Masonry** — `column-width: var(--riaco-card-min-width, 280px)` with `break-inside: avoid` on cards. Same adaptive behaviour as grid.
+
+**Card DOM order (both styles):**
+
+`default`:
+1. `.riaco-reviews__header` — flex row: `<h3 class="riaco-reviews__title">` (if `show_title`) + `.riaco-reviews__source` (logo, if `show_source`)
+2. `.riaco-reviews__rating` — five `★` spans
+3. `.riaco-reviews__card-tag` — tag badge
+4. `.riaco-reviews__body` — review text
+5. `<footer class="riaco-reviews__footer">` — avatar + author name + date
+
+`modern`:
+1. `<h3 class="riaco-reviews__title--modern">` (if `show_title`)
+2. `.riaco-reviews__modern-header` — flex row: avatar + `.riaco-reviews__author` (name + date) + `.riaco-reviews__rating-compact` (★ + numeric value)
+3. `.riaco-reviews__body` — review text
+4. `.riaco-reviews__modern-footer` — flex row: tag badge (left) + source link/logo (right)
+
+**Card style modifier classes** sit on `<article class="riaco-reviews__card riaco-reviews__card--{style}">`:
 
 | Class | Visual treatment |
 |---|---|
-| `.riaco-reviews__card--default` | White card, drop shadow, cream quote mark top-left (base styles, no overrides needed) |
-| `.riaco-reviews__card--quote` | No shadow, subtle border (`#ede8e2`), centered text, larger quote mark (`#d4b896`), centered footer |
-| `.riaco-reviews__card--minimal` | Transparent background, no shadow, no border-radius, 4px amber left border, no quote mark |
+| `.riaco-reviews__card--default` | White card, drop shadow, 12px border-radius; header flex row for title + source logo |
+| `.riaco-reviews__card--modern` | Same base card; top row collapses avatar + author + compact rating; footer splits tag and source link |
 
 `layout` and `card_style` are orthogonal — any combination is valid.
+
+**CSS custom properties** (with fallback defaults):
+
+| Property | Default | Used on |
+|---|---|---|
+| `--riaco-card-bg` | `#ffffff` | card background |
+| `--riaco-card-text` | `#444444` | review text colour |
+| `--riaco-card-border` | `transparent` | card border + minimal accent |
+| `--riaco-star-color` | `#f59e0b` | filled stars |
+| `--riaco-tag-bg` | `#f4f4f5` | tag badge background |
+| `--riaco-tag-text` | `#18181b` | tag badge text |
+| `--riaco-tag-border` | `#e4e4e7` | tag badge border |
+| `--riaco-font-size` | `0.9375rem` | review text size |
+| `--riaco-line-height` | `1.7` | review text line height |
+| `--riaco-card-min-width` | `280px` | grid column / masonry column width floor |
 
 ## Naming conventions
 

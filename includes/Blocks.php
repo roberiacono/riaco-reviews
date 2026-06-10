@@ -18,8 +18,7 @@ class Blocks implements ServiceInterface {
     }
 
     public function register(): void {
-        add_action( 'init',                 [ $this, 'register_block' ] );
-        add_action( 'enqueue_block_assets', [ $this, 'enqueue_frontend_assets' ] );
+        add_action( 'init', [ $this, 'register_block' ] );
     }
 
     public function register_block(): void {
@@ -29,35 +28,42 @@ class Blocks implements ServiceInterface {
         register_block_type( $build_dir, [
             'render_callback' => [ $this, 'render' ],
         ] );
+
+        // Loads reviews.css on the frontend (only when block is present) AND inside
+        // the editor canvas iframe — the correct hook for ServerSideRender previews.
+        wp_enqueue_block_style( 'riaco-reviews/reviews-block', [
+            'handle' => 'riaco-reviews',
+            'src'    => plugin_dir_url( $this->file ) . 'assets/dist/reviews.css',
+            'ver'    => $this->version,
+            'path'   => RIACO_REVIEWS_DIR . 'assets/dist/reviews.css',
+        ] );
     }
 
     public function render( array $attributes ): string {
         $atts = [
-            'count'            => $attributes['count']          ?? 6,
-            'layout'           => $attributes['layout']         ?? 'grid',
-            'card_style'       => $attributes['cardStyle']      ?? 'default',
-            'show_author_name' => $attributes['showAuthorName'] ?? true,
-            'show_avatar'      => $attributes['showAvatar']     ?? true,
-            'show_date'        => $attributes['showDate']        ?? false,
-            'show_rating'      => $attributes['showRating']     ?? true,
-            'show_source'      => $attributes['showSource']     ?? true,
-            'show_tag'         => $attributes['showTag']         ?? true,
-            'orderby'          => $attributes['orderby']        ?? 'date',
-            'order'            => $attributes['order']          ?? 'DESC',
+            'count'             => $attributes['count']            ?? 6,
+            'layout'            => $attributes['layout']           ?? 'grid',
+            'card_style'        => $attributes['cardStyle']        ?? 'default',
+            'show_author_name'  => $attributes['showAuthorName']   ?? true,
+            'show_avatar'       => $attributes['showAvatar']       ?? true,
+            'show_date'         => $attributes['showDate']         ?? false,
+            'show_rating'       => $attributes['showRating']       ?? true,
+            'show_source'       => $attributes['showSource']       ?? true,
+            'show_tag'          => $attributes['showTag']          ?? true,
+            'show_title'        => $attributes['showTitle']        ?? true,
+            'min_width'         => $attributes['minWidth']         ?? 280,
+            'orderby'           => $attributes['orderby']          ?? 'date',
+            'order'             => $attributes['order']            ?? 'DESC',
+            'card_bg'           => $attributes['cardBg']           ?? '',
+            'card_text_color'   => $attributes['cardTextColor']    ?? '',
+            'card_border_color' => $attributes['cardBorderColor']  ?? '',
+            'star_color'        => $attributes['starColor']        ?? '',
+            'font_size'         => $attributes['fontSize']         ?? '',
+            'line_height'       => $attributes['lineHeight']       ?? '',
+            'tag_bg'            => $attributes['tagBg']            ?? '',
+            'tag_text_color'    => $attributes['tagTextColor']     ?? '',
         ];
 
         return Renderer::render( $atts );
-    }
-
-    public function enqueue_frontend_assets(): void {
-        if ( is_admin() ) return;
-        if ( ! has_block( 'riaco-reviews/reviews-block' ) ) return;
-
-        wp_enqueue_style(
-            'riaco-reviews',
-            plugin_dir_url( $this->file ) . 'assets/dist/reviews.css',
-            [],
-            $this->version
-        );
     }
 }

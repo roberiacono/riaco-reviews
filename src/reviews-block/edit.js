@@ -1,9 +1,11 @@
-import { useBlockProps, InspectorControls } from '@wordpress/block-editor';
+import { useBlockProps, InspectorControls, ColorPalette } from '@wordpress/block-editor';
+import ServerSideRender from '@wordpress/server-side-render';
 import {
     PanelBody,
     RangeControl,
     SelectControl,
     ToggleControl,
+    BaseControl,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import './editor.scss';
@@ -19,13 +21,21 @@ export default function Edit( { attributes, setAttributes } ) {
         showRating,
         showSource,
         showTag,
+        showTitle,
+        minWidth,
         orderby,
         order,
+        cardBg,
+        cardTextColor,
+        cardBorderColor,
+        starColor,
+        fontSize,
+        lineHeight,
+        tagBg,
+        tagTextColor,
     } = attributes;
 
-    const blockProps = useBlockProps( {
-        className: 'riaco-reviews-editor-preview',
-    } );
+    const blockProps = useBlockProps( { className: 'riaco-reviews-ssr-wrap' } );
 
     return (
         <>
@@ -52,14 +62,26 @@ export default function Edit( { attributes, setAttributes } ) {
                         value={ cardStyle }
                         options={ [
                             { label: __( 'Default', 'riaco-reviews' ), value: 'default' },
-                            { label: __( 'Quote',   'riaco-reviews' ), value: 'quote'   },
-                            { label: __( 'Minimal', 'riaco-reviews' ), value: 'minimal' },
+                            { label: __( 'Modern',  'riaco-reviews' ), value: 'modern'  },
                         ] }
                         onChange={ ( value ) => setAttributes( { cardStyle: value } ) }
+                    />
+                    <RangeControl
+                        label={ __( 'Min Card Width (px)', 'riaco-reviews' ) }
+                        value={ minWidth }
+                        onChange={ ( value ) => setAttributes( { minWidth: value } ) }
+                        min={ 180 }
+                        max={ 600 }
+                        step={ 10 }
                     />
                 </PanelBody>
 
                 <PanelBody title={ __( 'Field Visibility', 'riaco-reviews' ) } initialOpen={ true }>
+                    <ToggleControl
+                        label={ __( 'Show Title', 'riaco-reviews' ) }
+                        checked={ showTitle }
+                        onChange={ ( value ) => setAttributes( { showTitle: value } ) }
+                    />
                     <ToggleControl
                         label={ __( 'Show Star Rating', 'riaco-reviews' ) }
                         checked={ showRating }
@@ -115,19 +137,97 @@ export default function Edit( { attributes, setAttributes } ) {
                         />
                     ) }
                 </PanelBody>
+
+                <PanelBody title={ __( 'Card Colours', 'riaco-reviews' ) } initialOpen={ false }>
+                    <BaseControl
+                        __nextHasNoMarginBottom
+                        label={ __( 'Card Background', 'riaco-reviews' ) }
+                    >
+                        <ColorPalette
+                            value={ cardBg }
+                            onChange={ ( val ) => setAttributes( { cardBg: val ?? '' } ) }
+                        />
+                    </BaseControl>
+                    <BaseControl
+                        __nextHasNoMarginBottom
+                        label={ __( 'Card Text', 'riaco-reviews' ) }
+                    >
+                        <ColorPalette
+                            value={ cardTextColor }
+                            onChange={ ( val ) => setAttributes( { cardTextColor: val ?? '' } ) }
+                        />
+                    </BaseControl>
+                    <BaseControl
+                        __nextHasNoMarginBottom
+                        label={ __( 'Card Border / Accent', 'riaco-reviews' ) }
+                    >
+                        <ColorPalette
+                            value={ cardBorderColor }
+                            onChange={ ( val ) => setAttributes( { cardBorderColor: val ?? '' } ) }
+                        />
+                    </BaseControl>
+                    <BaseControl
+                        __nextHasNoMarginBottom
+                        label={ __( 'Star Rating', 'riaco-reviews' ) }
+                    >
+                        <ColorPalette
+                            value={ starColor }
+                            onChange={ ( val ) => setAttributes( { starColor: val ?? '' } ) }
+                        />
+                    </BaseControl>
+                    <BaseControl
+                        __nextHasNoMarginBottom
+                        label={ __( 'Tag Background', 'riaco-reviews' ) }
+                    >
+                        <ColorPalette
+                            value={ tagBg }
+                            onChange={ ( val ) => setAttributes( { tagBg: val ?? '' } ) }
+                        />
+                    </BaseControl>
+                    <BaseControl
+                        __nextHasNoMarginBottom
+                        label={ __( 'Tag Text', 'riaco-reviews' ) }
+                    >
+                        <ColorPalette
+                            value={ tagTextColor }
+                            onChange={ ( val ) => setAttributes( { tagTextColor: val ?? '' } ) }
+                        />
+                    </BaseControl>
+                </PanelBody>
+
+                <PanelBody title={ __( 'Typography', 'riaco-reviews' ) } initialOpen={ false }>
+                    <RangeControl
+                        label={ __( 'Review Text Size (rem)', 'riaco-reviews' ) }
+                        value={ fontSize ? parseFloat( fontSize ) : 0.9375 }
+                        onChange={ ( val ) => setAttributes( {
+                            fontSize: ( val != null && val !== 0.9375 ) ? String( val ) : '',
+                        } ) }
+                        min={ 0.75 }
+                        max={ 1.5 }
+                        step={ 0.0625 }
+                        allowReset
+                        resetFallbackValue={ 0.9375 }
+                    />
+                    <RangeControl
+                        label={ __( 'Line Height', 'riaco-reviews' ) }
+                        value={ lineHeight ? parseFloat( lineHeight ) : 1.7 }
+                        onChange={ ( val ) => setAttributes( {
+                            lineHeight: ( val != null && val !== 1.7 ) ? String( val ) : '',
+                        } ) }
+                        min={ 1.2 }
+                        max={ 2.5 }
+                        step={ 0.1 }
+                        allowReset
+                        resetFallbackValue={ 1.7 }
+                    />
+                </PanelBody>
             </InspectorControls>
 
             <div { ...blockProps }>
-                <span className="riaco-reviews-editor-preview__icon dashicons dashicons-star-filled"></span>
-                <p className="riaco-reviews-editor-preview__label">
-                    { __( 'RIACO Reviews', 'riaco-reviews' ) }
-                </p>
-                <p className="riaco-reviews-editor-preview__desc">
-                    { count } { __( 'reviews', 'riaco-reviews' ) } &mdash; { layout } { __( 'layout', 'riaco-reviews' ) } &mdash; { cardStyle } { __( 'style', 'riaco-reviews' ) }
-                </p>
-                <p className="riaco-reviews-editor-preview__hint">
-                    { __( 'Configure display options in the sidebar.', 'riaco-reviews' ) }
-                </p>
+                <ServerSideRender
+                    block="riaco-reviews/reviews-block"
+                    attributes={ attributes }
+                />
             </div>
         </>
     );

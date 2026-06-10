@@ -16,21 +16,9 @@
 /* ---- Grid Layout ---------------------------------------- */
 .riaco-reviews--grid .riaco-reviews__grid {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(auto-fill, minmax(var(--riaco-card-min-width, 280px), 1fr));
     gap: 1.5rem;
     align-items: stretch;
-}
-
-@media (max-width: 1023px) {
-    .riaco-reviews--grid .riaco-reviews__grid {
-        grid-template-columns: repeat(2, 1fr);
-    }
-}
-
-@media (max-width: 639px) {
-    .riaco-reviews--grid .riaco-reviews__grid {
-        grid-template-columns: 1fr;
-    }
 }
 
 .riaco-reviews--grid .riaco-reviews__card {
@@ -44,20 +32,8 @@
 
 /* ---- Masonry Layout ------------------------------------ */
 .riaco-reviews--masonry .riaco-reviews__masonry {
-    columns: 3;
+    column-width: var(--riaco-card-min-width, 280px);
     column-gap: 1.5rem;
-}
-
-@media (max-width: 1023px) {
-    .riaco-reviews--masonry .riaco-reviews__masonry {
-        columns: 2;
-    }
-}
-
-@media (max-width: 639px) {
-    .riaco-reviews--masonry .riaco-reviews__masonry {
-        columns: 1;
-    }
 }
 
 .riaco-reviews--masonry .riaco-reviews__card {
@@ -68,23 +44,32 @@
 
 /* ---- Card ---------------------------------------------- */
 .riaco-reviews__card {
-    background: #ffffff;
+    background: var(--riaco-card-bg, #ffffff);
+    border: 1px solid var(--riaco-card-border, transparent);
     border-radius: 12px;
     box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
     padding: 1.75rem;
     margin-bottom: 1.5rem;
-    position: relative;
     overflow: hidden;
 }
 
-/* ---- Quote Mark ---------------------------------------- */
-.riaco-reviews__quote-mark {
-    font-size: 5rem;
-    line-height: 0.75;
-    color: #f5ece0;
-    font-family: Georgia, "Times New Roman", serif;
-    user-select: none;
-    margin-bottom: 0.5rem;
+/* ---- Card Header (title + source) ---------------------- */
+.riaco-reviews__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    gap: 1rem;
+    margin-bottom: 0.75rem;
+}
+
+.riaco-reviews__title {
+    font-size: 1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    color: #1a1a1a;
+    margin: 0;
+    flex: 1;
+    min-width: 0;
 }
 
 /* ---- Body / Text --------------------------------------- */
@@ -93,9 +78,9 @@
 }
 
 .riaco-reviews__text {
-    font-size: 0.9375rem;
-    line-height: 1.7;
-    color: #444444;
+    font-size: var(--riaco-font-size, 0.9375rem);
+    line-height: var(--riaco-line-height, 1.7);
+    color: var(--riaco-card-text, #444444);
     margin: 0;
 }
 
@@ -113,7 +98,7 @@
 }
 
 .riaco-reviews__star--filled {
-    color: #f59e0b;
+    color: var(--riaco-star-color, #f59e0b);
 }
 
 /* ---- Footer -------------------------------------------- */
@@ -184,17 +169,15 @@
     display: block;
 }
 
-/* ---- Source Logo (top-right) --------------------------- */
+/* ---- Source Logo --------------------------------------- */
 .riaco-reviews__source {
-    position: absolute;
-    top: 1.25rem;
-    right: 1.25rem;
+    flex-shrink: 0;
 }
 
 .riaco-reviews__source-logo {
-    height: 32px;
+    height: 20px;
     width: auto;
-    max-width: 64px;
+    max-width: 48px;
     display: block;
     object-fit: contain;
 }
@@ -209,63 +192,95 @@
     opacity: 1;
 }
 
+/* ---- Tag (shadcn badge style) -------------------------- */
+.riaco-reviews__card-tag {
+    display: inline-flex;
+    align-items: center;
+    border-radius: 9999px;
+    border: 1px solid var(--riaco-tag-border, #e4e4e7);
+    background: var(--riaco-tag-bg, #f4f4f5);
+    color: var(--riaco-tag-text, #18181b);
+    font-size: 0.75rem;
+    font-weight: 500;
+    line-height: 1;
+    padding: 0.25rem 0.625rem;
+    margin-top: 0;
+    margin-bottom: 1rem;
+    width: fit-content;
+    letter-spacing: 0.01em;
+    white-space: nowrap;
+}
+
 /* ---- Empty state --------------------------------------- */
 .riaco-reviews__empty {
     color: #888;
     font-style: italic;
 }
 
-/* ---- Card Style: Quote --------------------------------- */
-.riaco-reviews__card--quote {
-    box-shadow: none;
-    border: 1px solid #ede8e2;
-    text-align: center;
-}
-
-.riaco-reviews__card--quote .riaco-reviews__quote-mark {
-    font-size: 4rem;
-    color: #d4b896;
-    line-height: 1;
-    margin-bottom: 0.25rem;
-}
-
-.riaco-reviews__card--quote .riaco-reviews__rating {
-    justify-content: center;
-}
-
-.riaco-reviews__card--quote .riaco-reviews__footer {
-    justify-content: center;
-}
-
-.riaco-reviews__card--quote .riaco-reviews__card-tag {
-    display: block;
-    text-align: center;
-}
-
-/* ---- Card Style: Minimal ------------------------------- */
-.riaco-reviews__card--minimal {
-    box-shadow: none;
-    border-radius: 0;
-    border-left: 4px solid #f59e0b;
-    padding-left: 1.5rem;
-    background: transparent;
-}
-
-.riaco-reviews__card--minimal .riaco-reviews__footer {
-    border-top: none;
-    padding-top: 0.5rem;
-}
-
-/* ---- Tag ----------------------------------------------- */
-.riaco-reviews__card-tag {
-    display: inline-block;
-    font-size: 0.75rem;
-    font-weight: 600;
-    color: #6b5748;
-    background: #f5ece0;
-    border-radius: 4px;
-    padding: 2px 8px;
+/* ---- Card Style: Modern -------------------------------- */
+.riaco-reviews__title--modern {
+    font-size: 0.9375rem;
     margin-bottom: 0.75rem;
-    letter-spacing: 0.02em;
-    text-transform: uppercase;
+}
+
+.riaco-reviews__modern-header {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.riaco-reviews__modern-header .riaco-reviews__author {
+    flex: 1;
+}
+
+.riaco-reviews__rating-compact {
+    display: flex;
+    align-items: center;
+    gap: 0.25rem;
+    flex-shrink: 0;
+}
+
+.riaco-reviews__rating-compact .riaco-reviews__star {
+    font-size: 1rem;
+}
+
+.riaco-reviews__rating-value {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: #1a1a1a;
+    line-height: 1;
+}
+
+.riaco-reviews__modern-footer {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0.75rem;
+    margin-top: 1rem;
+    padding-top: 0.75rem;
+    border-top: 1px solid #f0ebe3;
+}
+
+.riaco-reviews__modern-footer .riaco-reviews__card-tag {
+    margin-top: 0;
+}
+
+.riaco-reviews__source-link--modern {
+    display: flex;
+    align-items: center;
+    gap: 0.35rem;
+    opacity: 0.75;
+    transition: opacity 0.15s ease;
+    text-decoration: none;
+    flex-shrink: 0;
+}
+
+.riaco-reviews__source-link--modern:hover {
+    opacity: 1;
+}
+
+.riaco-reviews__source-name--text {
+    font-size: 0.75rem;
+    color: #888;
 }

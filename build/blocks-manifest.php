@@ -53,6 +53,14 @@ return array(
 				'type' => 'boolean',
 				'default' => true
 			),
+			'showTitle' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
+			'minWidth' => array(
+				'type' => 'integer',
+				'default' => 280
+			),
 			'orderby' => array(
 				'type' => 'string',
 				'default' => 'date'
@@ -60,6 +68,38 @@ return array(
 			'order' => array(
 				'type' => 'string',
 				'default' => 'DESC'
+			),
+			'cardBg' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'cardTextColor' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'cardBorderColor' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'starColor' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'fontSize' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'lineHeight' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'tagBg' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'tagTextColor' => array(
+				'type' => 'string',
+				'default' => ''
 			)
 		),
 		'textdomain' => 'riaco-reviews',
