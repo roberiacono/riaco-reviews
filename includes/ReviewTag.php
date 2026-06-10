@@ -37,8 +37,11 @@ class ReviewTag implements ServiceInterface {
 
     public function render_meta_box( \WP_Post $post, array $box ): void {
         $terms    = get_terms( [ 'taxonomy' => 'riaco_review_tag', 'hide_empty' => false ] );
+        if ( is_wp_error( $terms ) ) {
+            $terms = [];
+        }
         $assigned = wp_get_post_terms( $post->ID, 'riaco_review_tag', [ 'fields' => 'ids' ] );
-        $current  = ! empty( $assigned ) ? (int) $assigned[0] : 0;
+        $current  = ( is_array( $assigned ) && ! empty( $assigned ) ) ? (int) $assigned[0] : 0;
 
         wp_nonce_field( 'riaco_tag_meta_box', 'riaco_tag_meta_box_nonce' );
         ?>

@@ -10,13 +10,13 @@
 if ( ! defined( 'ABSPATH' ) ) exit;
 
 $layout          = $atts['layout'];
-$container_class = 'riaco-reviews riaco-reviews--' . esc_attr( $layout );
-$inner_class     = 'riaco-reviews__' . esc_attr( $layout );
+$container_class = 'riaco-reviews riaco-reviews--' . $layout;
+$inner_class     = 'riaco-reviews__' . $layout;
 $style_attr      = ! empty( $atts['custom_style'] ) ? ' style="' . esc_attr( $atts['custom_style'] ) . '"' : '';
 ?>
 <?php do_action( 'riaco_reviews_before_loop', $atts ); ?>
-<div class="<?php echo $container_class; ?>"<?php echo $style_attr; ?>>
-    <div class="<?php echo $inner_class; ?>">
+<div class="<?php echo esc_attr( $container_class ); ?>"<?php echo $style_attr; ?>>
+    <div class="<?php echo esc_attr( $inner_class ); ?>">
         <?php if ( $reviews->have_posts() ) : ?>
             <?php while ( $reviews->have_posts() ) : $reviews->the_post(); ?>
                 <?php
@@ -44,7 +44,9 @@ $style_attr      = ! empty( $atts['custom_style'] ) ? ' style="' . esc_attr( $at
                     $post_id,
                     $meta
                 );
-                include $card_template;
+                if ( is_file( $card_template ) ) {
+                    include $card_template;
+                }
                 do_action( 'riaco_reviews_after_card', $post_id, $meta, $atts );
                 ?>
             <?php endwhile; ?>

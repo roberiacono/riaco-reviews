@@ -52,8 +52,11 @@ class ReviewSource implements ServiceInterface {
 
     public function render_meta_box( \WP_Post $post, array $box ): void {
         $terms    = get_terms( [ 'taxonomy' => 'riaco_review_source', 'hide_empty' => false ] );
+        if ( is_wp_error( $terms ) ) {
+            $terms = [];
+        }
         $assigned = wp_get_post_terms( $post->ID, 'riaco_review_source', [ 'fields' => 'ids' ] );
-        $current  = ! empty( $assigned ) ? (int) $assigned[0] : 0;
+        $current  = ( is_array( $assigned ) && ! empty( $assigned ) ) ? (int) $assigned[0] : 0;
 
         wp_nonce_field( 'riaco_source_meta_box', 'riaco_source_meta_box_nonce' );
         ?>
@@ -90,6 +93,7 @@ class ReviewSource implements ServiceInterface {
             </div>
             <img id="riaco_source_image_preview" src="" alt=""
                  style="height:40px;width:auto;object-fit:contain;display:none;">
+            <?php wp_nonce_field( 'riaco_source_image_save', 'riaco_source_image_nonce', false ); ?>
         </div>
         <?php
     }
@@ -113,6 +117,7 @@ class ReviewSource implements ServiceInterface {
                 </div>
                 <img id="riaco_source_image_preview" src="<?php echo esc_url( $image ); ?>"
                      alt="" style="height:40px;width:auto;object-fit:contain;<?php echo $image ? '' : 'display:none;'; ?>">
+                <?php wp_nonce_field( 'riaco_source_image_save', 'riaco_source_image_nonce', false ); ?>
             </td>
         </tr>
         <?php
@@ -135,6 +140,13 @@ class ReviewSource implements ServiceInterface {
     }
 
     public function save_image_meta( int $term_id ): void {
+        $nonce = isset( $_POST['riaco_source_image_nonce'] )
+            ? sanitize_text_field( wp_unslash( $_POST['riaco_source_image_nonce'] ) )
+            : '';
+
+        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_source_image_save' ) ) return;
+        if ( ! current_user_can( 'manage_categories' ) ) return;
+
         if ( isset( $_POST['riaco_source_image'] ) ) {
             update_term_meta( $term_id, '_riaco_source_image', esc_url_raw( wp_unslash( $_POST['riaco_source_image'] ) ) );
         }

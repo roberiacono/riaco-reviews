@@ -68,7 +68,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `count` | `6` | |
 | `layout` | `'grid'` | `'grid'` or `'masonry'` — controls card *arrangement* |
 | `card_style` / `cardStyle` | `'default'` | `'default'` or `'modern'` — controls card *visual design* |
-| `min_width` / `minWidth` | `280` | minimum card width in px; drives the CSS `--riaco-card-min-width` variable |
+| `min_width` / `minWidth` | `300` | minimum card width in px; drives the CSS `--riaco-card-min-width` variable |
 | `orderby` | `'date'` | `'date'`, `'rating'`, or `'rand'` |
 | `order` | `'DESC'` | `'ASC'` or `'DESC'` |
 
@@ -85,7 +85,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `font_size` / `fontSize` | `--riaco-font-size` (rem) |
 | `line_height` / `lineHeight` | `--riaco-line-height` |
 
-`Renderer::render()` sanitizes these values (hex colours via `sanitize_hex_color()`, typography as bounded floats, `min_width` as a positive integer) and injects them as a `style="…"` attribute on the `.riaco-reviews` wrapper. Non-default `min_width` is injected as `--riaco-card-min-width`. When `show_shadow` is false, `--riaco-card-shadow:none` is injected to suppress the drop shadow.
+`Renderer::render()` sanitizes these values (hex colours via `sanitize_hex_color()`, typography as bounded floats, `min_width` as a positive integer) and injects them as a `style="…"` attribute on the `.riaco-reviews` wrapper. `min_width` values other than `280` are injected as `--riaco-card-min-width` (the PHP default is `300`, so the var is injected on every render unless `min_width=280` is passed explicitly). When `show_shadow` is false, `--riaco-card-shadow:none` is injected to suppress the drop shadow. Hex colour values are sanitized both before and after the `riaco_reviews_atts` filter runs.
 
 ### Gutenberg block
 
@@ -94,7 +94,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 - The block uses **server-side rendering**: `save()` returns `null`; `Blocks::render()` is the PHP render callback registered in `register_block_type()`.
 - The editor preview uses `ServerSideRender` — the inspector sidebar has panels for Display Settings, Field Visibility, Sort Order, Card Colours, and Typography.
 - `style.scss` is intentionally empty — frontend styles are loaded separately from `assets/dist/reviews.css` via `wp_enqueue_block_style()` in `Blocks::register_block()`. This hook loads the CSS both on the frontend (when the block is present) and inside the editor canvas iframe, which is required for the `ServerSideRender` preview to be styled correctly.
-- `block.json` `style` field points to `style-index.css` (empty build artifact) so WordPress does not double-load styles.
+- `block.json` has no `style` field. `wp_enqueue_block_style()` in `Blocks::register_block()` is the sole owner of frontend style loading; omitting the field prevents WordPress from registering a redundant empty stylesheet.
 
 ### Admin JS
 
@@ -195,7 +195,7 @@ All hooks follow the `riaco_reviews_*` naming convention. Filters return the (po
 | `riaco_reviews_layouts` | filter | `string[]` | Extend the allowed `layout` values (default: `['grid','masonry']`). |
 | `riaco_reviews_card_styles` | filter | `string[]` | Extend the allowed `card_style` values (default: `['default','modern']`). |
 | `riaco_reviews_orderby_options` | filter | `string[]` | Extend the allowed `orderby` values (default: `['date','rating','rand']`). |
-| `riaco_reviews_atts` | filter | `$atts` | Override any sanitised display attribute before CSS vars are built. |
+| `riaco_reviews_atts` | filter | `$atts` | Override any sanitised display attribute before CSS vars are built. Hex colour values are re-sanitized after this filter runs, so non-hex colour strings are stripped. |
 | `riaco_reviews_query_args` | filter | `$query_args, $atts` | Modify the `WP_Query` args before the query runs (tax queries, `post__in`, etc.). |
 
 ### Template loop (`templates/reviews.php`)
@@ -205,7 +205,7 @@ All hooks follow the `riaco_reviews_*` naming convention. Filters return the (po
 | `riaco_reviews_before_loop` | action | `$atts` | Output before the `.riaco-reviews` wrapper div. |
 | `riaco_reviews_after_loop` | action | `$atts` | Output after the wrapper div. |
 | `riaco_reviews_card_meta` | filter | `$meta, $post_id, $atts` | Add or modify per-review meta before the card template receives it. |
-| `riaco_reviews_card_template_path` | filter | `$path, $card_style, $post_id, $meta` | Return a custom template file path for a given card style. |
+| `riaco_reviews_card_template_path` | filter | `$path, $card_style, $post_id, $meta` | Return a custom template file path for a given card style. The path is validated with `is_file()` before inclusion; a non-existent path silently no-ops. |
 | `riaco_reviews_before_card` | action | `$post_id, $meta, $atts` | Output before each `<article>`. |
 | `riaco_reviews_after_card` | action | `$post_id, $meta, $atts` | Output after each `</article>`. |
 | `riaco_reviews_no_reviews_html` | filter | `$html, $atts` | Replace the "No reviews found" paragraph HTML. |

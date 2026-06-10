@@ -19,7 +19,7 @@ class Renderer {
             'show_tag'          => true,
             'show_title'        => true,
             'show_shadow'       => true,
-            'min_width'         => 280,
+            'min_width'         => 300,
             'orderby'           => 'date',
             'order'             => 'DESC',
             'card_bg'           => '',
@@ -61,6 +61,11 @@ class Renderer {
         $atts['line_height'] = ( $line_height > 0 && $line_height <= 5 ) ? $line_height : '';
 
         $atts = apply_filters( 'riaco_reviews_atts', $atts );
+
+        // Re-sanitize colour values in case the filter introduced unsanitized strings.
+        foreach ( [ 'card_bg', 'card_text_color', 'card_border_color', 'star_color', 'tag_bg', 'tag_text_color' ] as $key ) {
+            $atts[ $key ] = ! empty( $atts[ $key ] ) ? ( sanitize_hex_color( $atts[ $key ] ) ?? '' ) : '';
+        }
 
         // Build CSS custom-property string for per-block colour/typography overrides
         $style_parts = [];
@@ -114,6 +119,6 @@ class Renderer {
         include RIACO_REVIEWS_DIR . 'templates/reviews.php';
         wp_reset_postdata();
 
-        return ob_get_clean();
+        return ob_get_clean() ?: '';
     }
 }

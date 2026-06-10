@@ -55,9 +55,12 @@ if ( 'modern' === $atts['card_style'] ) :
                     <span class="riaco-reviews__author-name"><?php echo esc_html( $meta['author_name'] ); ?></span>
                 <?php endif; ?>
                 <?php if ( $atts['show_date'] && ! empty( $meta['review_date'] ) ) : ?>
-                    <time class="riaco-reviews__date" datetime="<?php echo esc_attr( $meta['review_date'] ); ?>">
-                        <?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $meta['review_date'] ) ) ); ?>
-                    </time>
+                    <?php $ts = strtotime( $meta['review_date'] ); ?>
+                    <?php if ( $ts ) : ?>
+                        <time class="riaco-reviews__date" datetime="<?php echo esc_attr( $meta['review_date'] ); ?>">
+                            <?php echo esc_html( wp_date( get_option( 'date_format' ), $ts ) ); ?>
+                        </time>
+                    <?php endif; ?>
                 <?php endif; ?>
             </div>
         <?php endif; ?>
@@ -66,7 +69,7 @@ if ( 'modern' === $atts['card_style'] ) :
             <?php /* translators: %d: star rating number from 1 to 5 */ ?>
             <div class="riaco-reviews__rating-compact" aria-label="<?php echo esc_attr( sprintf( __( '%d out of 5 stars', 'riaco-reviews' ), $rating ) ); ?>">
                 <span class="riaco-reviews__star riaco-reviews__star--filled" aria-hidden="true">★</span>
-                <span class="riaco-reviews__rating-value"><?php echo (int) $rating; ?>.0</span>
+                <span class="riaco-reviews__rating-value"><?php echo esc_html( number_format( $rating, 1, '.', '' ) ); ?></span>
             </div>
         <?php endif; ?>
 
@@ -182,9 +185,12 @@ if ( 'modern' === $atts['card_style'] ) :
                         <span class="riaco-reviews__author-name"><?php echo esc_html( $meta['author_name'] ); ?></span>
                     <?php endif; ?>
                     <?php if ( $atts['show_date'] && ! empty( $meta['review_date'] ) ) : ?>
-                        <time class="riaco-reviews__date" datetime="<?php echo esc_attr( $meta['review_date'] ); ?>">
-                            <?php echo esc_html( date_i18n( get_option( 'date_format' ), strtotime( $meta['review_date'] ) ) ); ?>
-                        </time>
+                        <?php $ts = strtotime( $meta['review_date'] ); ?>
+                        <?php if ( $ts ) : ?>
+                            <time class="riaco-reviews__date" datetime="<?php echo esc_attr( $meta['review_date'] ); ?>">
+                                <?php echo esc_html( wp_date( get_option( 'date_format' ), $ts ) ); ?>
+                            </time>
+                        <?php endif; ?>
                     <?php endif; ?>
                 </div>
             <?php endif; ?>

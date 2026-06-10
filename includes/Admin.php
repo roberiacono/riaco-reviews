@@ -190,7 +190,12 @@ class Admin implements ServiceInterface {
 
             case 'riaco_review_date':
                 $date = get_post_meta( $post_id, '_riaco_review_date', true );
-                echo $date ? esc_html( date_i18n( get_option( 'date_format' ), strtotime( $date ) ) ) : '—';
+                if ( $date ) {
+                    $ts = strtotime( $date );
+                    echo $ts ? esc_html( wp_date( get_option( 'date_format' ), $ts ) ) : '—';
+                } else {
+                    echo '—';
+                }
                 break;
         }
     }
@@ -230,10 +235,11 @@ class Admin implements ServiceInterface {
         }
 
         return sprintf(
-            /* translators: %1$s: plugin name, %2$s: WordPress.org URL */
-            __( 'If you like %1$s please leave us a <a href="%2$s" target="_blank" rel="noopener noreferrer">★★★★★</a> rating. A huge thanks in advance!', 'riaco-reviews' ),
-            '<strong>RIACO Reviews</strong>',
-            'https://wordpress.org/plugins/riaco-reviews/'
+            /* translators: 1: plugin name 2: opening <a> tag 3: closing </a> tag */
+            esc_html__( 'If you like %1$s please leave us a %2$s★★★★★%3$s rating. A huge thanks in advance!', 'riaco-reviews' ),
+            '<strong>' . esc_html( 'RIACO Reviews' ) . '</strong>',
+            '<a href="' . esc_url( 'https://wordpress.org/plugins/riaco-reviews/' ) . '" target="_blank" rel="noopener noreferrer">',
+            '</a>'
         );
     }
 

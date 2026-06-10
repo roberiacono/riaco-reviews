@@ -33,6 +33,7 @@ class Shortcodes implements ServiceInterface {
             'show_rating'       => 1,
             'show_source'       => 1,
             'show_tag'          => 1,
+            'show_shadow'       => 1,
             'orderby'           => 'date',
             'order'             => 'DESC',
             'min_width'         => 280,
@@ -59,6 +60,7 @@ class Shortcodes implements ServiceInterface {
             'show_rating'       => (bool) $atts['show_rating'],
             'show_source'       => (bool) $atts['show_source'],
             'show_tag'          => (bool) $atts['show_tag'],
+            'show_shadow'       => (bool) $atts['show_shadow'],
             'orderby'           => sanitize_key( $atts['orderby'] ),
             'order'             => in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
                                     ? strtoupper( $atts['order'] ) : 'DESC',

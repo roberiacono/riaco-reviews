@@ -66,6 +66,13 @@ class Plugin {
         if ( empty( $this->services ) ) {
             $this->load_services();
         }
+
+        $post_type = $this->get_service( 'postType' );
+
+        if ( $post_type instanceof PostType ) {
+            $post_type->register_post_type();
+        }
+
         flush_rewrite_rules();
     }
 }
