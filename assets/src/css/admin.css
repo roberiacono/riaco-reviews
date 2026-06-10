@@ -1,0 +1,12 @@
+/* RIACO Reviews — Admin Styles */
+
+.riaco-reviews-meta-table td input[type="text"],
+.riaco-reviews-meta-table td input[type="url"],
+.riaco-reviews-meta-table td input[type="date"] {
+    width: 100%;
+    max-width: 400px;
+}
+
+.riaco-reviews-meta-table td select {
+    min-width: 150px;
+}

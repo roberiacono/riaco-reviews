@@ -1,0 +1,230 @@
+/* =========================================================
+   RIACO Reviews — Frontend Component Styles
+   ========================================================= */
+
+/* Root wrapper */
+.riaco-reviews {
+    box-sizing: border-box;
+}
+
+.riaco-reviews *,
+.riaco-reviews *::before,
+.riaco-reviews *::after {
+    box-sizing: inherit;
+}
+
+/* ---- Grid Layout ---------------------------------------- */
+.riaco-reviews--grid .riaco-reviews__grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+@media (max-width: 1023px) {
+    .riaco-reviews--grid .riaco-reviews__grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 639px) {
+    .riaco-reviews--grid .riaco-reviews__grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.riaco-reviews--grid .riaco-reviews__card {
+    display: flex;
+    flex-direction: column;
+}
+
+.riaco-reviews--grid .riaco-reviews__body {
+    flex: 1;
+}
+
+/* ---- Masonry Layout ------------------------------------ */
+.riaco-reviews--masonry .riaco-reviews__masonry {
+    columns: 3;
+    column-gap: 1.5rem;
+}
+
+@media (max-width: 1023px) {
+    .riaco-reviews--masonry .riaco-reviews__masonry {
+        columns: 2;
+    }
+}
+
+@media (max-width: 639px) {
+    .riaco-reviews--masonry .riaco-reviews__masonry {
+        columns: 1;
+    }
+}
+
+.riaco-reviews--masonry .riaco-reviews__card {
+    break-inside: avoid;
+    display: inline-block;
+    width: 100%;
+}
+
+/* ---- Card ---------------------------------------------- */
+.riaco-reviews__card {
+    background: #ffffff;
+    border-radius: 12px;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    padding: 1.75rem;
+    margin-bottom: 1.5rem;
+    position: relative;
+    overflow: hidden;
+}
+
+/* ---- Quote Mark ---------------------------------------- */
+.riaco-reviews__quote-mark {
+    font-size: 5rem;
+    line-height: 0.75;
+    color: #f5ece0;
+    font-family: Georgia, "Times New Roman", serif;
+    user-select: none;
+    margin-bottom: 0.5rem;
+}
+
+/* ---- Body / Text --------------------------------------- */
+.riaco-reviews__body {
+    margin-bottom: 1rem;
+}
+
+.riaco-reviews__text {
+    font-size: 0.9375rem;
+    line-height: 1.7;
+    color: #444444;
+    margin: 0;
+}
+
+/* ---- Star Rating --------------------------------------- */
+.riaco-reviews__rating {
+    display: flex;
+    gap: 2px;
+    margin-bottom: 1rem;
+}
+
+.riaco-reviews__star {
+    font-size: 1.125rem;
+    color: #dddddd;
+    line-height: 1;
+}
+
+.riaco-reviews__star--filled {
+    color: #f59e0b;
+}
+
+/* ---- Footer -------------------------------------------- */
+.riaco-reviews__footer {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    border-top: 1px solid #f0ebe3;
+    margin-top: auto;
+}
+
+/* ---- Avatar -------------------------------------------- */
+.riaco-reviews__avatar-wrap {
+    flex-shrink: 0;
+}
+
+.riaco-reviews__avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    object-fit: cover;
+    display: block;
+    background: #f5ece0;
+}
+
+.riaco-reviews__avatar--initials {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: #e8ddd3;
+    color: #6b5748;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.125rem;
+    font-weight: 600;
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+}
+
+/* ---- Author Info --------------------------------------- */
+.riaco-reviews__author {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    min-width: 0;
+}
+
+.riaco-reviews__author-name {
+    font-weight: 600;
+    font-size: 0.875rem;
+    color: #1a1a1a;
+    display: block;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.riaco-reviews__author-handle {
+    font-size: 0.8125rem;
+    color: #888888;
+    display: block;
+}
+
+.riaco-reviews__date {
+    font-size: 0.75rem;
+    color: #aaaaaa;
+    display: block;
+}
+
+/* ---- Source Logo (top-right) --------------------------- */
+.riaco-reviews__source {
+    position: absolute;
+    top: 1.25rem;
+    right: 1.25rem;
+}
+
+.riaco-reviews__source-logo {
+    height: 32px;
+    width: auto;
+    max-width: 64px;
+    display: block;
+    object-fit: contain;
+}
+
+.riaco-reviews__source-link {
+    display: block;
+    opacity: 0.8;
+    transition: opacity 0.15s ease;
+}
+
+.riaco-reviews__source-link:hover {
+    opacity: 1;
+}
+
+/* ---- Empty state --------------------------------------- */
+.riaco-reviews__empty {
+    color: #888;
+    font-style: italic;
+}
+
+/* ---- Tag ----------------------------------------------- */
+.riaco-reviews__card-tag {
+    display: inline-block;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #6b5748;
+    background: #f5ece0;
+    border-radius: 4px;
+    padding: 2px 8px;
+    margin-bottom: 0.75rem;
+    letter-spacing: 0.02em;
+    text-transform: uppercase;
+}

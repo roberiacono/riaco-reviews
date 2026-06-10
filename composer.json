@@ -1,0 +1,10 @@
+{
+    "name": "riaco/reviews",
+    "description": "Collect, manage, and display customer reviews with blocks and shortcodes.",
+    "type": "wordpress-plugin",
+    "autoload": {
+        "psr-4": {
+            "RIACO\\Reviews\\": "includes/"
+        }
+    }
+}

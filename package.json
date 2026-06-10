@@ -1,0 +1,15 @@
+{
+    "name": "riaco-reviews",
+    "version": "1.0.0",
+    "private": true,
+    "scripts": {
+        "build": "wp-scripts build --blocks-manifest",
+        "start": "wp-scripts start --blocks-manifest",
+        "format": "wp-scripts format",
+        "lint:js": "wp-scripts lint-js",
+        "lint:css": "wp-scripts lint-style"
+    },
+    "devDependencies": {
+        "@wordpress/scripts": "^30.0.0"
+    }
+}

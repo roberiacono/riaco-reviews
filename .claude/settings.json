@@ -1,0 +1,9 @@
+{
+  "permissions": {
+    "allow": [
+      "Read(//opt/lampp/htdocs/dev/wp-content/plugins/riaco-icon-block/src/**)",
+      "Read(//opt/lampp/htdocs/dev/wp-content/plugins/riaco-icon-block/build/**)",
+      "Bash(npm run *)"
+    ]
+  }
+}

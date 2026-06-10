@@ -1,0 +1,60 @@
+{
+    "$schema": "https://schemas.wp.org/trunk/block.json",
+    "apiVersion": 3,
+    "name": "riaco-reviews/reviews-block",
+    "version": "1.0.0",
+    "title": "RIACO Reviews",
+    "category": "widgets",
+    "icon": "star-filled",
+    "description": "Display a grid or masonry layout of customer reviews.",
+    "example": {},
+    "supports": {
+        "html": false
+    },
+    "attributes": {
+        "count": {
+            "type": "integer",
+            "default": 6
+        },
+        "layout": {
+            "type": "string",
+            "default": "grid"
+        },
+        "showAuthorName": {
+            "type": "boolean",
+            "default": true
+        },
+        "showAvatar": {
+            "type": "boolean",
+            "default": true
+        },
+        "showDate": {
+            "type": "boolean",
+            "default": false
+        },
+        "showRating": {
+            "type": "boolean",
+            "default": true
+        },
+        "showSource": {
+            "type": "boolean",
+            "default": true
+        },
+        "showTag": {
+            "type": "boolean",
+            "default": true
+        },
+        "orderby": {
+            "type": "string",
+            "default": "date"
+        },
+        "order": {
+            "type": "string",
+            "default": "DESC"
+        }
+    },
+    "textdomain": "riaco-reviews",
+    "editorScript": "file:./index.js",
+    "editorStyle": "file:./index.css",
+    "style": "file:./style-index.css"
+}
