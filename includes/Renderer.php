@@ -36,7 +36,7 @@ class Renderer {
         $atts['count']  = max( 1, absint( $atts['count'] ) );
 
         $allowed_layouts     = apply_filters( 'riaco_reviews_layouts',         [ 'grid', 'masonry' ] );
-        $allowed_card_styles = apply_filters( 'riaco_reviews_card_styles',     [ 'default', 'modern' ] );
+        $allowed_card_styles = apply_filters( 'riaco_reviews_card_styles',     [ 'default', 'modern', 'minimal' ] );
         $allowed_orderby     = apply_filters( 'riaco_reviews_orderby_options', [ 'date', 'rating', 'rand' ] );
 
         $atts['layout']     = in_array( $atts['layout'],     $allowed_layouts,     true ) ? $atts['layout']     : 'grid';

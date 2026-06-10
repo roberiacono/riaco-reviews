@@ -106,6 +106,63 @@ if ( 'modern' === $atts['card_style'] ) :
 
 </article>
 
+<?php elseif ( 'minimal' === $atts['card_style'] ) :
+
+    $has_minimal_source = ! empty( $meta['source_name'] );
+    $has_minimal_footer = ( $atts['show_author_name'] && ! empty( $meta['author_name'] ) ) || $atts['show_date'] || $has_minimal_source;
+?>
+<article class="riaco-reviews__card riaco-reviews__card--minimal">
+
+    <?php if ( $show_title ) : ?>
+        <h3 class="riaco-reviews__title riaco-reviews__title--minimal"><?php echo esc_html( $post_title ); ?></h3>
+    <?php endif; ?>
+
+    <?php if ( $atts['show_rating'] && $rating > 0 ) : ?>
+        <?php /* translators: %d: star rating number from 1 to 5 */ ?>
+        <div class="riaco-reviews__rating" aria-label="<?php echo esc_attr( sprintf( __( '%d out of 5 stars', 'riaco-reviews' ), $rating ) ); ?>">
+            <?php for ( $i = 1; $i <= 5; $i++ ) : ?>
+                <span class="riaco-reviews__star<?php echo ( $i <= $rating ) ? ' riaco-reviews__star--filled' : ''; ?>" aria-hidden="true">★</span>
+            <?php endfor; ?>
+        </div>
+    <?php endif; ?>
+
+    <div class="riaco-reviews__body">
+        <p class="riaco-reviews__text"><?php echo wp_kses_post( $review_text ); ?></p>
+    </div>
+
+    <?php if ( $atts['show_tag'] && ! empty( $meta['tag_name'] ) ) : ?>
+        <div class="riaco-reviews__card-tag"><?php echo esc_html( $meta['tag_name'] ); ?></div>
+    <?php endif; ?>
+
+    <?php if ( $has_minimal_footer ) : ?>
+        <footer class="riaco-reviews__footer--minimal">
+
+            <?php if ( $atts['show_author_name'] && ! empty( $meta['author_name'] ) ) : ?>
+                <?php if ( ! empty( $meta['source_url'] ) ) : ?>
+                    <a href="<?php echo esc_url( $meta['source_url'] ); ?>" target="_blank" rel="noopener noreferrer nofollow" class="riaco-reviews__author-link--minimal"><?php echo esc_html( $meta['author_name'] ); ?></a>
+                <?php else : ?>
+                    <span class="riaco-reviews__author-name riaco-reviews__author-link--minimal"><?php echo esc_html( $meta['author_name'] ); ?></span>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if ( $atts['show_date'] && ! empty( $meta['review_date'] ) ) : ?>
+                <?php $ts = strtotime( $meta['review_date'] ); ?>
+                <?php if ( $ts ) : ?>
+                    <time class="riaco-reviews__date riaco-reviews__date--minimal" datetime="<?php echo esc_attr( $meta['review_date'] ); ?>">
+                        <?php echo esc_html( wp_date( get_option( 'date_format' ), $ts ) ); ?>
+                    </time>
+                <?php endif; ?>
+            <?php endif; ?>
+
+            <?php if ( $has_minimal_source ) : ?>
+                <span class="riaco-reviews__source--minimal"><?php echo esc_html( $meta['source_name'] ); ?></span>
+            <?php endif; ?>
+
+        </footer>
+    <?php endif; ?>
+
+</article>
+
 <?php else : /* default style */
 
     $has_footer = $atts['show_author_name'] || $atts['show_date'] || $atts['show_avatar'];

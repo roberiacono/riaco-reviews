@@ -64,6 +64,7 @@ export default function Edit( { attributes, setAttributes } ) {
                         options={ [
                             { label: __( 'Default', 'riaco-reviews' ), value: 'default' },
                             { label: __( 'Modern',  'riaco-reviews' ), value: 'modern'  },
+                            { label: __( 'Minimal', 'riaco-reviews' ), value: 'minimal' },
                         ] }
                         onChange={ ( value ) => setAttributes( { cardStyle: value } ) }
                     />
@@ -108,11 +109,13 @@ export default function Edit( { attributes, setAttributes } ) {
                         checked={ showDate }
                         onChange={ ( value ) => setAttributes( { showDate: value } ) }
                     />
-                    <ToggleControl
-                        label={ __( 'Show Source Logo', 'riaco-reviews' ) }
-                        checked={ showSource }
-                        onChange={ ( value ) => setAttributes( { showSource: value } ) }
-                    />
+                    { cardStyle !== 'minimal' && (
+                        <ToggleControl
+                            label={ __( 'Show Source Logo', 'riaco-reviews' ) }
+                            checked={ showSource }
+                            onChange={ ( value ) => setAttributes( { showSource: value } ) }
+                        />
+                    ) }
                     <ToggleControl
                         label={ __( 'Show Tag', 'riaco-reviews' ) }
                         checked={ showTag }

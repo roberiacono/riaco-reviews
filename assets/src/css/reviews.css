@@ -284,3 +284,62 @@
     font-size: 0.75rem;
     color: #888;
 }
+
+/* ---- Card Style: Minimal ------------------------------- */
+.riaco-reviews__title--minimal {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
+    color: #1a1a1a;
+    margin: 0 0 0.75rem;
+}
+
+.riaco-reviews__card--minimal .riaco-reviews__rating {
+    margin-bottom: 1rem;
+}
+
+.riaco-reviews__card--minimal .riaco-reviews__body {
+    margin-bottom: 1rem;
+}
+
+.riaco-reviews__card--minimal .riaco-reviews__star--filled {
+    color: currentColor;
+}
+
+.riaco-reviews__card--minimal .riaco-reviews__card-tag {
+    background: transparent;
+    margin-bottom: 1rem;
+}
+
+.riaco-reviews__footer--minimal {
+    display: flex;
+    flex-direction: column;
+    gap: 0.125rem;
+    padding-top: 0.75rem;
+    margin-top: auto;
+}
+
+.riaco-reviews__author-link--minimal {
+    font-size: 0.8125rem;
+    color: #555555;
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    text-decoration-color: rgba(0, 0, 0, 0.25);
+    transition: color 0.15s ease;
+}
+
+a.riaco-reviews__author-link--minimal:hover {
+    color: #111111;
+    text-decoration-color: rgba(0, 0, 0, 0.6);
+}
+
+.riaco-reviews__date--minimal {
+    font-size: 0.75rem;
+    color: #aaaaaa;
+}
+
+.riaco-reviews__source--minimal {
+    font-size: 0.6875rem;
+    color: #aaaaaa;
+    display: block;
+}

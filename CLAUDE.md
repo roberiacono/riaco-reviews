@@ -67,7 +67,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `show_shadow` / `showShadow` | `true` | drop shadow on cards |
 | `count` | `6` | |
 | `layout` | `'grid'` | `'grid'` or `'masonry'` — controls card *arrangement* |
-| `card_style` / `cardStyle` | `'default'` | `'default'` or `'modern'` — controls card *visual design* |
+| `card_style` / `cardStyle` | `'default'` | `'default'`, `'modern'`, or `'minimal'` — controls card *visual design* |
 | `min_width` / `minWidth` | `300` | minimum card width in px; drives the CSS `--riaco-card-min-width` variable |
 | `orderby` | `'date'` | `'date'`, `'rating'`, or `'rand'` |
 | `order` | `'DESC'` | `'ASC'` or `'DESC'` |
@@ -137,7 +137,7 @@ Frontend card styles use BEM with the `.riaco-reviews__` prefix.
 - **Grid** — `grid-template-columns: repeat(auto-fill, minmax(var(--riaco-card-min-width, 280px), 1fr))`. No fixed breakpoints; column count adjusts automatically to the container width and the configured min card width.
 - **Masonry** — `column-width: var(--riaco-card-min-width, 280px)` with `break-inside: avoid` on cards. Same adaptive behaviour as grid.
 
-**Card DOM order (both styles):**
+**Card DOM order (all styles):**
 
 `default`:
 1. `.riaco-reviews__header` — flex row: `<h3 class="riaco-reviews__title">` (if `show_title`) + `.riaco-reviews__source` (logo, if `show_source`)
@@ -152,12 +152,25 @@ Frontend card styles use BEM with the `.riaco-reviews__` prefix.
 3. `.riaco-reviews__body` — review text
 4. `.riaco-reviews__modern-footer` — flex row: tag badge (left) + source link/logo (right)
 
+`minimal`:
+1. `<h3 class="riaco-reviews__title--minimal">` (if `show_title`) — 1.5rem bold title
+2. `.riaco-reviews__rating` — five `★` spans; filled stars use `currentColor` (inherits text colour, never amber)
+3. `.riaco-reviews__body` — review text
+4. `.riaco-reviews__card-tag` — tag badge; `background: transparent` (border only)
+5. `<footer class="riaco-reviews__footer--minimal">` — author name as `<a>` to `source_url` (falls back to `<span>`) + date (off by default) + source name as small muted text
+
+**Minimal style behaviour notes:**
+- Source logo is never rendered. The "Show Source Logo" block editor toggle is hidden when this style is selected.
+- Source name text always renders if the term has a name (not gated by `show_source`).
+- `show_avatar` has no effect — no avatar is rendered.
+
 **Card style modifier classes** sit on `<article class="riaco-reviews__card riaco-reviews__card--{style}">`:
 
 | Class | Visual treatment |
 |---|---|
 | `.riaco-reviews__card--default` | White card, drop shadow, 12px border-radius; header flex row for title + source logo |
 | `.riaco-reviews__card--modern` | Same base card; top row collapses avatar + author + compact rating; footer splits tag and source link |
+| `.riaco-reviews__card--minimal` | Same base card; large title, no avatar or source logo; filled stars use text colour; tag badge has transparent background; footer shows linked author name + source name as small text |
 
 `layout` and `card_style` are orthogonal — any combination is valid.
 
@@ -193,7 +206,7 @@ All hooks follow the `riaco_reviews_*` naming convention. Filters return the (po
 | Hook | Type | Args | Purpose |
 |---|---|---|---|
 | `riaco_reviews_layouts` | filter | `string[]` | Extend the allowed `layout` values (default: `['grid','masonry']`). |
-| `riaco_reviews_card_styles` | filter | `string[]` | Extend the allowed `card_style` values (default: `['default','modern']`). |
+| `riaco_reviews_card_styles` | filter | `string[]` | Extend the allowed `card_style` values (default: `['default','modern','minimal']`). |
 | `riaco_reviews_orderby_options` | filter | `string[]` | Extend the allowed `orderby` values (default: `['date','rating','rand']`). |
 | `riaco_reviews_atts` | filter | `$atts` | Override any sanitised display attribute before CSS vars are built. Hex colour values are re-sanitized after this filter runs, so non-hex colour strings are stripped. |
 | `riaco_reviews_query_args` | filter | `$query_args, $atts` | Modify the `WP_Query` args before the query runs (tax queries, `post__in`, etc.). |

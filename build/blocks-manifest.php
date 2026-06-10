@@ -108,7 +108,6 @@ return array(
 		),
 		'textdomain' => 'riaco-reviews',
 		'editorScript' => 'file:./index.js',
-		'editorStyle' => 'file:./index.css',
-		'style' => 'file:./style-index.css'
+		'editorStyle' => 'file:./index.css'
 	)
 );
