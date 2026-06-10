@@ -52,6 +52,10 @@
       "type": "boolean",
       "default": true
     },
+    "showShadow": {
+      "type": "boolean",
+      "default": true
+    },
     "minWidth": {
       "type": "integer",
       "default": 280

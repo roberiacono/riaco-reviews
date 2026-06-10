@@ -18,6 +18,7 @@ class Renderer {
             'show_source'       => true,
             'show_tag'          => true,
             'show_title'        => true,
+            'show_shadow'       => true,
             'min_width'         => 280,
             'orderby'           => 'date',
             'order'             => 'DESC',
@@ -44,7 +45,7 @@ class Renderer {
         $atts['order'] = in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
             ? strtoupper( $atts['order'] ) : 'DESC';
 
-        foreach ( [ 'show_author_name', 'show_avatar', 'show_date', 'show_rating', 'show_source', 'show_tag', 'show_title' ] as $key ) {
+        foreach ( [ 'show_author_name', 'show_avatar', 'show_date', 'show_rating', 'show_source', 'show_tag', 'show_title', 'show_shadow' ] as $key ) {
             $atts[ $key ] = filter_var( $atts[ $key ], FILTER_VALIDATE_BOOLEAN );
         }
 
@@ -85,6 +86,9 @@ class Renderer {
         $min_width = absint( $atts['min_width'] );
         if ( $min_width > 0 && $min_width !== 280 ) {
             $style_parts[] = '--riaco-card-min-width:' . $min_width . 'px';
+        }
+        if ( ! $atts['show_shadow'] ) {
+            $style_parts[] = '--riaco-card-shadow:none';
         }
         $atts['custom_style'] = $style_parts ? implode( ';', $style_parts ) : '';
 

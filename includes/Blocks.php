@@ -51,6 +51,7 @@ class Blocks implements ServiceInterface {
             'show_source'       => $attributes['showSource']       ?? true,
             'show_tag'          => $attributes['showTag']          ?? true,
             'show_title'        => $attributes['showTitle']        ?? true,
+            'show_shadow'       => $attributes['showShadow']       ?? true,
             'min_width'         => $attributes['minWidth']         ?? 280,
             'orderby'           => $attributes['orderby']          ?? 'date',
             'order'             => $attributes['order']            ?? 'DESC',

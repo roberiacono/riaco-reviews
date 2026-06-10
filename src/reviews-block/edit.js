@@ -22,6 +22,7 @@ export default function Edit( { attributes, setAttributes } ) {
         showSource,
         showTag,
         showTitle,
+        showShadow,
         minWidth,
         orderby,
         order,
@@ -65,6 +66,11 @@ export default function Edit( { attributes, setAttributes } ) {
                             { label: __( 'Modern',  'riaco-reviews' ), value: 'modern'  },
                         ] }
                         onChange={ ( value ) => setAttributes( { cardStyle: value } ) }
+                    />
+                    <ToggleControl
+                        label={ __( 'Card Shadow', 'riaco-reviews' ) }
+                        checked={ showShadow }
+                        onChange={ ( value ) => setAttributes( { showShadow: value } ) }
                     />
                     <RangeControl
                         label={ __( 'Min Card Width (px)', 'riaco-reviews' ) }

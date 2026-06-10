@@ -47,7 +47,7 @@
     background: var(--riaco-card-bg, #ffffff);
     border: 1px solid var(--riaco-card-border, transparent);
     border-radius: 12px;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.07);
+    box-shadow: var(--riaco-card-shadow, 0 2px 12px rgba(0, 0, 0, 0.07));
     padding: 1.75rem;
     margin-bottom: 1.5rem;
     overflow: hidden;

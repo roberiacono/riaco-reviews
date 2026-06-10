@@ -57,6 +57,10 @@ return array(
 				'type' => 'boolean',
 				'default' => true
 			),
+			'showShadow' => array(
+				'type' => 'boolean',
+				'default' => true
+			),
 			'minWidth' => array(
 				'type' => 'integer',
 				'default' => 280

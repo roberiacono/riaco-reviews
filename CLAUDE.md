@@ -85,7 +85,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `font_size` / `fontSize` | `--riaco-font-size` (rem) |
 | `line_height` / `lineHeight` | `--riaco-line-height` |
 
-`Renderer::render()` sanitizes these values (hex colours via `sanitize_hex_color()`, typography as bounded floats, `min_width` as a positive integer) and injects them as a `style="…"` attribute on the `.riaco-reviews` wrapper. Non-default `min_width` is also injected as `--riaco-card-min-width`.
+`Renderer::render()` sanitizes these values (hex colours via `sanitize_hex_color()`, typography as bounded floats, `min_width` as a positive integer) and injects them as a `style="…"` attribute on the `.riaco-reviews` wrapper. Non-default `min_width` is injected as `--riaco-card-min-width`. When `show_shadow` is false, `--riaco-card-shadow:none` is injected to suppress the drop shadow.
 
 ### Gutenberg block
 
@@ -175,6 +175,7 @@ Frontend card styles use BEM with the `.riaco-reviews__` prefix.
 | `--riaco-font-size` | `0.9375rem` | review text size |
 | `--riaco-line-height` | `1.7` | review text line height |
 | `--riaco-card-min-width` | `280px` | grid column / masonry column width floor |
+| `--riaco-card-shadow` | `0 2px 12px rgba(0,0,0,0.07)` | card drop shadow; set to `none` when `show_shadow` is false |
 
 ## Developer hooks
 
