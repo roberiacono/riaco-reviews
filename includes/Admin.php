@@ -21,6 +21,7 @@ class Admin implements ServiceInterface {
         add_action( 'manage_riaco_review_posts_custom_column',                             [ $this, 'render_column' ], 10, 2 );
         add_action( 'admin_enqueue_scripts',                                               [ $this, 'enqueue_assets' ] );
         add_filter( 'plugin_action_links_' . plugin_basename( $this->file ),              [ $this, 'action_links' ] );
+        add_filter( 'admin_footer_text',                                                   [ $this, 'footer_text' ] );
     }
 
     public function action_links( array $links ): array {
@@ -210,6 +211,27 @@ class Admin implements ServiceInterface {
             [],
             RIACO_REVIEWS_VERSION,
             true
+        );
+    }
+
+    public function footer_text( string $text ): string {
+        $screen = get_current_screen();
+
+        if ( ! $screen ) {
+            return $text;
+        }
+
+        $plugin_screens = [ 'riaco_review', 'edit-riaco_review', 'edit-riaco_review_source', 'edit-riaco_review_tag' ];
+
+        if ( ! in_array( $screen->id, $plugin_screens, true ) ) {
+            return $text;
+        }
+
+        return sprintf(
+            /* translators: %1$s: plugin name, %2$s: WordPress.org URL */
+            __( 'If you like %1$s please leave us a <a href="%2$s" target="_blank" rel="noopener noreferrer">★★★★★</a> rating. A huge thanks in advance!', 'riaco-reviews' ),
+            '<strong>RIACO Reviews</strong>',
+            'https://wordpress.org/plugins/riaco-reviews/'
         );
     }
 
