@@ -7,6 +7,7 @@
  * Requires PHP: 7.4
  * Author: Roberto Iacono
  * Author URI: https://riacoplugins.com/
+ * Plugin URI: https://github.com/roberiacono/riaco-reviews
  * Text Domain: riaco-reviews
  * Domain Path: /languages
  * License: GPL v2 or later
