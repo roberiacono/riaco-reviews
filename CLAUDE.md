@@ -72,7 +72,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `orderby` | `'date'` | `'date'`, `'rating'`, or `'rand'` |
 | `order` | `'DESC'` | `'ASC'` or `'DESC'` |
 
-**Colour / typography attributes** (block only, empty = use CSS default):
+**Colour / typography attributes** (block and shortcode, empty = use CSS default):
 
 | Attribute (`snake_case` / `camelCase`) | CSS variable injected |
 |---|---|
