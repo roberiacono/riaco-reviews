@@ -15,11 +15,22 @@ class Admin implements ServiceInterface {
     }
 
     public function register(): void {
-        add_action( 'add_meta_boxes',                           [ $this, 'add_meta_box' ] );
-        add_action( 'save_post_riaco_review',                   [ $this, 'save_meta' ] );
-        add_filter( 'manage_riaco_review_posts_columns',        [ $this, 'columns' ] );
-        add_action( 'manage_riaco_review_posts_custom_column',  [ $this, 'render_column' ], 10, 2 );
-        add_action( 'admin_enqueue_scripts',                    [ $this, 'enqueue_assets' ] );
+        add_action( 'add_meta_boxes',                                                      [ $this, 'add_meta_box' ] );
+        add_action( 'save_post_riaco_review',                                              [ $this, 'save_meta' ] );
+        add_filter( 'manage_riaco_review_posts_columns',                                   [ $this, 'columns' ] );
+        add_action( 'manage_riaco_review_posts_custom_column',                             [ $this, 'render_column' ], 10, 2 );
+        add_action( 'admin_enqueue_scripts',                                               [ $this, 'enqueue_assets' ] );
+        add_filter( 'plugin_action_links_' . plugin_basename( $this->file ),              [ $this, 'action_links' ] );
+    }
+
+    public function action_links( array $links ): array {
+        $manage = '<a href="' . esc_url( admin_url( 'edit.php?post_type=riaco_review' ) ) . '">'
+            . esc_html__( 'Manage Reviews', 'riaco-reviews' )
+            . '</a>';
+
+        array_unshift( $links, $manage );
+
+        return $links;
     }
 
     public function add_meta_box(): void {
