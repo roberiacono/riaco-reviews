@@ -43,6 +43,7 @@ export default function Edit( { attributes, setAttributes } ) {
             <InspectorControls>
                 <PanelBody title={ __( 'Display Settings', 'riaco-reviews' ) } initialOpen={ true }>
                     <RangeControl
+                        __next40pxDefaultSize
                         label={ __( 'Number of Reviews', 'riaco-reviews' ) }
                         value={ count }
                         onChange={ ( value ) => setAttributes( { count: value } ) }
@@ -50,6 +51,7 @@ export default function Edit( { attributes, setAttributes } ) {
                         max={ 50 }
                     />
                     <SelectControl
+                        __next40pxDefaultSize
                         label={ __( 'Layout', 'riaco-reviews' ) }
                         value={ layout }
                         options={ [
@@ -59,6 +61,7 @@ export default function Edit( { attributes, setAttributes } ) {
                         onChange={ ( value ) => setAttributes( { layout: value } ) }
                     />
                     <SelectControl
+                        __next40pxDefaultSize
                         label={ __( 'Card Style', 'riaco-reviews' ) }
                         value={ cardStyle }
                         options={ [
@@ -74,6 +77,7 @@ export default function Edit( { attributes, setAttributes } ) {
                         onChange={ ( value ) => setAttributes( { showShadow: value } ) }
                     />
                     <RangeControl
+                        __next40pxDefaultSize
                         label={ __( 'Min Card Width (px)', 'riaco-reviews' ) }
                         value={ minWidth }
                         onChange={ ( value ) => setAttributes( { minWidth: value } ) }
@@ -125,6 +129,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
                 <PanelBody title={ __( 'Sort Order', 'riaco-reviews' ) } initialOpen={ false }>
                     <SelectControl
+                        __next40pxDefaultSize
                         label={ __( 'Order By', 'riaco-reviews' ) }
                         value={ orderby }
                         options={ [
@@ -136,6 +141,7 @@ export default function Edit( { attributes, setAttributes } ) {
                     />
                     { orderby !== 'rand' && (
                         <SelectControl
+                            __next40pxDefaultSize
                             label={ __( 'Direction', 'riaco-reviews' ) }
                             value={ order }
                             options={ [
@@ -206,6 +212,7 @@ export default function Edit( { attributes, setAttributes } ) {
 
                 <PanelBody title={ __( 'Typography', 'riaco-reviews' ) } initialOpen={ false }>
                     <RangeControl
+                        __next40pxDefaultSize
                         label={ __( 'Review Text Size (rem)', 'riaco-reviews' ) }
                         value={ fontSize ? parseFloat( fontSize ) : 0.9375 }
                         onChange={ ( val ) => setAttributes( {
@@ -218,6 +225,7 @@ export default function Edit( { attributes, setAttributes } ) {
                         resetFallbackValue={ 0.9375 }
                     />
                     <RangeControl
+                        __next40pxDefaultSize
                         label={ __( 'Line Height', 'riaco-reviews' ) }
                         value={ lineHeight ? parseFloat( lineHeight ) : 1.7 }
                         onChange={ ( val ) => setAttributes( {
