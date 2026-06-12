@@ -1,0 +1,9 @@
+.claude/
+.claude
+.distignore
+.git
+.gitignore
+CLAUDE.md
+composer.lock
+node_modules/
+package-lock.json
