@@ -27,6 +27,13 @@ composer install --no-dev
 
 After adding a new class in `includes/`, the PSR-4 autoloader picks it up automatically — no `composer dump-autoload` needed.
 
+**Translations:**
+```bash
+wp i18n make-pot . languages/riaco-reviews.pot --exclude=vendor,node_modules,build
+```
+
+Run this after adding or changing any translatable string. The `.pot` file lives in `languages/` and is committed.
+
 ## Architecture
 
 ### Service container pattern
@@ -42,6 +49,10 @@ The plugin initialises on `plugins_loaded` (not `init`), so all services are ava
 1. `riaco_reviews_init` — after `load_services()`, before `register()`. Use this to call `set_service()` so third-party services participate in the normal registration pass.
 2. `riaco_reviews_loaded` — after all services are registered. Use this for post-boot setup that doesn't require a registration slot.
 
+**Activation / deactivation hooks** (registered in `riaco-reviews.php`):
+- `register_activation_hook` → `Plugin::on_activation()`: registers the post type and calls `flush_rewrite_rules()`.
+- `register_deactivation_hook` → `flush_rewrite_rules()`: ensures the CPT slug is removed from the rewrite table when the plugin is disabled.
+
 ### Rendering pipeline
 
 Both the block and the shortcode converge on `Renderer::render(array $atts): string`, which runs a `WP_Query` and includes the PHP templates via output buffering. The two entry points differ only in how they normalise their attribute keys:
@@ -52,6 +63,8 @@ Both the block and the shortcode converge on `Renderer::render(array $atts): str
 Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates/partials/card.php` renders a single card. Both receive `$atts` (display options) and `$reviews` (the `WP_Query` object) as local variables via `include`.
 
 `reviews.php` builds a `$meta` array per post that includes post-meta fields **and** taxonomy data resolved in the loop: it resolves the `riaco_review_source` term to get `source_image` and `source_name` (via `get_term_meta`), fetches `source_url` from post meta, and collects `riaco_review_tag` terms for the tag badge.
+
+**Term meta cache warming** — `WP_Query` pre-warms the post meta and term caches for all posts in the result set, but WordPress does not automatically warm term meta. To prevent N+1 queries from `get_term_meta()` calls inside the loop, `Renderer::render()` calls `update_termmeta_cache()` on the deduplicated list of source term IDs immediately after the query runs and before `ob_start()`.
 
 **Display attributes** — all default to `true` unless noted:
 
@@ -91,7 +104,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 ### Gutenberg block
 
 - Source: `src/reviews-block/` — `index.js`, `edit.js`, `editor.scss`, `style.scss`, `block.json`
-- Build output: `build/reviews-block/` (committed? no — regenerate with `npm run build`)
+- Build output: `build/reviews-block/` (committed — regenerate with `npm run build` after editing JS or SCSS)
 - The block uses **server-side rendering**: `save()` returns `null`; `Blocks::render()` is the PHP render callback registered in `register_block_type()`.
 - The editor preview uses `ServerSideRender` — the inspector sidebar has panels for Display Settings, Field Visibility, Sort Order, Card Colours, and Typography.
 - `style.scss` is intentionally empty — frontend styles are loaded separately from `assets/dist/reviews.css` via `wp_enqueue_block_style()` in `Blocks::register_block()`. This hook loads the CSS both on the frontend (when the block is present) and inside the editor canvas iframe, which is required for the `ServerSideRender` preview to be styled correctly.
@@ -104,7 +117,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 - **Avatar upload** on the review edit screen (`#riaco_author_avatar` / `#riaco_avatar_preview`)
 - **Source logo upload** on the Sources taxonomy term screens (`#riaco_source_image` / `#riaco_source_image_preview`)
 
-Each is a self-contained IIFE using `wp.media`. Enqueued by `Admin::enqueue_assets()` (review post screens) and `ReviewSource::enqueue_assets()` (taxonomy screens); both also call `wp_enqueue_media()`.
+Each is a self-contained IIFE using `wp.media`. Enqueued by `Admin::enqueue_assets()` (review post screens) and `ReviewSource::enqueue_assets()` (taxonomy screens); both call `wp_enqueue_media()`. In `Admin::enqueue_assets()`, `wp_enqueue_media()` is gated to `post.php` / `post-new.php` only — the media uploader is not loaded on the list table screen.
 
 ### CPT & meta
 

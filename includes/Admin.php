@@ -66,22 +66,23 @@ class Admin implements ServiceInterface {
                             <?php esc_html_e( 'Upload Image', 'riaco-reviews' ); ?>
                         </button>
                         <button type="button" id="riaco_avatar_remove_btn" class="button-link button-link-delete"
-                                <?php echo $fields['author_avatar'] ? '' : 'style="display:none;"'; ?>>
+                                <?php if ( ! $fields['author_avatar'] ) : ?>style="display:none;"<?php endif; ?>>
                             <?php esc_html_e( 'Remove', 'riaco-reviews' ); ?>
                         </button>
                     </div>
                     <img id="riaco_avatar_preview"
                          src="<?php echo esc_url( $fields['author_avatar'] ); ?>"
-                         alt="" style="width:48px;height:48px;border-radius:50%;margin-top:8px;object-fit:cover;<?php echo $fields['author_avatar'] ? '' : 'display:none;'; ?>">
+                         alt="" style="width:48px;height:48px;border-radius:50%;margin-top:8px;object-fit:cover;<?php if ( ! $fields['author_avatar'] ) : ?>display:none;<?php endif; ?>">
                 </td>
             </tr>
             <tr>
                 <th><label for="riaco_rating"><?php esc_html_e( 'Star Rating', 'riaco-reviews' ); ?></label></th>
                 <td>
                     <select id="riaco_rating" name="riaco_rating">
+                        <option value="0" <?php selected( $fields['rating'], 0 ); ?>>— <?php esc_html_e( 'None', 'riaco-reviews' ); ?> —</option>
                         <?php for ( $i = 1; $i <= 5; $i++ ) : ?>
-                            <option value="<?php echo $i; ?>" <?php selected( (int) $fields['rating'], $i ); ?>>
-                                <?php echo $i; ?> ★
+                            <option value="<?php echo esc_attr( $i ); ?>" <?php selected( $fields['rating'], $i ); ?>>
+                                <?php echo esc_html( $i ); ?> ★
                             </option>
                         <?php endfor; ?>
                     </select>
@@ -134,8 +135,12 @@ class Admin implements ServiceInterface {
         }
 
         if ( isset( $_POST['riaco_rating'] ) ) {
-            $rating = max( 1, min( 5, absint( $_POST['riaco_rating'] ) ) );
-            update_post_meta( $post_id, '_riaco_review_rating', $rating );
+            $rating = absint( $_POST['riaco_rating'] );
+            if ( $rating === 0 ) {
+                delete_post_meta( $post_id, '_riaco_review_rating' );
+            } else {
+                update_post_meta( $post_id, '_riaco_review_rating', max( 1, min( 5, $rating ) ) );
+            }
         }
 
         do_action( 'riaco_reviews_save_meta', $post_id );
@@ -165,7 +170,7 @@ class Admin implements ServiceInterface {
                 $rating = (int) get_post_meta( $post_id, '_riaco_review_rating', true );
                 for ( $i = 1; $i <= 5; $i++ ) {
                     $color = ( $i <= $rating ) ? '#f59e0b' : '#ddd';
-                    echo '<span style="color:' . $color . ';font-size:16px;">★</span>';
+                    echo '<span style="color:' . esc_attr( $color ) . ';font-size:16px;">★</span>';
                 }
                 break;
 
@@ -197,6 +202,9 @@ class Admin implements ServiceInterface {
                     echo '—';
                 }
                 break;
+
+            default:
+                break;
         }
     }
 
@@ -211,7 +219,9 @@ class Admin implements ServiceInterface {
             RIACO_REVIEWS_VERSION
         );
 
-        wp_enqueue_media();
+        if ( in_array( $hook, [ 'post.php', 'post-new.php' ], true ) ) {
+            wp_enqueue_media();
+        }
         wp_enqueue_script(
             'riaco-reviews-admin',
             plugin_dir_url( $this->file ) . 'assets/dist/admin.js',
@@ -234,20 +244,20 @@ class Admin implements ServiceInterface {
             return $text;
         }
 
-        return sprintf(
+        return wp_kses_post( sprintf(
             /* translators: 1: plugin name 2: opening <a> tag 3: closing </a> tag */
-            esc_html__( 'If you like %1$s please leave us a %2$s★★★★★%3$s rating. A huge thanks in advance!', 'riaco-reviews' ),
+            __( 'If you like %1$s please leave us a %2$s★★★★★%3$s rating. A huge thanks in advance!', 'riaco-reviews' ),
             '<strong>' . esc_html( 'RIACO Reviews' ) . '</strong>',
-            '<a href="' . esc_url( 'https://wordpress.org/plugins/riaco-reviews/' ) . '" target="_blank" rel="noopener noreferrer">',
+            '<a href="' . esc_url( 'https://wordpress.org/support/plugin/riaco-reviews/reviews/' ) . '" target="_blank" rel="noopener noreferrer">',
             '</a>'
-        );
+        ) );
     }
 
     private function get_meta( int $post_id ): array {
         return [
             'author_name'   => get_post_meta( $post_id, '_riaco_review_author_name',   true ),
             'author_avatar' => get_post_meta( $post_id, '_riaco_review_author_avatar', true ),
-            'rating'        => (int) get_post_meta( $post_id, '_riaco_review_rating',  true ) ?: 5,
+            'rating'        => (int) get_post_meta( $post_id, '_riaco_review_rating',  true ),
             'review_date'   => get_post_meta( $post_id, '_riaco_review_date',          true ),
             'source_url'    => get_post_meta( $post_id, '_riaco_review_source_url',    true ),
         ];

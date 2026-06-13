@@ -10,7 +10,7 @@
  * Plugin URI: https://github.com/roberiacono/riaco-reviews
  * Text Domain: riaco-reviews
  * Domain Path: /languages
- * License: GPL v2 or later
+ * License: GPL-2.0-or-later
  * License URI: https://www.gnu.org/licenses/gpl-2.0.html
  */
 
@@ -29,3 +29,4 @@ $plugin = new Plugin( __FILE__, RIACO_REVIEWS_VERSION );
 $plugin->load();
 
 register_activation_hook( __FILE__, [ $plugin, 'on_activation' ] );
+register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );

@@ -111,13 +111,24 @@ class Renderer {
             'post_type'      => 'riaco_review',
             'posts_per_page' => $atts['count'],
             'post_status'    => 'publish',
-            'orderby'        => $atts['orderby'] === 'rating' ? 'meta_value_num' : $atts['orderby'],
+            'orderby'        => $atts['orderby'] === 'rating' ? [ 'riaco_rating' => $atts['order'] ] : $atts['orderby'],
             'order'          => $atts['order'],
             'no_found_rows'  => true,
         ];
 
         if ( $atts['orderby'] === 'rating' ) {
-            $query_args['meta_key'] = '_riaco_review_rating';
+            $query_args['meta_query'] = [
+                'relation'     => 'OR',
+                'riaco_rating' => [
+                    'key'     => '_riaco_review_rating',
+                    'compare' => 'EXISTS',
+                    'type'    => 'NUMERIC',
+                ],
+                [
+                    'key'     => '_riaco_review_rating',
+                    'compare' => 'NOT EXISTS',
+                ],
+            ];
         }
 
         if ( ! empty( $atts['tag'] ) ) {
@@ -131,6 +142,20 @@ class Renderer {
         $query_args = apply_filters( 'riaco_reviews_query_args', $query_args, $atts );
 
         $reviews = new \WP_Query( $query_args );
+
+        // Pre-warm term meta cache for all source terms in one query to avoid N+1 inside the loop.
+        if ( $reviews->have_posts() ) {
+            $source_term_ids = [];
+            foreach ( $reviews->posts as $p ) {
+                $terms = get_the_terms( $p->ID, 'riaco_review_source' );
+                if ( $terms && ! is_wp_error( $terms ) ) {
+                    $source_term_ids[] = (int) $terms[0]->term_id;
+                }
+            }
+            if ( $source_term_ids ) {
+                update_termmeta_cache( array_unique( $source_term_ids ) );
+            }
+        }
 
         ob_start();
         include RIACO_REVIEWS_DIR . 'templates/reviews.php';

@@ -212,7 +212,7 @@ Yes. Use the `riaco_reviews_card_template_path` filter to return the path to you
 
 = Does this plugin add anything to my database on activation? =
 
-No. Activation flushes the rewrite rules so the custom post type and taxonomies register correctly. No custom database tables are created. All review data is stored as standard WordPress post meta.
+No. Activation flushes the rewrite rules so the custom post type and taxonomies register correctly; deactivation flushes them again so the CPT slug is removed cleanly. No custom database tables are created. All review data is stored as standard WordPress post meta.
 
 = Will this slow down my site? =
 
@@ -220,7 +220,7 @@ The plugin loads its CSS only on pages where the block or shortcode is present (
 
 = Is the plugin translation-ready? =
 
-Yes. All user-facing strings are wrapped in WordPress i18n functions and the text domain is `riaco-reviews`. A `.pot` file can be generated from the source.
+Yes. All user-facing strings are wrapped in WordPress i18n functions and the text domain is `riaco-reviews`. A `.pot` file is included in the `languages/` directory.
 
 == Screenshots ==
 

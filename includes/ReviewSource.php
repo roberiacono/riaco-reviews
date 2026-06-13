@@ -111,12 +111,12 @@ class ReviewSource implements ServiceInterface {
                         <?php esc_html_e( 'Upload Image', 'riaco-reviews' ); ?>
                     </button>
                     <button type="button" id="riaco_source_image_remove_btn" class="button-link button-link-delete"
-                            <?php echo $image ? '' : 'style="display:none;"'; ?>>
+                            <?php if ( ! $image ) : ?>style="display:none;"<?php endif; ?>>
                         <?php esc_html_e( 'Remove', 'riaco-reviews' ); ?>
                     </button>
                 </div>
                 <img id="riaco_source_image_preview" src="<?php echo esc_url( $image ); ?>"
-                     alt="" style="height:40px;width:auto;object-fit:contain;<?php echo $image ? '' : 'display:none;'; ?>">
+                     alt="" style="height:40px;width:auto;object-fit:contain;<?php if ( ! $image ) : ?>display:none;<?php endif; ?>">
                 <?php wp_nonce_field( 'riaco_source_image_save', 'riaco_source_image_nonce', false ); ?>
             </td>
         </tr>
@@ -174,9 +174,9 @@ class ReviewSource implements ServiceInterface {
     }
 
     public function enqueue_assets( string $hook ): void {
+        $taxonomy      = isset( $_GET['taxonomy'] ) ? sanitize_key( wp_unslash( $_GET['taxonomy'] ) ) : '';
         $on_tax_screen = in_array( $hook, [ 'edit-tags.php', 'term.php' ], true )
-            && isset( $_GET['taxonomy'] )
-            && $_GET['taxonomy'] === 'riaco_review_source';
+            && $taxonomy === 'riaco_review_source';
 
         if ( ! $on_tax_screen ) return;
 

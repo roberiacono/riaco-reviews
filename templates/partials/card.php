@@ -109,7 +109,9 @@ if ( 'modern' === $atts['card_style'] ) :
 <?php elseif ( 'minimal' === $atts['card_style'] ) :
 
     $has_minimal_source = ! empty( $meta['source_name'] );
-    $has_minimal_footer = ( $atts['show_author_name'] && ! empty( $meta['author_name'] ) ) || $atts['show_date'] || $has_minimal_source;
+    $has_minimal_footer = ( $atts['show_author_name'] && ! empty( $meta['author_name'] ) )
+                       || ( $atts['show_date'] && ! empty( $meta['review_date'] ) )
+                       || $has_minimal_source;
 ?>
 <article class="riaco-reviews__card riaco-reviews__card--minimal">
 
@@ -165,7 +167,10 @@ if ( 'modern' === $atts['card_style'] ) :
 
 <?php else : /* default style */
 
-    $has_footer = $atts['show_author_name'] || $atts['show_date'] || $atts['show_avatar'];
+    $has_footer = ( $atts['show_author_name'] && ! empty( $meta['author_name'] ) )
+               || ( $atts['show_date'] && ! empty( $meta['review_date'] ) )
+               || $has_avatar
+               || ( $atts['show_avatar'] && ! empty( $meta['author_name'] ) );
 ?>
 <article class="riaco-reviews__card riaco-reviews__card--<?php echo esc_attr( $atts['card_style'] ); ?>">
 

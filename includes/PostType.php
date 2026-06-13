@@ -43,7 +43,7 @@ class PostType implements ServiceInterface {
 
     public function noindex(): void {
         if ( is_singular( 'riaco_review' ) ) {
-            echo '<meta name="robots" content="noindex, nofollow">' . "\n";
+            echo wp_kses( '<meta name="robots" content="noindex, nofollow">', [ 'meta' => [ 'name' => [], 'content' => [] ] ] ) . "\n";
         }
     }
 }
