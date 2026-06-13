@@ -36,6 +36,7 @@ class Shortcodes implements ServiceInterface {
             'show_shadow'       => 1,
             'orderby'           => 'date',
             'order'             => 'DESC',
+            'tag'               => '',
             'min_width'         => 280,
             'card_bg'           => '',
             'card_text_color'   => '',
@@ -64,6 +65,7 @@ class Shortcodes implements ServiceInterface {
             'orderby'           => sanitize_key( $atts['orderby'] ),
             'order'             => in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
                                     ? strtoupper( $atts['order'] ) : 'DESC',
+            'tag'               => sanitize_text_field( $atts['tag'] ),
             'min_width'         => absint( $atts['min_width'] ),
             'card_bg'           => $atts['card_bg'],
             'card_text_color'   => $atts['card_text_color'],

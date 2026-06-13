@@ -22,6 +22,7 @@ class Renderer {
             'min_width'         => 300,
             'orderby'           => 'date',
             'order'             => 'DESC',
+            'tag'               => '',
             'card_bg'           => '',
             'card_text_color'   => '',
             'card_border_color' => '',
@@ -44,6 +45,14 @@ class Renderer {
         $atts['orderby']    = in_array( $atts['orderby'],    $allowed_orderby,     true ) ? $atts['orderby']    : 'date';
         $atts['order'] = in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
             ? strtoupper( $atts['order'] ) : 'DESC';
+
+        // Sanitize tag filter: comma-separated slugs.
+        if ( ! empty( $atts['tag'] ) ) {
+            $slugs       = array_filter( array_map( 'sanitize_title', explode( ',', (string) $atts['tag'] ) ) );
+            $atts['tag'] = implode( ',', $slugs );
+        } else {
+            $atts['tag'] = '';
+        }
 
         foreach ( [ 'show_author_name', 'show_avatar', 'show_date', 'show_rating', 'show_source', 'show_tag', 'show_title', 'show_shadow' ] as $key ) {
             $atts[ $key ] = filter_var( $atts[ $key ], FILTER_VALIDATE_BOOLEAN );
@@ -109,6 +118,14 @@ class Renderer {
 
         if ( $atts['orderby'] === 'rating' ) {
             $query_args['meta_key'] = '_riaco_review_rating';
+        }
+
+        if ( ! empty( $atts['tag'] ) ) {
+            $query_args['tax_query'] = [ [
+                'taxonomy' => 'riaco_review_tag',
+                'field'    => 'slug',
+                'terms'    => explode( ',', $atts['tag'] ),
+            ] ];
         }
 
         $query_args = apply_filters( 'riaco_reviews_query_args', $query_args, $atts );

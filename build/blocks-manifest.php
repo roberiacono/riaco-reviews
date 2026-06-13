@@ -5,7 +5,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
 		'name' => 'riaco-reviews/reviews-block',
-		'version' => '1.0.1',
+		'version' => '1.0.2',
 		'title' => 'RIACO Reviews',
 		'category' => 'widgets',
 		'icon' => 'star-filled',
@@ -102,6 +102,10 @@ return array(
 				'default' => ''
 			),
 			'tagTextColor' => array(
+				'type' => 'string',
+				'default' => ''
+			),
+			'tagFilter' => array(
 				'type' => 'string',
 				'default' => ''
 			)

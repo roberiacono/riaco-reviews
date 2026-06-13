@@ -3,7 +3,7 @@ Contributors: prototipo88
 Tags: reviews, testimonials, star rating, review block, customer reviews
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.0.1
+Stable tag: 1.0.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -59,6 +59,12 @@ Show or hide each element independently:
 * Tag badge
 * Card drop shadow
 
+**Filtering**
+
+* Filter displayed reviews by tag — show only reviews tagged with a specific product or subject.
+* Block editor: choose a tag from the "Filter by Tag" dropdown in the Display Settings panel.
+* Shortcode: pass `tag="my-product-slug"` (comma-separated slugs for multiple tags).
+
 **Sorting**
 
 * By date (newest or oldest first)
@@ -113,7 +119,7 @@ Basic usage:
 
 All parameters:
 
-`[riaco_reviews count="6" layout="grid" card_style="default" orderby="date" order="DESC" show_title="1" show_author_name="1" show_avatar="1" show_date="0" show_rating="1" show_source="1" show_tag="1" show_shadow="1" min_width="280"]`
+`[riaco_reviews count="6" layout="grid" card_style="default" orderby="date" order="DESC" tag="" show_title="1" show_author_name="1" show_avatar="1" show_date="0" show_rating="1" show_source="1" show_tag="1" show_shadow="1" min_width="280"]`
 
 Colour and typography:
 
@@ -179,6 +185,18 @@ Yes. Set `orderby="rating"` in the shortcode or choose **By rating** in the bloc
 
 Go to **Reviews > Tags** and create a tag for each product or subject. When editing a review, select the appropriate tag from the **Tag** dropdown in the sidebar. The tag appears as a pill badge on the card.
 
+= Can I show only reviews for a specific product or tag? =
+
+Yes. Use the `tag` attribute in the shortcode — pass the tag slug (the URL-friendly version of the tag name):
+
+`[riaco_reviews tag="my-plugin"]`
+
+For multiple tags (show reviews matching any of them), pass a comma-separated list:
+
+`[riaco_reviews tag="plugin-one,plugin-two"]`
+
+In the block editor, open the **Display Settings** panel and choose a tag from the **Filter by Tag** dropdown. Selecting "— All Tags —" removes the filter.
+
 = Can I filter the reviews query to show only certain reviews? =
 
 Yes, using the `riaco_reviews_query_args` filter. This gives you access to the full `WP_Query` args array before the query runs — add taxonomy queries, `post__in`, meta queries, or any other `WP_Query` parameter. Example:
@@ -216,6 +234,10 @@ Yes. All user-facing strings are wrapped in WordPress i18n functions and the tex
 8. **Frontend — Mobile view** — Single-column layout on a narrow screen, demonstrating the responsive auto-fill column behaviour.
 
 == Changelog ==
+
+= 1.0.2 =
+* Added filter-by-tag support: `tag` shortcode attribute and `tagFilter` block attribute let you show only reviews assigned to a specific tag (comma-separated slugs for multiple tags).
+* Block editor: new "Filter by Tag" dropdown in the Display Settings panel, populated from existing tags without requiring REST API access.
 
 = 1.0.0 =
 * Initial release.

@@ -71,6 +71,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `min_width` / `minWidth` | `300` | minimum card width in px; drives the CSS `--riaco-card-min-width` variable |
 | `orderby` | `'date'` | `'date'`, `'rating'`, or `'rand'` |
 | `order` | `'DESC'` | `'ASC'` or `'DESC'` |
+| `tag` / `tagFilter` | `''` | tag slug to filter by; comma-separated for multiple; empty = all tags |
 
 **Colour / typography attributes** (block and shortcode, empty = use CSS default):
 
@@ -95,6 +96,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 - The editor preview uses `ServerSideRender` — the inspector sidebar has panels for Display Settings, Field Visibility, Sort Order, Card Colours, and Typography.
 - `style.scss` is intentionally empty — frontend styles are loaded separately from `assets/dist/reviews.css` via `wp_enqueue_block_style()` in `Blocks::register_block()`. This hook loads the CSS both on the frontend (when the block is present) and inside the editor canvas iframe, which is required for the `ServerSideRender` preview to be styled correctly.
 - `block.json` has no `style` field. `wp_enqueue_block_style()` in `Blocks::register_block()` is the sole owner of frontend style loading; omitting the field prevents WordPress from registering a redundant empty stylesheet.
+- **Tag data for the editor**: `Blocks::localize_editor_data()` fires on `enqueue_block_editor_assets` and injects `window.riacoReviewsData = { tags: [...] }` as an inline script before `riaco-reviews-reviews-block-editor-script`. The `edit.js` reads this to populate the "Filter by Tag" `SelectControl` without requiring `show_in_rest` on the taxonomy.
 
 ### Admin JS
 

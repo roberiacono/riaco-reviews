@@ -2,7 +2,7 @@
     "$schema": "https://schemas.wp.org/trunk/block.json",
     "apiVersion": 3,
     "name": "riaco-reviews/reviews-block",
-    "version": "1.0.1",
+    "version": "1.0.2",
     "title": "RIACO Reviews",
     "category": "widgets",
     "icon": "star-filled",
@@ -97,6 +97,10 @@
             "default": ""
         },
         "tagTextColor": {
+            "type": "string",
+            "default": ""
+        },
+        "tagFilter": {
             "type": "string",
             "default": ""
         }

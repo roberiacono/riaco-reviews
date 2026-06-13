@@ -37,6 +37,23 @@ class Blocks implements ServiceInterface {
             'ver'    => $this->version,
             'path'   => RIACO_REVIEWS_DIR . 'assets/dist/reviews.css',
         ] );
+
+        add_action( 'enqueue_block_editor_assets', [ $this, 'localize_editor_data' ] );
+    }
+
+    public function localize_editor_data(): void {
+        $terms    = get_terms( [ 'taxonomy' => 'riaco_review_tag', 'hide_empty' => false ] );
+        $tag_data = [];
+        if ( ! is_wp_error( $terms ) ) {
+            foreach ( $terms as $term ) {
+                $tag_data[] = [ 'slug' => $term->slug, 'name' => $term->name ];
+            }
+        }
+        wp_add_inline_script(
+            'riaco-reviews-reviews-block-editor-script',
+            'window.riacoReviewsData = ' . wp_json_encode( [ 'tags' => $tag_data ] ) . ';',
+            'before'
+        );
     }
 
     public function render( array $attributes ): string {
@@ -55,6 +72,7 @@ class Blocks implements ServiceInterface {
             'min_width'         => $attributes['minWidth']         ?? 280,
             'orderby'           => $attributes['orderby']          ?? 'date',
             'order'             => $attributes['order']            ?? 'DESC',
+            'tag'               => $attributes['tagFilter']        ?? '',
             'card_bg'           => $attributes['cardBg']           ?? '',
             'card_text_color'   => $attributes['cardTextColor']    ?? '',
             'card_border_color' => $attributes['cardBorderColor']  ?? '',

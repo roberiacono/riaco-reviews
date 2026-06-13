@@ -26,6 +26,7 @@ export default function Edit( { attributes, setAttributes } ) {
         minWidth,
         orderby,
         order,
+        tagFilter,
         cardBg,
         cardTextColor,
         cardBorderColor,
@@ -38,6 +39,12 @@ export default function Edit( { attributes, setAttributes } ) {
 
     const blockProps = useBlockProps( { className: 'riaco-reviews-ssr-wrap' } );
 
+    const availableTags = ( window.riacoReviewsData?.tags ) || [];
+    const tagOptions = [
+        { label: __( '— All Tags —', 'riaco-reviews' ), value: '' },
+        ...availableTags.map( ( t ) => ( { label: t.name, value: t.slug } ) ),
+    ];
+
     return (
         <>
             <InspectorControls>
@@ -49,6 +56,17 @@ export default function Edit( { attributes, setAttributes } ) {
                         onChange={ ( value ) => setAttributes( { count: value } ) }
                         min={ 1 }
                         max={ 50 }
+                    />
+                    <SelectControl
+                        __next40pxDefaultSize
+                        label={ __( 'Filter by Tag', 'riaco-reviews' ) }
+                        value={ tagFilter }
+                        options={ tagOptions }
+                        onChange={ ( value ) => setAttributes( { tagFilter: value } ) }
+                        help={ availableTags.length === 0
+                            ? __( 'No tags found. Create tags under Reviews → Tags.', 'riaco-reviews' )
+                            : undefined
+                        }
                     />
                     <SelectControl
                         __next40pxDefaultSize
