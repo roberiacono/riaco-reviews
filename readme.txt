@@ -3,7 +3,7 @@ Contributors: prototipo88
 Tags: reviews, testimonials, star rating, review block, customer reviews
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.1.0
+Stable tag: 1.2.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -14,14 +14,14 @@ Display beautiful customer reviews and testimonials in Grid or Masonry layouts w
 
 **RIACO Reviews** lets you manual collect, manage, and display customer reviews and testimonials anywhere on your WordPress site — no page builder required. Add the Reviews block in the Gutenberg editor and get a live preview instantly, or drop in the `[riaco_reviews]` shortcode on any page or widget area.
 
-Every review is a native WordPress post with its own star rating, author, avatar, review date, source platform, and product tag. Display options, layout, card style, and colours are all configurable directly from the block inspector panel — no CSS editing required.
+Every review is a native WordPress post with its own star rating, author, avatar, review date, source platform, and product. Display options, layout, card style, and colours are all configurable directly from the block inspector panel — no CSS editing required.
 
 = Why RIACO Reviews? =
 
 * **Works with any theme** — lightweight, BEM-structured CSS, no opinionated framework dependencies.
 * **Three card styles** — Default, Modern, and Minimal — each designed to suit a different aesthetic without installing extra plugins.
 * **Two responsive layouts** — Grid and Masonry — that adapt to any container width automatically. No fixed breakpoints.
-* **Colour control** — customise card background, text, borders, star colour, tag badge colours, font size, and line height directly from the block editor.
+* **Colour control** — customise card background, text, borders, star colour, product badge colours, font size, and line height directly from the block editor.
 * **Built for WordPress** — uses a custom post type, standard taxonomies, native media uploader, and WordPress hooks throughout.
 
 = Features =
@@ -44,7 +44,7 @@ Every review is a native WordPress post with its own star rating, author, avatar
 * Review date (separate from the publish date — enter the date the customer left the review)
 * Source platform — assign a platform like "Google", "Trustpilot", or "WordPress.org" with its logo
 * Source URL — link to the original review on the external platform
-* Product / subject tag — label each review with what it refers to; set a URL and schema.org type per tag for structured data
+* Product / subject — label each review with what it refers to; set a URL and schema.org type per product for structured data
 
 **Visibility Toggles**
 
@@ -56,14 +56,14 @@ Show or hide each element independently:
 * Star rating
 * Review date
 * Source platform logo
-* Tag badge
+* Product badge
 * Card drop shadow
 
 **Filtering**
 
-* Filter displayed reviews by tag — show only reviews tagged with a specific product or subject.
-* Block editor: choose a tag from the "Filter by Tag" dropdown in the Display Settings panel.
-* Shortcode: pass `tag="my-product-slug"` (comma-separated slugs for multiple tags).
+* Filter displayed reviews by product — show only reviews assigned to a specific product or subject.
+* Block editor: choose a product from the "Filter by Product" dropdown in the Display Settings panel.
+* Shortcode: pass `product="my-product-slug"` (comma-separated slugs for multiple products).
 
 **Sorting**
 
@@ -79,22 +79,22 @@ Override directly from the block editor or shortcode attributes:
 * Card text colour
 * Card border colour
 * Star colour
-* Tag badge background and text colour
+* Product badge background and text colour
 * Font size (rem)
 * Line height
 
 **Admin**
 
 * Dedicated **Reviews** menu in the WordPress admin
-* Custom admin list table with columns for author, rating, source logo, tag, and review date
+* Custom admin list table with columns for author, rating, source logo, product, and review date
 * Media-uploader integration for author avatars and source logos
 
 **JSON-LD Structured Data**
 
 * Automatically outputs schema.org `Review` structured data in a `<script type="application/ld+json">` tag in the page footer — no setup required.
 * Each review card produces one `Review` object with `reviewBody`, `reviewRating`, `author`, `datePublished`, `url`, and `itemReviewed`.
-* `itemReviewed` is driven by the tag assigned to the review: set a URL and a schema.org type (Product, SoftwareApplication, LocalBusiness, Organization, Book, Movie, Course, Event, or the generic Thing) on each tag in **Reviews → Tags**.
-* Reviews without a tag fall back to the review headline as `itemReviewed.name` with type `Thing`.
+* `itemReviewed` is driven by the product assigned to the review: set a URL and a schema.org type (Product, SoftwareApplication, LocalBusiness, Organization, Book, Movie, Course, Event, or the generic Thing) on each product in **Reviews → Products**.
+* Reviews without a product fall back to the review headline as `itemReviewed.name` with type `Thing`.
 * Multiple reviews on the same page (from one or more blocks/shortcodes) are combined into a single `@graph` array — one `<script>` tag regardless of how many shortcodes are on the page.
 * Use the `riaco_reviews_json_ld_data` filter to modify or suppress the structured data for individual reviews.
 
@@ -116,7 +116,7 @@ Override directly from the block editor or shortcode attributes:
 
 * **SaaS companies** — showcase user testimonials on landing pages with star ratings and platform logos (G2, Capterra, Product Hunt).
 * **Freelancers and agencies** — display client testimonials with a clean Minimal card style.
-* **eCommerce stores** — highlight product reviews tagged by product name in a Grid layout.
+* **eCommerce stores** — highlight product reviews filtered by product name in a Grid layout.
 * **WordPress plugin and theme authors** — show WordPress.org reviews with source logo and link to the original listing.
 * **Local businesses** — display Google or Yelp reviews with the platform logo and a link to the source.
 * **Course creators and coaches** — collect student testimonials and display them in a Masonry layout with avatars.
@@ -129,11 +129,11 @@ Basic usage:
 
 All parameters:
 
-`[riaco_reviews count="6" layout="grid" card_style="default" orderby="date" order="DESC" tag="" show_title="1" show_author_name="1" show_avatar="1" show_date="0" show_rating="1" show_source="1" show_tag="1" show_shadow="1" min_width="280"]`
+`[riaco_reviews count="6" layout="grid" card_style="default" orderby="date" order="DESC" product="" show_title="1" show_author_name="1" show_avatar="1" show_date="0" show_rating="1" show_source="1" show_product="1" show_shadow="1" min_width="280"]`
 
 Colour and typography:
 
-`[riaco_reviews card_bg="#ffffff" card_text_color="#444444" card_border_color="#e4e4e7" star_color="#f59e0b" tag_bg="#f4f4f5" tag_text_color="#18181b" font_size="0.9375" line_height="1.7"]`
+`[riaco_reviews card_bg="#ffffff" card_text_color="#444444" card_border_color="#e4e4e7" star_color="#f59e0b" product_bg="#f4f4f5" product_text_color="#18181b" font_size="0.9375" line_height="1.7"]`
 
 == Installation ==
 
@@ -141,7 +141,7 @@ Colour and typography:
 2. Activate the plugin through the **Plugins** screen in WordPress.
 3. Go to **Reviews > Add New** to create your first review — enter the headline as the post title, the review body as the post content, and fill in the Review Details meta box (author, rating, date, source URL).
 4. Go to **Reviews > Sources** to add platform sources (Google, Trustpilot, etc.) and upload their logos.
-5. Go to **Reviews > Tags** to add product or subject tags.
+5. Go to **Reviews > Products** to add product or subject entries.
 6. In the block editor, search for **Reviews** and insert the block. Configure display options in the Inspector sidebar.
 7. Alternatively, add `[riaco_reviews]` to any post, page, or widget area.
 
@@ -161,7 +161,7 @@ Yes. Use `[riaco_reviews]` in any post, page, widget area, or PHP template. All 
 
 = How do I add a new review? =
 
-Go to **Reviews > Add New** in the WordPress admin. Enter the review headline as the post title and the review text as the main content. Use the **Review Details** meta box to set the author name, avatar, star rating, review date, and a link to the original source. Assign a Source (platform) and a Tag from the sidebar dropdowns.
+Go to **Reviews > Add New** in the WordPress admin. Enter the review headline as the post title and the review text as the main content. Use the **Review Details** meta box to set the author name, avatar, star rating, review date, and a link to the original source. Assign a Source (platform) and a Product from the sidebar dropdowns.
 
 = How do I add a platform logo (Google, Trustpilot, etc.)? =
 
@@ -172,12 +172,12 @@ Go to **Reviews > Sources** and add a new source. Upload a logo image using the 
 Three styles are available:
 
 * **Default** — white card with a drop shadow; header row shows the review title and source logo side by side.
-* **Modern** — compact header combines the author avatar, name, date, and a compact star rating in one row; the footer splits the tag badge and source link.
+* **Modern** — compact header combines the author avatar, name, date, and a compact star rating in one row; the footer splits the product badge and source link.
 * **Minimal** — large bold title, no avatar or source logo, stars use the text colour, author name links to the source URL.
 
 = Can I customise the colours to match my brand? =
 
-Yes. From the block editor Inspector sidebar, open the **Card Colours** or **Typography** panel to set card background, text, border, star, and tag colours, as well as font size and line height. The same options are available as shortcode attributes. All values are injected as CSS custom properties on the wrapper element so they scope to that specific block instance.
+Yes. From the block editor Inspector sidebar, open the **Card Colours** or **Typography** panel to set card background, text, border, star, and product badge colours, as well as font size and line height. The same options are available as shortcode attributes. All values are injected as CSS custom properties on the wrapper element so they scope to that specific block instance.
 
 = Does the layout respond to different screen sizes? =
 
@@ -191,28 +191,30 @@ Yes. Every field has an individual show/hide toggle — available both in the bl
 
 Yes. Set `orderby="rating"` in the shortcode or choose **By rating** in the block editor Sort Order panel. You can also sort by date (newest or oldest first) or random.
 
-= How do I tag reviews by product? =
+= How do I assign reviews to a product? =
 
-Go to **Reviews > Tags** and create a tag for each product or subject. When editing a review, select the appropriate tag from the **Tag** dropdown in the sidebar. The tag appears as a pill badge on the card.
+Go to **Reviews > Products** and create a product entry for each product or subject. When editing a review, select the appropriate product from the **Product** dropdown in the sidebar. The product name appears as a pill badge on the card.
 
-= Can I show only reviews for a specific product or tag? =
+= Can I show only reviews for a specific product? =
 
-Yes. Use the `tag` attribute in the shortcode — pass the tag slug (the URL-friendly version of the tag name):
+Yes. Use the `product` attribute in the shortcode — pass the product slug (the URL-friendly version of the product name):
 
-`[riaco_reviews tag="my-plugin"]`
+`[riaco_reviews product="my-plugin"]`
 
-For multiple tags (show reviews matching any of them), pass a comma-separated list:
+For multiple products (show reviews matching any of them), pass a comma-separated list:
 
-`[riaco_reviews tag="plugin-one,plugin-two"]`
+`[riaco_reviews product="plugin-one,plugin-two"]`
 
-In the block editor, open the **Display Settings** panel and choose a tag from the **Filter by Tag** dropdown. Selecting "— All Tags —" removes the filter.
+In the block editor, open the **Display Settings** panel and choose a product from the **Filter by Product** dropdown. Selecting "— All Products —" removes the filter.
+
+The old `tag=` shortcode attribute still works for backward compatibility with existing shortcodes.
 
 = Can I filter the reviews query to show only certain reviews? =
 
 Yes, using the `riaco_reviews_query_args` filter. This gives you access to the full `WP_Query` args array before the query runs — add taxonomy queries, `post__in`, meta queries, or any other `WP_Query` parameter. Example:
 
 `add_filter( 'riaco_reviews_query_args', function( $args, $atts ) {
-    $args['tax_query'] = [ [ 'taxonomy' => 'riaco_review_tag', 'field' => 'slug', 'terms' => 'my-product' ] ];
+    $args['tax_query'] = [ [ 'taxonomy' => 'riaco_review_product', 'field' => 'slug', 'terms' => 'my-product' ] ];
     return $args;
 }, 10, 2 );`
 
@@ -220,12 +222,12 @@ Yes, using the `riaco_reviews_query_args` filter. This gives you access to the f
 
 Yes. The plugin automatically outputs schema.org `Review` structured data in the page footer for every review rendered by a block or shortcode. No configuration is required — the data is picked up by Google and other search engines automatically.
 
-To get the most out of rich results, go to **Reviews → Tags**, edit each tag, and set:
+To get the most out of rich results, go to **Reviews → Products**, edit each product, and set:
 
 * **Product / Subject URL** — the canonical URL of the thing being reviewed (e.g. your plugin's WordPress.org listing page).
 * **Schema.org Type** — the type of thing being reviewed. Use `Product` for physical or digital products, `SoftwareApplication` for apps and plugins, `LocalBusiness` for shops and services, etc. Leave it as `Thing` if unsure.
 
-Reviews that share the same tag but have different star ratings each produce a separate `Review` object — this is expected and valid. You can validate the structured data with [Google's Rich Results Test](https://search.google.com/test/rich-results).
+Reviews that share the same product but have different star ratings each produce a separate `Review` object — this is expected and valid. You can validate the structured data with [Google's Rich Results Test](https://search.google.com/test/rich-results).
 
 To suppress or modify the structured data for a specific review, use the `riaco_reviews_json_ld_data` filter (return `false` to suppress).
 
@@ -247,21 +249,28 @@ Yes. All user-facing strings are wrapped in WordPress i18n functions and the tex
 
 == Screenshots ==
 
-1. **Review list admin screen** — Custom admin list table showing Author, Rating (stars), Source logo, Tag, and Review Date columns for quick management.
-2. **Add / Edit review screen** — Post editor with the Review Details meta box (author name, avatar upload, star rating, review date, source URL) and Source / Tag dropdowns in the sidebar.
+1. **Review list admin screen** — Custom admin list table showing Author, Rating (stars), Source logo, Product, and Review Date columns for quick management.
+2. **Add / Edit review screen** — Post editor with the Review Details meta box (author name, avatar upload, star rating, review date, source URL) and Source / Product dropdowns in the sidebar.
 3. **Sources admin screen** — Taxonomy screen for managing review sources with logo upload and preview.
 4. **Block editor — Inspector sidebar** — The Reviews block selected, showing the Inspector panels: Display Settings, Field Visibility, Sort Order, Card Colours, and Typography.
-5. **Frontend — Grid layout, Default card style** — Review cards in an auto-fill grid with title, star rating, tag badge, review text, avatar, and source logo.
+5. **Frontend — Grid layout, Default card style** — Review cards in an auto-fill grid with title, star rating, product badge, review text, avatar, and source logo.
 6. **Frontend — Masonry layout, Modern card style** — Masonry column layout with compact author + rating header row and source link in the footer.
 7. **Frontend — Grid layout, Minimal card style** — Minimal cards with large title, text-coloured stars, no avatars, and author name linked to the source URL.
 8. **Frontend — Mobile view** — Single-column layout on a narrow screen, demonstrating the responsive auto-fill column behaviour.
 
 == Changelog ==
 
+= 1.2.0 =
+* **Taxonomy rename:** `riaco_review_tag` renamed to `riaco_review_product`; the admin menu now shows **Reviews → Products** instead of Tags.
+* **Shortcode attribute rename:** `tag` → `product`, `show_tag` → `show_product`, `tag_bg` → `product_bg`, `tag_text_color` → `product_text_color`. Old `tag=` attribute still accepted for backward compatibility.
+* **Block attribute rename:** `tagFilter` → `productFilter`, `showTag` → `showProduct`, `tagBg` → `productBg`, `tagTextColor` → `productTextColor`. Old saved blocks continue to render correctly via a compatibility shim.
+* **CSS rename:** `.riaco-reviews__card-tag` → `.riaco-reviews__card-product`; `--riaco-tag-*` custom properties → `--riaco-product-*`.
+* **DB migration:** on first load after upgrade, the plugin automatically renames the taxonomy slug and migrates `_riaco_tag_url` / `_riaco_tag_type` term meta keys — no manual action needed.
+
 = 1.1.0 =
 * Initial release.
 * **JSON-LD structured data:** the plugin now outputs schema.org `Review` structured data automatically in the page footer for every rendered review, enabling Google rich results with no configuration.
-* **Tag metadata:** two new fields on the **Reviews → Tags** edit screen — "Product / Subject URL" and "Schema.org Type" — let you specify what each tag refers to so `itemReviewed` in the structured data is as accurate as possible.
+* **Tag metadata:** two new fields on the **Reviews → Tags** (now **Products**) edit screen — "Product / Subject URL" and "Schema.org Type" — let you specify what each entry refers to so `itemReviewed` in the structured data is as accurate as possible.
 * `riaco_reviews_json_ld_data` filter: modify or suppress the JSON-LD object for individual reviews before output.
 * Multiple blocks/shortcodes on the same page produce a single `<script>` tag with a `@graph` array rather than one script per shortcode.
 * **Accessibility:** added `:focus-visible` outlines to all interactive links; improved colour contrast on muted text (date, author handle, source name) to meet WCAG 2.1 AA.
@@ -276,23 +285,23 @@ Yes. All user-facing strings are wrapped in WordPress i18n functions and the tex
 * **i18n:** admin media-uploader strings ("Select Avatar", "Use this image", "Select Logo") are now translatable via PHP localisation.
 * **Bug fix:** `strtotime()` truthiness check corrected to `false !== $ts` to handle edge-case epoch dates.
 * **Security:** source logo save capability tightened from `manage_categories` to `manage_options`.
-* **Tooltip:** `title` attribute added to truncated author names and tag badges so full text is accessible on hover.
+* **Tooltip:** `title` attribute added to truncated author names and product badges so full text is accessible on hover.
 
 = 1.0.2 =
-* Added filter-by-tag support: `tag` shortcode attribute and `tagFilter` block attribute let you show only reviews assigned to a specific tag (comma-separated slugs for multiple tags).
-* Block editor: new "Filter by Tag" dropdown in the Display Settings panel, populated from existing tags without requiring REST API access.
+* Added filter-by-tag support: `tag` shortcode attribute and `tagFilter` block attribute (renamed to `product` / `productFilter` in v1.2.0) let you show only reviews assigned to a specific tag.
+* Block editor: new "Filter by Tag" dropdown (now "Filter by Product") in the Display Settings panel, populated from existing tags without requiring REST API access.
 
 = 1.0.1 =
 * Fix performance bugs
 
 = 1.0.0 =
-* Custom post type `riaco_review` with dedicated admin list table (Author, Rating, Source, Tag, Review Date columns).
+* Custom post type `riaco_review` with dedicated admin list table (Author, Rating, Source, Product, Review Date columns).
 * Gutenberg block with server-side rendering and live editor preview.
 * Shortcode `[riaco_reviews]` with full attribute support.
 * Grid and Masonry responsive layouts.
 * Default, Modern, and Minimal card styles.
 * Review Sources taxonomy with media-uploader logo field (SVG supported).
-* Review Tags taxonomy with pill badge display.
+* Review Products taxonomy with pill badge display.
 * Per-review fields: author name, avatar (with initials fallback), star rating (1–5), review date, source URL.
 * Show/hide toggles for all card elements.
 * Sort by date, rating, or random.

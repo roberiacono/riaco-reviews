@@ -33,21 +33,27 @@ class Shortcodes implements ServiceInterface {
             'show_date'         => 0,
             'show_rating'       => 1,
             'show_source'       => 1,
-            'show_tag'          => 1,
-            'show_shadow'       => 1,
-            'orderby'           => 'date',
-            'order'             => 'DESC',
-            'tag'               => '',
-            'min_width'         => 280,
-            'card_bg'           => '',
-            'card_text_color'   => '',
-            'card_border_color' => '',
-            'star_color'        => '',
-            'tag_bg'            => '',
-            'tag_text_color'    => '',
-            'font_size'         => '',
-            'line_height'       => '',
+            'show_product'       => 1,
+            'show_shadow'        => 1,
+            'orderby'            => 'date',
+            'order'              => 'DESC',
+            'product'            => '',
+            'tag'                => '',
+            'min_width'          => 280,
+            'card_bg'            => '',
+            'card_text_color'    => '',
+            'card_border_color'  => '',
+            'star_color'         => '',
+            'product_bg'         => '',
+            'product_text_color' => '',
+            'font_size'          => '',
+            'line_height'        => '',
         ], $atts, 'riaco_reviews' );
+
+        // Backward compat: old shortcodes may still use tag= or tag_bg= / tag_text_color=.
+        if ( ! empty( $atts['tag'] ) && empty( $atts['product'] ) ) {
+            $atts['product'] = $atts['tag'];
+        }
 
         $this->enqueue_assets();
 
@@ -60,23 +66,23 @@ class Shortcodes implements ServiceInterface {
             'show_author_name'  => (bool) $atts['show_author_name'],
             'show_avatar'       => (bool) $atts['show_avatar'],
             'show_date'         => (bool) $atts['show_date'],
-            'show_rating'       => (bool) $atts['show_rating'],
-            'show_source'       => (bool) $atts['show_source'],
-            'show_tag'          => (bool) $atts['show_tag'],
-            'show_shadow'       => (bool) $atts['show_shadow'],
-            'orderby'           => sanitize_key( $atts['orderby'] ),
-            'order'             => in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
+            'show_rating'        => (bool) $atts['show_rating'],
+            'show_source'        => (bool) $atts['show_source'],
+            'show_product'       => (bool) $atts['show_product'],
+            'show_shadow'        => (bool) $atts['show_shadow'],
+            'orderby'            => sanitize_key( $atts['orderby'] ),
+            'order'              => in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
                                     ? strtoupper( $atts['order'] ) : 'DESC',
-            'tag'               => sanitize_text_field( $atts['tag'] ),
-            'min_width'         => absint( $atts['min_width'] ),
-            'card_bg'           => $atts['card_bg'],
-            'card_text_color'   => $atts['card_text_color'],
-            'card_border_color' => $atts['card_border_color'],
-            'star_color'        => $atts['star_color'],
-            'tag_bg'            => $atts['tag_bg'],
-            'tag_text_color'    => $atts['tag_text_color'],
-            'font_size'         => $atts['font_size'],
-            'line_height'       => $atts['line_height'],
+            'product'            => sanitize_text_field( $atts['product'] ),
+            'min_width'          => absint( $atts['min_width'] ),
+            'card_bg'            => $atts['card_bg'],
+            'card_text_color'    => $atts['card_text_color'],
+            'card_border_color'  => $atts['card_border_color'],
+            'star_color'         => $atts['star_color'],
+            'product_bg'         => $atts['product_bg'],
+            'product_text_color' => $atts['product_text_color'],
+            'font_size'          => $atts['font_size'],
+            'line_height'        => $atts['line_height'],
         ] );
     }
 

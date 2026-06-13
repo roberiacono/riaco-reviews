@@ -42,7 +42,7 @@ Run this after adding or changing any translatable string. The `.pot` file lives
 
 The plugin initialises on `plugins_loaded` (not `init`), so all services are available when WordPress fires `init`.
 
-`get_service(string $key)` retrieves a registered service by key (e.g. `'postType'`, `'admin'`, `'blocks'`, `'shortcodes'`, `'reviewSource'`, `'reviewTag'`, `'dashboard'`, `'jsonLd'`). Returns `null` if the key is not found.
+`get_service(string $key)` retrieves a registered service by key (e.g. `'postType'`, `'admin'`, `'blocks'`, `'shortcodes'`, `'reviewSource'`, `'reviewProduct'`, `'dashboard'`, `'jsonLd'`). Returns `null` if the key is not found.
 
 **Lifecycle actions fired by `Plugin::init()`** (in order):
 
@@ -62,9 +62,9 @@ Both the block and the shortcode converge on `Renderer::render(array $atts): str
 
 Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates/partials/card.php` renders a single card. Both receive `$atts` (display options) and `$reviews` (the `WP_Query` object) as local variables via `include`.
 
-`reviews.php` builds a `$meta` array per post that includes post-meta fields **and** taxonomy data resolved in the loop: it resolves the `riaco_review_source` term to get `source_image` and `source_name` (via `get_term_meta`), fetches `source_url` from post meta, and collects `riaco_review_tag` terms for the tag badge.
+`reviews.php` builds a `$meta` array per post that includes post-meta fields **and** taxonomy data resolved in the loop: it resolves the `riaco_review_source` term to get `source_image` and `source_name` (via `get_term_meta`), fetches `source_url` from post meta, and collects `riaco_review_product` terms for the product badge.
 
-**Term meta cache warming** — `WP_Query` pre-warms the post meta and term caches for all posts in the result set, but WordPress does not automatically warm term meta. To prevent N+1 queries from `get_term_meta()` calls inside the loop, `Renderer::render()` calls `update_termmeta_cache()` on the deduplicated list of source term IDs **and** tag term IDs immediately after the query runs and before `ob_start()`. Both taxonomies are collected in a single pre-loop pass.
+**Term meta cache warming** — `WP_Query` pre-warms the post meta and term caches for all posts in the result set, but WordPress does not automatically warm term meta. To prevent N+1 queries from `get_term_meta()` calls inside the loop, `Renderer::render()` calls `update_termmeta_cache()` on the deduplicated list of source term IDs **and** product term IDs immediately after the query runs and before `ob_start()`. Both taxonomies are collected in a single pre-loop pass.
 
 **Display attributes** — all default to `true` unless noted:
 
@@ -76,7 +76,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `show_date` / `showDate` | `false` | |
 | `show_rating` / `showRating` | `true` | |
 | `show_source` / `showSource` | `true` | source logo in card header |
-| `show_tag` / `showTag` | `true` | neutral pill badge |
+| `show_product` / `showProduct` | `true` | neutral pill badge |
 | `show_shadow` / `showShadow` | `true` | drop shadow on cards |
 | `count` | `6` | |
 | `layout` | `'grid'` | `'grid'` or `'masonry'` — controls card *arrangement* |
@@ -85,7 +85,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `min_width` / `minWidth` | `300` | minimum card width in px; drives the CSS `--riaco-card-min-width` variable |
 | `orderby` | `'date'` | `'date'`, `'rating'`, or `'rand'` |
 | `order` | `'DESC'` | `'ASC'` or `'DESC'` |
-| `tag` / `tagFilter` | `''` | tag slug to filter by; comma-separated for multiple; empty = all tags |
+| `product` / `productFilter` | `''` | product slug to filter by; comma-separated for multiple; empty = all products |
 
 **Colour / typography attributes** (block and shortcode, empty = use CSS default):
 
@@ -95,12 +95,12 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `card_text_color` / `cardTextColor` | `--riaco-card-text` |
 | `card_border_color` / `cardBorderColor` | `--riaco-card-border` |
 | `star_color` / `starColor` | `--riaco-star-color` |
-| `tag_bg` / `tagBg` | `--riaco-tag-bg` |
-| `tag_text_color` / `tagTextColor` | `--riaco-tag-text` |
+| `product_bg` / `productBg` | `--riaco-product-bg` |
+| `product_text_color` / `productTextColor` | `--riaco-product-text` |
 | `font_size` / `fontSize` | `--riaco-font-size` (rem) |
 | `line_height` / `lineHeight` | `--riaco-line-height` |
 
-`Renderer::render()` sanitizes these values (hex colours via `sanitize_hex_color()`, typography as bounded floats, `min_width` as a positive integer) and injects them as a `style="…"` attribute on the `.riaco-reviews` wrapper. `min_width` values other than `280` are injected as `--riaco-card-min-width` (the PHP default is `300`, so the var is injected on every render unless `min_width=280` is passed explicitly). When `show_shadow` is false, `--riaco-card-shadow:none` is injected to suppress the drop shadow. Hex colour values are sanitized both before and after the `riaco_reviews_atts` filter runs.
+`Renderer::render()` sanitizes these values (hex colours via `sanitize_hex_color()`, typography as bounded floats, `min_width` as a positive integer) and injects them as a `style="…"` attribute on the `.riaco-reviews` wrapper. `min_width` values other than `280` are injected as `--riaco-card-min-width` (the PHP default is `300`, so the var is injected on every render unless `min_width=280` is passed explicitly). When `show_shadow` is false, `--riaco-card-shadow:none` is injected to suppress the drop shadow. Hex colour values are sanitized both before and after the `riaco_reviews_atts` filter runs. Product badge colours are injected as `--riaco-product-bg` and `--riaco-product-text`.
 
 ### Gutenberg block
 
@@ -111,7 +111,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 - `style.scss` is intentionally empty — frontend styles are loaded separately from `assets/dist/reviews.css` via `wp_enqueue_block_style()` in `Blocks::register_block()`. This hook loads the CSS both on the frontend (when the block is present) and inside the editor canvas iframe, which is required for the `ServerSideRender` preview to be styled correctly.
 - `block.json` has no `style` field. `wp_enqueue_block_style()` in `Blocks::register_block()` is the sole owner of frontend style loading; omitting the field prevents WordPress from registering a redundant empty stylesheet.
 - **Align support**: `block.json` declares `"supports": { "align": ["wide", "full"] }`, giving the block Wide and Full alignment options in the block toolbar.
-- **Tag data for the editor**: `Blocks::localize_editor_data()` fires on `enqueue_block_editor_assets` and injects `window.riacoReviewsData = { tags: [...] }` as an inline script before `riaco-reviews-reviews-block-editor-script`. The `edit.js` reads this to populate the "Filter by Tag" `SelectControl` without requiring `show_in_rest` on the taxonomy.
+- **Product data for the editor**: `Blocks::localize_editor_data()` fires on `enqueue_block_editor_assets` and injects `window.riacoReviewsData = { products: [...] }` as an inline script before `riaco-reviews-reviews-block-editor-script`. The `edit.js` reads this to populate the "Filter by Product" `SelectControl` without requiring `show_in_rest` on the taxonomy.
 - **Inspector controls**: Display Settings panel includes a "Reset all settings to defaults" button (uses the `DEFAULTS` constant in `edit.js`) and a help text on the Min Card Width slider. Field Visibility panel shows a "Title Heading Level" `SelectControl` (H2–H6) when Show Title is enabled.
 
 ### Admin JS
@@ -154,16 +154,16 @@ Both taxonomies are flat (non-hierarchical), registered on `riaco_review`, with 
 
 `riaco_review_source` — source/platform (e.g. "WordPress.org", "G2"). Term meta `_riaco_source_image` stores the logo URL (supports SVG — unlocked for `manage_options` users via `upload_mimes` + `wp_check_filetype_and_ext` filters in `ReviewSource.php`). Managed in **Reviews → Sources**. The logo is displayed in the card header alongside the review title (`.riaco-reviews__source`, inside a flex row), optionally linked to `_riaco_review_source_url`.
 
-`riaco_review_tag` — the product or subject the review refers to. Managed in **Reviews → Tags**. Implemented in `ReviewTag.php`. Displayed on the frontend card as a neutral pill badge (`.riaco-reviews__card-tag`, shadcn-inspired: `border-radius: 9999px`, zinc-100 background, `font-weight: 500`, no uppercase); toggled via `show_tag` / `showTag`.
+`riaco_review_product` — the product or subject the review refers to. Managed in **Reviews → Products**. Implemented in `ReviewProduct.php`. Displayed on the frontend card as a neutral pill badge (`.riaco-reviews__card-product`, shadcn-inspired: `border-radius: 9999px`, zinc-100 background, `font-weight: 500`, no uppercase); toggled via `show_product` / `showProduct`.
 
-Term meta stored on `riaco_review_tag` terms:
+Term meta stored on `riaco_review_product` terms:
 
 | Meta key | Notes |
 |---|---|
-| `_riaco_tag_url` | URL of the product / subject being reviewed; used in JSON-LD `itemReviewed.url` |
-| `_riaco_tag_type` | schema.org type for the reviewed item; one of `Thing` (default), `Product`, `SoftwareApplication`, `LocalBusiness`, `Organization`, `Book`, `Movie`, `Course`, `Event` |
+| `_riaco_product_url` | URL of the product / subject being reviewed; used in JSON-LD `itemReviewed.url` |
+| `_riaco_product_type` | schema.org type for the reviewed item; one of `Thing` (default), `Product`, `SoftwareApplication`, `LocalBusiness`, `Organization`, `Book`, `Movie`, `Course`, `Event` |
 
-Both fields are editable on the Add/Edit Tag screens in the admin. `_riaco_tag_url` is sanitized with `esc_url_raw()`; `_riaco_tag_type` is validated against the allowed list before saving.
+Both fields are editable on the Add/Edit Product screens in the admin. `_riaco_product_url` is sanitized with `esc_url_raw()`; `_riaco_product_type` is validated against the allowed list before saving.
 
 ### CSS
 
@@ -181,7 +181,7 @@ The title heading element is dynamic: `card.php` sets `$hl = 'h' . absint( $atts
 `default`:
 1. `.riaco-reviews__header` — flex row: `<h{heading_level} class="riaco-reviews__title">` (if `show_title`) + `.riaco-reviews__source` (logo, if `show_source`)
 2. `.riaco-reviews__rating` — five `★` spans
-3. `.riaco-reviews__card-tag` — tag badge (has `title` attribute for truncation tooltip)
+3. `.riaco-reviews__card-product` — product badge (has `title` attribute for truncation tooltip)
 4. `.riaco-reviews__body` — review text
 5. `<footer class="riaco-reviews__footer">` — avatar + author name (has `title` attribute) + date
 
@@ -189,13 +189,13 @@ The title heading element is dynamic: `card.php` sets `$hl = 'h' . absint( $atts
 1. `<h{heading_level} class="riaco-reviews__title--modern">` (if `show_title`)
 2. `.riaco-reviews__modern-header` — flex row: avatar + `.riaco-reviews__author` (name with `title` attr + date) + `.riaco-reviews__rating-compact` (★ + numeric value)
 3. `.riaco-reviews__body` — review text
-4. `.riaco-reviews__modern-footer` — flex row with `flex-wrap: wrap`: tag badge (has `title` attr, left) + source link/logo (right)
+4. `.riaco-reviews__modern-footer` — flex row with `flex-wrap: wrap`: product badge (has `title` attr, left) + source link/logo (right)
 
 `minimal`:
 1. `<h{heading_level} class="riaco-reviews__title--minimal">` (if `show_title`) — 1.5rem bold title
 2. `.riaco-reviews__rating` — five `★` spans; filled stars use `currentColor` (inherits text colour, never amber)
 3. `.riaco-reviews__body` — review text
-4. `.riaco-reviews__card-tag` — tag badge (has `title` attr); `background: transparent` (border only)
+4. `.riaco-reviews__card-product` — product badge (has `title` attr); `background: transparent` (border only)
 5. `<footer class="riaco-reviews__footer--minimal">` — author name as `<a>` to `source_url` (falls back to `<span>`) + date (off by default) + source name as small muted text
 
 **Minimal style behaviour notes:**
@@ -208,15 +208,15 @@ The title heading element is dynamic: `card.php` sets `$hl = 'h' . absint( $atts
 | Class | Visual treatment |
 |---|---|
 | `.riaco-reviews__card--default` | White card, drop shadow, 12px border-radius; header flex row for title + source logo |
-| `.riaco-reviews__card--modern` | Same base card; top row collapses avatar + author + compact rating; footer splits tag and source link |
-| `.riaco-reviews__card--minimal` | Same base card; large title, no avatar or source logo; filled stars use text colour; tag badge has transparent background; footer shows linked author name + source name as small text |
+| `.riaco-reviews__card--modern` | Same base card; top row collapses avatar + author + compact rating; footer splits product badge and source link |
+| `.riaco-reviews__card--minimal` | Same base card; large title, no avatar or source logo; filled stars use text colour; product badge has transparent background; footer shows linked author name + source name as small text |
 
 `layout` and `card_style` are orthogonal — any combination is valid.
 
 **Responsive & dark mode:**
 
 - Cards reduce padding to `1.25rem` at `max-width: 480px`.
-- `.riaco-reviews__modern-footer` has `flex-wrap: wrap` so tag + source never overflow narrow cards.
+- `.riaco-reviews__modern-footer` has `flex-wrap: wrap` so product badge + source never overflow narrow cards.
 - Cards have a hover lift effect (`translateY(-2px)` + deeper shadow) guarded by `@media (prefers-reduced-motion: reduce)`.
 - A `@media (prefers-color-scheme: dark)` block sets dark defaults on `.riaco-reviews` CSS custom properties; these are always overrideable by inline style values injected by `Renderer::render()`.
 - All interactive links (`.riaco-reviews__source-link`, `.riaco-reviews__source-link--modern`, `a.riaco-reviews__author-link--minimal`) have `:focus-visible` outlines for keyboard accessibility.
@@ -230,9 +230,9 @@ The title heading element is dynamic: `card.php` sets `$hl = 'h' . absint( $atts
 | `--riaco-card-text` | `#444444` | review text colour |
 | `--riaco-card-border` | `transparent` | card border + minimal accent |
 | `--riaco-star-color` | `#f59e0b` | filled stars |
-| `--riaco-tag-bg` | `#f4f4f5` | tag badge background |
-| `--riaco-tag-text` | `#18181b` | tag badge text |
-| `--riaco-tag-border` | `#e4e4e7` | tag badge border |
+| `--riaco-product-bg` | `#f4f4f5` | product badge background |
+| `--riaco-product-text` | `#18181b` | product badge text |
+| `--riaco-product-border` | `#e4e4e7` | product badge border |
 | `--riaco-font-size` | `0.9375rem` | review text size |
 | `--riaco-line-height` | `1.7` | review text line height |
 | `--riaco-card-min-width` | `280px` | grid column / masonry column width floor |
@@ -289,9 +289,9 @@ The `$meta` keys used for JSON-LD output:
 | `author_name` | `author.name` |
 | `review_date` | `datePublished` |
 | `source_url` | `url` (top-level review URL) |
-| `tag_name` | `itemReviewed.name` (falls back to post title) |
-| `tag_type` | `itemReviewed.@type` (falls back to `'Thing'`) |
-| `tag_url` | `itemReviewed.url` (omitted if empty) |
+| `product_name` | `itemReviewed.name` (falls back to post title) |
+| `product_type` | `itemReviewed.@type` (falls back to `'Thing'`) |
+| `product_url` | `itemReviewed.url` (omitted if empty) |
 | `post_content` | `reviewBody` (tags stripped via `wp_strip_all_tags()`) |
 
 | Hook | Type | Args | Purpose |

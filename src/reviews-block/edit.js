@@ -22,38 +22,38 @@ export default function Edit( { attributes, setAttributes } ) {
         showDate,
         showRating,
         showSource,
-        showTag,
+        showProduct,
         showTitle,
         showShadow,
         minWidth,
         orderby,
         order,
-        tagFilter,
+        productFilter,
         cardBg,
         cardTextColor,
         cardBorderColor,
         starColor,
         fontSize,
         lineHeight,
-        tagBg,
-        tagTextColor,
+        productBg,
+        productTextColor,
     } = attributes;
 
     const DEFAULTS = {
         count: 6, layout: 'grid', cardStyle: 'default', headingLevel: 3,
         showAuthorName: true, showAvatar: true, showDate: false, showRating: true,
-        showSource: true, showTag: true, showTitle: true, showShadow: true,
-        minWidth: 280, orderby: 'date', order: 'DESC', tagFilter: '',
+        showSource: true, showProduct: true, showTitle: true, showShadow: true,
+        minWidth: 280, orderby: 'date', order: 'DESC', productFilter: '',
         cardBg: '', cardTextColor: '', cardBorderColor: '', starColor: '',
-        fontSize: '', lineHeight: '', tagBg: '', tagTextColor: '',
+        fontSize: '', lineHeight: '', productBg: '', productTextColor: '',
     };
 
     const blockProps = useBlockProps( { className: 'riaco-reviews-ssr-wrap' } );
 
-    const availableTags = ( window.riacoReviewsData?.tags ) || [];
-    const tagOptions = [
-        { label: __( '— All Tags —', 'riaco-reviews' ), value: '' },
-        ...availableTags.map( ( t ) => ( { label: t.name, value: t.slug } ) ),
+    const availableProducts = ( window.riacoReviewsData?.products ) || [];
+    const productOptions = [
+        { label: __( '— All Products —', 'riaco-reviews' ), value: '' },
+        ...availableProducts.map( ( t ) => ( { label: t.name, value: t.slug } ) ),
     ];
 
     return (
@@ -70,12 +70,12 @@ export default function Edit( { attributes, setAttributes } ) {
                     />
                     <SelectControl
                         __next40pxDefaultSize
-                        label={ __( 'Filter by Tag', 'riaco-reviews' ) }
-                        value={ tagFilter }
-                        options={ tagOptions }
-                        onChange={ ( value ) => setAttributes( { tagFilter: value } ) }
-                        help={ availableTags.length === 0
-                            ? __( 'No tags found. Create tags under Reviews → Tags.', 'riaco-reviews' )
+                        label={ __( 'Filter by Product', 'riaco-reviews' ) }
+                        value={ productFilter }
+                        options={ productOptions }
+                        onChange={ ( value ) => setAttributes( { productFilter: value } ) }
+                        help={ availableProducts.length === 0
+                            ? __( 'No products found. Create products under Reviews → Products.', 'riaco-reviews' )
                             : undefined
                         }
                     />
@@ -174,9 +174,9 @@ export default function Edit( { attributes, setAttributes } ) {
                         />
                     ) }
                     <ToggleControl
-                        label={ __( 'Show Tag', 'riaco-reviews' ) }
-                        checked={ showTag }
-                        onChange={ ( value ) => setAttributes( { showTag: value } ) }
+                        label={ __( 'Show Product', 'riaco-reviews' ) }
+                        checked={ showProduct }
+                        onChange={ ( value ) => setAttributes( { showProduct: value } ) }
                     />
                 </PanelBody>
 
@@ -245,20 +245,20 @@ export default function Edit( { attributes, setAttributes } ) {
                     </BaseControl>
                     <BaseControl
                         __nextHasNoMarginBottom
-                        label={ __( 'Tag Background', 'riaco-reviews' ) }
+                        label={ __( 'Product Badge Background', 'riaco-reviews' ) }
                     >
                         <ColorPalette
-                            value={ tagBg }
-                            onChange={ ( val ) => setAttributes( { tagBg: val ?? '' } ) }
+                            value={ productBg }
+                            onChange={ ( val ) => setAttributes( { productBg: val ?? '' } ) }
                         />
                     </BaseControl>
                     <BaseControl
                         __nextHasNoMarginBottom
-                        label={ __( 'Tag Text', 'riaco-reviews' ) }
+                        label={ __( 'Product Badge Text', 'riaco-reviews' ) }
                     >
                         <ColorPalette
-                            value={ tagTextColor }
-                            onChange={ ( val ) => setAttributes( { tagTextColor: val ?? '' } ) }
+                            value={ productTextColor }
+                            onChange={ ( val ) => setAttributes( { productTextColor: val ?? '' } ) }
                         />
                     </BaseControl>
                 </PanelBody>

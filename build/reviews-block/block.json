@@ -2,7 +2,7 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "riaco-reviews/reviews-block",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "title": "RIACO Reviews",
   "category": "widgets",
   "icon": "star-filled",
@@ -52,7 +52,7 @@
       "type": "boolean",
       "default": true
     },
-    "showTag": {
+    "showProduct": {
       "type": "boolean",
       "default": true
     },
@@ -100,15 +100,15 @@
       "type": "string",
       "default": ""
     },
-    "tagBg": {
+    "productBg": {
       "type": "string",
       "default": ""
     },
-    "tagTextColor": {
+    "productTextColor": {
       "type": "string",
       "default": ""
     },
-    "tagFilter": {
+    "productFilter": {
       "type": "string",
       "default": ""
     }

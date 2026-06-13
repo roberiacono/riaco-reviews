@@ -4,8 +4,8 @@
  *
  * Variables available:
  *   $post_id  int
- *   $meta     array (author_name, author_handle, author_avatar, rating, review_date, source_image, source_name, source_url, tag_name)
- *   $atts     array (show_author_name, show_avatar, show_date, show_rating, show_source, show_tag, show_title, card_style)
+ *   $meta     array (author_name, author_handle, author_avatar, rating, review_date, source_image, source_name, source_url, product_name)
+ *   $atts     array (show_author_name, show_avatar, show_date, show_rating, show_source, show_product, show_title, card_style)
  */
 
 if ( ! defined( 'ABSPATH' ) ) exit;
@@ -21,7 +21,7 @@ $hl          = 'h' . absint( $atts['heading_level'] );
 
 if ( 'modern' === $atts['card_style'] ) :
     $has_modern_source = $atts['show_source'] && ( ! empty( $meta['source_image'] ) || ! empty( $meta['source_name'] ) ) && ! empty( $meta['source_url'] );
-    $has_modern_tag    = $atts['show_tag'] && ! empty( $meta['tag_name'] );
+    $has_modern_tag    = $atts['show_product'] && ! empty( $meta['product_name'] );
     $has_modern_footer = $has_modern_tag || $has_modern_source;
 ?>
 <article class="riaco-reviews__card riaco-reviews__card--modern">
@@ -85,7 +85,7 @@ if ( 'modern' === $atts['card_style'] ) :
         <div class="riaco-reviews__modern-footer">
 
             <?php if ( $has_modern_tag ) : ?>
-                <div class="riaco-reviews__card-tag" title="<?php echo esc_attr( $meta['tag_name'] ); ?>"><?php echo esc_html( $meta['tag_name'] ); ?></div>
+                <div class="riaco-reviews__card-product" title="<?php echo esc_attr( $meta['product_name'] ); ?>"><?php echo esc_html( $meta['product_name'] ); ?></div>
             <?php else : ?>
                 <span></span>
             <?php endif; ?>
@@ -134,8 +134,8 @@ if ( 'modern' === $atts['card_style'] ) :
         <p class="riaco-reviews__text"><?php echo wp_kses_post( $review_text ); ?></p>
     </div>
 
-    <?php if ( $atts['show_tag'] && ! empty( $meta['tag_name'] ) ) : ?>
-        <div class="riaco-reviews__card-tag" title="<?php echo esc_attr( $meta['tag_name'] ); ?>"><?php echo esc_html( $meta['tag_name'] ); ?></div>
+    <?php if ( $atts['show_product'] && ! empty( $meta['product_name'] ) ) : ?>
+        <div class="riaco-reviews__card-product" title="<?php echo esc_attr( $meta['product_name'] ); ?>"><?php echo esc_html( $meta['product_name'] ); ?></div>
     <?php endif; ?>
 
     <?php if ( $has_minimal_footer ) : ?>
@@ -211,9 +211,9 @@ if ( 'modern' === $atts['card_style'] ) :
         </div>
     <?php endif; ?>
 
-    <?php if ( $atts['show_tag'] && ! empty( $meta['tag_name'] ) ) : ?>
-        <div class="riaco-reviews__card-tag" title="<?php echo esc_attr( $meta['tag_name'] ); ?>">
-            <?php echo esc_html( $meta['tag_name'] ); ?>
+    <?php if ( $atts['show_product'] && ! empty( $meta['product_name'] ) ) : ?>
+        <div class="riaco-reviews__card-product" title="<?php echo esc_attr( $meta['product_name'] ); ?>">
+            <?php echo esc_html( $meta['product_name'] ); ?>
         </div>
     <?php endif; ?>
 

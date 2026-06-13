@@ -10,7 +10,7 @@ use RIACO\Reviews\Admin;
 use RIACO\Reviews\Shortcodes;
 use RIACO\Reviews\Blocks;
 use RIACO\Reviews\ReviewSource;
-use RIACO\Reviews\ReviewTag;
+use RIACO\Reviews\ReviewProduct;
 use RIACO\Reviews\Dashboard;
 use RIACO\Reviews\JsonLd;
 
@@ -32,6 +32,7 @@ class Plugin {
     }
 
     public function init(): void {
+        $this->maybe_upgrade();
         $this->load_services();
         do_action( 'riaco_reviews_init', $this );
         $this->register();
@@ -45,7 +46,7 @@ class Plugin {
         $this->set_service( 'shortcodes', new Shortcodes( $this->file, $this->version ) );
         $this->set_service( 'blocks',      new Blocks( $this->file, $this->version ) );
         $this->set_service( 'reviewSource', new ReviewSource( $this->file, $this->version ) );
-        $this->set_service( 'reviewTag',  new ReviewTag() );
+        $this->set_service( 'reviewProduct', new ReviewProduct() );
         $this->set_service( 'dashboard',  new Dashboard() );
         $this->set_service( 'jsonLd',     new JsonLd() );
     }
@@ -64,6 +65,35 @@ class Plugin {
                 $service->register();
             }
         }
+    }
+
+    private function maybe_upgrade(): void {
+        $db_version = get_option( 'riaco_reviews_db_version', '0' );
+        if ( version_compare( $db_version, '1.2.0', '<' ) ) {
+            $this->migrate_tag_to_product();
+            update_option( 'riaco_reviews_db_version', '1.2.0' );
+        }
+    }
+
+    private function migrate_tag_to_product(): void {
+        global $wpdb;
+
+        $wpdb->update(
+            $wpdb->term_taxonomy,
+            [ 'taxonomy' => 'riaco_review_product' ],
+            [ 'taxonomy' => 'riaco_review_tag' ]
+        );
+
+        $wpdb->query(
+            "UPDATE {$wpdb->termmeta}
+             SET meta_key = '_riaco_product_url'
+             WHERE meta_key = '_riaco_tag_url'"
+        );
+        $wpdb->query(
+            "UPDATE {$wpdb->termmeta}
+             SET meta_key = '_riaco_product_type'
+             WHERE meta_key = '_riaco_tag_type'"
+        );
     }
 
     public function on_activation(): void {

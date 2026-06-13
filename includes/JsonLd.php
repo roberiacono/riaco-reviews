@@ -71,15 +71,15 @@ class JsonLd implements ServiceInterface {
             $data['url'] = $meta['source_url'];
         }
 
-        $item_name = ! empty( $meta['tag_name'] ) ? $meta['tag_name'] : get_the_title( $post_id );
-        $item_type = ! empty( $meta['tag_type'] ) ? $meta['tag_type'] : 'Thing';
+        $item_name = ! empty( $meta['product_name'] ) ? $meta['product_name'] : get_the_title( $post_id );
+        $item_type = ! empty( $meta['product_type'] ) ? $meta['product_type'] : 'Thing';
 
         $item = [
             '@type' => $item_type,
             'name'  => $item_name,
         ];
-        if ( ! empty( $meta['tag_url'] ) ) {
-            $item['url'] = $meta['tag_url'];
+        if ( ! empty( $meta['product_url'] ) ) {
+            $item['url'] = $meta['product_url'];
         }
         $data['itemReviewed'] = $item;
 

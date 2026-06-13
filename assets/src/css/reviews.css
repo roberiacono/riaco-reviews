@@ -210,13 +210,13 @@
     outline-offset: 2px;
 }
 
-/* ---- Tag (shadcn badge style) -------------------------- */
-.riaco-reviews__card-tag {
+/* ---- Product badge (shadcn badge style) ---------------- */
+.riaco-reviews__card-product {
     display: inline-block;
     border-radius: 9999px;
-    border: 1px solid var(--riaco-tag-border, #e4e4e7);
-    background: var(--riaco-tag-bg, #f4f4f5);
-    color: var(--riaco-tag-text, #18181b);
+    border: 1px solid var(--riaco-product-border, #e4e4e7);
+    background: var(--riaco-product-bg, #f4f4f5);
+    color: var(--riaco-product-text, #18181b);
     font-size: 0.75rem;
     font-weight: 500;
     line-height: 1;
@@ -285,7 +285,7 @@
     border-top: 1px solid #f0ebe3;
 }
 
-.riaco-reviews__modern-footer .riaco-reviews__card-tag {
+.riaco-reviews__modern-footer .riaco-reviews__card-product {
     margin-top: 0;
 }
 
@@ -332,7 +332,7 @@
     color: currentColor;
 }
 
-.riaco-reviews__card--minimal .riaco-reviews__card-tag {
+.riaco-reviews__card--minimal .riaco-reviews__card-product {
     background: transparent;
     margin-bottom: 1rem;
 }
@@ -386,8 +386,8 @@ a.riaco-reviews__author-link--minimal:focus-visible {
         --riaco-card-bg: #1e1e1e;
         --riaco-card-text: #d1d5db;
         --riaco-card-border: #374151;
-        --riaco-tag-bg: #374151;
-        --riaco-tag-text: #d1d5db;
-        --riaco-tag-border: #4b5563;
+        --riaco-product-bg: #374151;
+        --riaco-product-text: #d1d5db;
+        --riaco-product-border: #4b5563;
     }
 }

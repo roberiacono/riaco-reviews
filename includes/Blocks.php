@@ -42,21 +42,31 @@ class Blocks implements ServiceInterface {
     }
 
     public function localize_editor_data(): void {
-        $terms    = get_terms( [ 'taxonomy' => 'riaco_review_tag', 'hide_empty' => false ] );
-        $tag_data = [];
+        $terms        = get_terms( [ 'taxonomy' => 'riaco_review_product', 'hide_empty' => false ] );
+        $product_data = [];
         if ( ! is_wp_error( $terms ) ) {
             foreach ( $terms as $term ) {
-                $tag_data[] = [ 'slug' => $term->slug, 'name' => $term->name ];
+                $product_data[] = [ 'slug' => $term->slug, 'name' => $term->name ];
             }
         }
         wp_add_inline_script(
             'riaco-reviews-reviews-block-editor-script',
-            'window.riacoReviewsData = ' . wp_json_encode( [ 'tags' => $tag_data ] ) . ';',
+            'window.riacoReviewsData = ' . wp_json_encode( [ 'products' => $product_data ] ) . ';',
             'before'
         );
     }
 
     public function render( array $attributes ): string {
+        // Backward compat: old saved blocks may still store the tag-era attribute names.
+        $product_filter = $attributes['productFilter']
+            ?? ( isset( $attributes['tagFilter'] ) ? $attributes['tagFilter'] : '' );
+        $show_product   = $attributes['showProduct']
+            ?? ( isset( $attributes['showTag'] ) ? $attributes['showTag'] : true );
+        $product_bg     = $attributes['productBg']
+            ?? ( isset( $attributes['tagBg'] ) ? $attributes['tagBg'] : '' );
+        $product_text   = $attributes['productTextColor']
+            ?? ( isset( $attributes['tagTextColor'] ) ? $attributes['tagTextColor'] : '' );
+
         $atts = [
             'count'             => $attributes['count']            ?? 6,
             'layout'            => $attributes['layout']           ?? 'grid',
@@ -67,21 +77,21 @@ class Blocks implements ServiceInterface {
             'show_date'         => $attributes['showDate']         ?? false,
             'show_rating'       => $attributes['showRating']       ?? true,
             'show_source'       => $attributes['showSource']       ?? true,
-            'show_tag'          => $attributes['showTag']          ?? true,
+            'show_product'      => $show_product,
             'show_title'        => $attributes['showTitle']        ?? true,
             'show_shadow'       => $attributes['showShadow']       ?? true,
             'min_width'         => $attributes['minWidth']         ?? 280,
             'orderby'           => $attributes['orderby']          ?? 'date',
             'order'             => $attributes['order']            ?? 'DESC',
-            'tag'               => $attributes['tagFilter']        ?? '',
+            'product'           => $product_filter,
             'card_bg'           => $attributes['cardBg']           ?? '',
             'card_text_color'   => $attributes['cardTextColor']    ?? '',
             'card_border_color' => $attributes['cardBorderColor']  ?? '',
             'star_color'        => $attributes['starColor']        ?? '',
             'font_size'         => $attributes['fontSize']         ?? '',
             'line_height'       => $attributes['lineHeight']       ?? '',
-            'tag_bg'            => $attributes['tagBg']            ?? '',
-            'tag_text_color'    => $attributes['tagTextColor']     ?? '',
+            'product_bg'        => $product_bg,
+            'product_text_color' => $product_text,
         ];
 
         $atts = apply_filters( 'riaco_reviews_block_render_atts', $atts, $attributes );

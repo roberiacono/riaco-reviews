@@ -23,8 +23,8 @@ $inner_class     = 'riaco-reviews__' . $layout;
                 $post_id      = get_the_ID();
                 $source_terms  = get_the_terms( $post_id, 'riaco_review_source' );
                 $source_term   = ( $source_terms && ! is_wp_error( $source_terms ) ) ? $source_terms[0] : null;
-                $tag_terms = get_the_terms( $post_id, 'riaco_review_tag' );
-                $tag_term  = ( $tag_terms && ! is_wp_error( $tag_terms ) ) ? $tag_terms[0] : null;
+                $product_terms = get_the_terms( $post_id, 'riaco_review_product' );
+                $product_term  = ( $product_terms && ! is_wp_error( $product_terms ) ) ? $product_terms[0] : null;
                 $meta = [
                     'author_name'   => get_post_meta( $post_id, '_riaco_review_author_name',   true ),
                     'author_avatar' => get_post_meta( $post_id, '_riaco_review_author_avatar', true ),
@@ -33,9 +33,9 @@ $inner_class     = 'riaco-reviews__' . $layout;
                     'source_image'  => $source_term ? get_term_meta( $source_term->term_id, '_riaco_source_image', true ) : '',
                     'source_name'   => $source_term ? $source_term->name : '',
                     'source_url'    => get_post_meta( $post_id, '_riaco_review_source_url',    true ),
-                    'tag_name'      => $tag_term ? $tag_term->name : '',
-                    'tag_url'       => $tag_term ? get_term_meta( $tag_term->term_id, '_riaco_tag_url',  true ) : '',
-                    'tag_type'      => $tag_term ? get_term_meta( $tag_term->term_id, '_riaco_tag_type', true ) : '',
+                    'product_name'  => $product_term ? $product_term->name : '',
+                    'product_url'   => $product_term ? get_term_meta( $product_term->term_id, '_riaco_product_url',  true ) : '',
+                    'product_type'  => $product_term ? get_term_meta( $product_term->term_id, '_riaco_product_type', true ) : '',
                 ];
                 $meta = apply_filters( 'riaco_reviews_card_meta', $meta, $post_id, $atts );
                 do_action( 'riaco_reviews_before_card', $post_id, $meta, $atts );

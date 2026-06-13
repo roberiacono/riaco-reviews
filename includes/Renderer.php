@@ -17,21 +17,21 @@ class Renderer {
             'show_date'         => false,
             'show_rating'       => true,
             'show_source'       => true,
-            'show_tag'          => true,
+            'show_product'      => true,
             'show_title'        => true,
             'show_shadow'       => true,
             'min_width'         => 300,
             'orderby'           => 'date',
             'order'             => 'DESC',
-            'tag'               => '',
+            'product'           => '',
             'card_bg'           => '',
             'card_text_color'   => '',
             'card_border_color' => '',
             'star_color'        => '',
             'font_size'         => '',
             'line_height'       => '',
-            'tag_bg'            => '',
-            'tag_text_color'    => '',
+            'product_bg'        => '',
+            'product_text_color' => '',
         ] );
 
         // Sanitize display options
@@ -49,20 +49,20 @@ class Renderer {
         $atts['order'] = in_array( strtoupper( $atts['order'] ), [ 'ASC', 'DESC' ], true )
             ? strtoupper( $atts['order'] ) : 'DESC';
 
-        // Sanitize tag filter: comma-separated slugs.
-        if ( ! empty( $atts['tag'] ) ) {
-            $slugs       = array_filter( array_map( 'sanitize_title', explode( ',', (string) $atts['tag'] ) ) );
-            $atts['tag'] = implode( ',', $slugs );
+        // Sanitize product filter: comma-separated slugs.
+        if ( ! empty( $atts['product'] ) ) {
+            $slugs            = array_filter( array_map( 'sanitize_title', explode( ',', (string) $atts['product'] ) ) );
+            $atts['product']  = implode( ',', $slugs );
         } else {
-            $atts['tag'] = '';
+            $atts['product'] = '';
         }
 
-        foreach ( [ 'show_author_name', 'show_avatar', 'show_date', 'show_rating', 'show_source', 'show_tag', 'show_title', 'show_shadow' ] as $key ) {
+        foreach ( [ 'show_author_name', 'show_avatar', 'show_date', 'show_rating', 'show_source', 'show_product', 'show_title', 'show_shadow' ] as $key ) {
             $atts[ $key ] = filter_var( $atts[ $key ], FILTER_VALIDATE_BOOLEAN );
         }
 
         // Sanitize colours (hex only)
-        foreach ( [ 'card_bg', 'card_text_color', 'card_border_color', 'star_color', 'tag_bg', 'tag_text_color' ] as $key ) {
+        foreach ( [ 'card_bg', 'card_text_color', 'card_border_color', 'star_color', 'product_bg', 'product_text_color' ] as $key ) {
             $atts[ $key ] = ! empty( $atts[ $key ] ) ? ( sanitize_hex_color( $atts[ $key ] ) ?? '' ) : '';
         }
 
@@ -75,7 +75,7 @@ class Renderer {
         $atts = apply_filters( 'riaco_reviews_atts', $atts );
 
         // Re-sanitize colour values in case the filter introduced unsanitized strings.
-        foreach ( [ 'card_bg', 'card_text_color', 'card_border_color', 'star_color', 'tag_bg', 'tag_text_color' ] as $key ) {
+        foreach ( [ 'card_bg', 'card_text_color', 'card_border_color', 'star_color', 'product_bg', 'product_text_color' ] as $key ) {
             $atts[ $key ] = ! empty( $atts[ $key ] ) ? ( sanitize_hex_color( $atts[ $key ] ) ?? '' ) : '';
         }
 
@@ -85,9 +85,9 @@ class Renderer {
             'card_bg'           => '--riaco-card-bg',
             'card_text_color'   => '--riaco-card-text',
             'card_border_color' => '--riaco-card-border',
-            'star_color'        => '--riaco-star-color',
-            'tag_bg'            => '--riaco-tag-bg',
-            'tag_text_color'    => '--riaco-tag-text',
+            'star_color'         => '--riaco-star-color',
+            'product_bg'         => '--riaco-product-bg',
+            'product_text_color' => '--riaco-product-text',
         ];
         foreach ( $color_vars as $att_key => $css_var ) {
             if ( ! empty( $atts[ $att_key ] ) ) {
@@ -134,11 +134,11 @@ class Renderer {
             ];
         }
 
-        if ( ! empty( $atts['tag'] ) ) {
-            $query_args['tax_query'] = [ [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- required for tag filtering; taxonomy tables are indexed.
-                'taxonomy' => 'riaco_review_tag',
+        if ( ! empty( $atts['product'] ) ) {
+            $query_args['tax_query'] = [ [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- required for product filtering; taxonomy tables are indexed.
+                'taxonomy' => 'riaco_review_product',
                 'field'    => 'slug',
-                'terms'    => explode( ',', $atts['tag'] ),
+                'terms'    => explode( ',', $atts['product'] ),
             ] ];
         }
 
@@ -146,25 +146,25 @@ class Renderer {
 
         $reviews = new \WP_Query( $query_args );
 
-        // Pre-warm term meta cache for all source and tag terms to avoid N+1 inside the loop.
+        // Pre-warm term meta cache for all source and product terms to avoid N+1 inside the loop.
         if ( $reviews->have_posts() ) {
-            $source_term_ids = [];
-            $tag_term_ids    = [];
+            $source_term_ids  = [];
+            $product_term_ids = [];
             foreach ( $reviews->posts as $p ) {
                 $s_terms = get_the_terms( $p->ID, 'riaco_review_source' );
                 if ( $s_terms && ! is_wp_error( $s_terms ) ) {
                     $source_term_ids[] = (int) $s_terms[0]->term_id;
                 }
-                $t_terms = get_the_terms( $p->ID, 'riaco_review_tag' );
-                if ( $t_terms && ! is_wp_error( $t_terms ) ) {
-                    $tag_term_ids[] = (int) $t_terms[0]->term_id;
+                $p_terms = get_the_terms( $p->ID, 'riaco_review_product' );
+                if ( $p_terms && ! is_wp_error( $p_terms ) ) {
+                    $product_term_ids[] = (int) $p_terms[0]->term_id;
                 }
             }
             if ( $source_term_ids ) {
                 update_termmeta_cache( array_unique( $source_term_ids ) );
             }
-            if ( $tag_term_ids ) {
-                update_termmeta_cache( array_unique( $tag_term_ids ) );
+            if ( $product_term_ids ) {
+                update_termmeta_cache( array_unique( $product_term_ids ) );
             }
         }
 

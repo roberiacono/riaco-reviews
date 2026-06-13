@@ -154,7 +154,7 @@ class Admin implements ServiceInterface {
             'riaco_author'       => __( 'Author',        'riaco-reviews' ),
             'riaco_rating'       => __( 'Rating',        'riaco-reviews' ),
             'riaco_source_term'  => __( 'Source',        'riaco-reviews' ),
-            'riaco_tag_term'     => __( 'Tag',            'riaco-reviews' ),
+            'riaco_product_term' => __( 'Product',        'riaco-reviews' ),
             'riaco_review_date'  => __( 'Review Date',   'riaco-reviews' ),
             'date'               => __( 'Added',         'riaco-reviews' ),
         ];
@@ -189,8 +189,8 @@ class Admin implements ServiceInterface {
                 }
                 break;
 
-            case 'riaco_tag_term':
-                $terms = get_the_terms( $post_id, 'riaco_review_tag' );
+            case 'riaco_product_term':
+                $terms = get_the_terms( $post_id, 'riaco_review_product' );
                 echo ( $terms && ! is_wp_error( $terms ) ) ? esc_html( $terms[0]->name ) : '—';
                 break;
 
@@ -248,7 +248,7 @@ class Admin implements ServiceInterface {
             return $text;
         }
 
-        $plugin_screens = [ 'riaco_review', 'edit-riaco_review', 'edit-riaco_review_source', 'edit-riaco_review_tag' ];
+        $plugin_screens = [ 'riaco_review', 'edit-riaco_review', 'edit-riaco_review_source', 'edit-riaco_review_product' ];
 
         if ( ! in_array( $screen->id, $plugin_screens, true ) ) {
             return $text;
@@ -281,7 +281,7 @@ class Admin implements ServiceInterface {
             [ 'card_style',        'default',   __( 'Card design: <code>default</code>, <code>modern</code>, or <code>minimal</code>.', 'riaco-reviews' ) ],
             [ 'orderby',           'date',      __( 'Sort field: <code>date</code>, <code>rating</code>, or <code>rand</code>.', 'riaco-reviews' ) ],
             [ 'order',             'DESC',      __( 'Sort direction: <code>ASC</code> or <code>DESC</code>.', 'riaco-reviews' ) ],
-            [ 'tag',               '',          __( 'Tag slug to filter by. Comma-separate multiple slugs.', 'riaco-reviews' ) ],
+            [ 'product',           '',          __( 'Product slug to filter by. Comma-separate multiple slugs.', 'riaco-reviews' ) ],
             [ 'heading_level',     '3',         __( 'HTML heading level for the review title: <code>2</code>–<code>6</code>.', 'riaco-reviews' ) ],
             [ 'show_title',        '1',         __( 'Show review title.', 'riaco-reviews' ) ],
             [ 'show_author_name',  '1',         __( 'Show author name.', 'riaco-reviews' ) ],
@@ -289,21 +289,21 @@ class Admin implements ServiceInterface {
             [ 'show_date',         '0',         __( 'Show review date.', 'riaco-reviews' ) ],
             [ 'show_rating',       '1',         __( 'Show star rating.', 'riaco-reviews' ) ],
             [ 'show_source',       '1',         __( 'Show source logo.', 'riaco-reviews' ) ],
-            [ 'show_tag',          '1',         __( 'Show tag badge.', 'riaco-reviews' ) ],
+            [ 'show_product',       '1',         __( 'Show product badge.', 'riaco-reviews' ) ],
             [ 'show_shadow',       '1',         __( 'Card drop shadow.', 'riaco-reviews' ) ],
             [ 'min_width',         '280',       __( 'Minimum card width in px.', 'riaco-reviews' ) ],
             [ 'card_bg',           '',          __( 'Card background colour (hex, e.g. <code>#ffffff</code>).', 'riaco-reviews' ) ],
             [ 'card_text_color',   '',          __( 'Review text colour (hex).', 'riaco-reviews' ) ],
             [ 'card_border_color', '',          __( 'Card border colour (hex).', 'riaco-reviews' ) ],
             [ 'star_color',        '',          __( 'Star rating colour (hex).', 'riaco-reviews' ) ],
-            [ 'tag_bg',            '',          __( 'Tag badge background colour (hex).', 'riaco-reviews' ) ],
-            [ 'tag_text_color',    '',          __( 'Tag badge text colour (hex).', 'riaco-reviews' ) ],
+            [ 'product_bg',         '',          __( 'Product badge background colour (hex).', 'riaco-reviews' ) ],
+            [ 'product_text_color', '',          __( 'Product badge text colour (hex).', 'riaco-reviews' ) ],
             [ 'font_size',         '',          __( 'Review text size in rem (e.g. <code>1</code>).', 'riaco-reviews' ) ],
             [ 'line_height',       '',          __( 'Line height (e.g. <code>1.7</code>).', 'riaco-reviews' ) ],
         ];
 
         $html = '<p><strong>' . esc_html__( 'Usage:', 'riaco-reviews' ) . '</strong> <code>[riaco_reviews]</code></p>';
-        $html .= '<p>' . wp_kses( __( '<strong>Example:</strong> <code>[riaco_reviews count="9" layout="masonry" card_style="modern" tag="wordpress"]</code>', 'riaco-reviews' ), [ 'strong' => [], 'code' => [] ] ) . '</p>';
+        $html .= '<p>' . wp_kses( __( '<strong>Example:</strong> <code>[riaco_reviews count="9" layout="masonry" card_style="modern" product="my-product"]</code>', 'riaco-reviews' ), [ 'strong' => [], 'code' => [] ] ) . '</p>';
         $html .= '<table class="widefat striped" style="max-width:720px;">';
         $html .= '<thead><tr>';
         $html .= '<th>' . esc_html__( 'Parameter', 'riaco-reviews' ) . '</th>';
