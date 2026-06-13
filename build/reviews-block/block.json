@@ -2,14 +2,18 @@
   "$schema": "https://schemas.wp.org/trunk/block.json",
   "apiVersion": 3,
   "name": "riaco-reviews/reviews-block",
-  "version": "1.0.2",
+  "version": "1.1.0",
   "title": "RIACO Reviews",
   "category": "widgets",
   "icon": "star-filled",
   "description": "Display a grid or masonry layout of customer reviews.",
   "example": {},
   "supports": {
-    "html": false
+    "html": false,
+    "align": [
+      "wide",
+      "full"
+    ]
   },
   "attributes": {
     "count": {
@@ -23,6 +27,10 @@
     "cardStyle": {
       "type": "string",
       "default": "default"
+    },
+    "headingLevel": {
+      "type": "integer",
+      "default": 3
     },
     "showAuthorName": {
       "type": "boolean",

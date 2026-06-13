@@ -11,6 +11,7 @@ use RIACO\Reviews\Shortcodes;
 use RIACO\Reviews\Blocks;
 use RIACO\Reviews\ReviewSource;
 use RIACO\Reviews\ReviewTag;
+use RIACO\Reviews\Dashboard;
 
 class Plugin {
 
@@ -41,9 +42,10 @@ class Plugin {
         $this->set_service( 'postType',   new PostType() );
         $this->set_service( 'admin',      new Admin( $this->file ) );
         $this->set_service( 'shortcodes', new Shortcodes( $this->file, $this->version ) );
-        $this->set_service( 'blocks',        new Blocks( $this->file, $this->version ) );
-        $this->set_service( 'reviewSource',  new ReviewSource( $this->file, $this->version ) );
-        $this->set_service( 'reviewTag', new ReviewTag() );
+        $this->set_service( 'blocks',      new Blocks( $this->file, $this->version ) );
+        $this->set_service( 'reviewSource', new ReviewSource( $this->file, $this->version ) );
+        $this->set_service( 'reviewTag',  new ReviewTag() );
+        $this->set_service( 'dashboard',  new Dashboard() );
     }
 
     public function set_service( string $key, $service ): void {

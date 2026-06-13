@@ -6,6 +6,7 @@ import {
     SelectControl,
     ToggleControl,
     BaseControl,
+    Button,
 } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
 import './editor.scss';
@@ -15,6 +16,7 @@ export default function Edit( { attributes, setAttributes } ) {
         count,
         layout,
         cardStyle,
+        headingLevel,
         showAuthorName,
         showAvatar,
         showDate,
@@ -36,6 +38,15 @@ export default function Edit( { attributes, setAttributes } ) {
         tagBg,
         tagTextColor,
     } = attributes;
+
+    const DEFAULTS = {
+        count: 6, layout: 'grid', cardStyle: 'default', headingLevel: 3,
+        showAuthorName: true, showAvatar: true, showDate: false, showRating: true,
+        showSource: true, showTag: true, showTitle: true, showShadow: true,
+        minWidth: 280, orderby: 'date', order: 'DESC', tagFilter: '',
+        cardBg: '', cardTextColor: '', cardBorderColor: '', starColor: '',
+        fontSize: '', lineHeight: '', tagBg: '', tagTextColor: '',
+    };
 
     const blockProps = useBlockProps( { className: 'riaco-reviews-ssr-wrap' } );
 
@@ -97,12 +108,21 @@ export default function Edit( { attributes, setAttributes } ) {
                     <RangeControl
                         __next40pxDefaultSize
                         label={ __( 'Min Card Width (px)', 'riaco-reviews' ) }
+                        help={ __( 'Minimum column width. More columns appear as the container widens.', 'riaco-reviews' ) }
                         value={ minWidth }
                         onChange={ ( value ) => setAttributes( { minWidth: value } ) }
                         min={ 180 }
                         max={ 600 }
                         step={ 10 }
                     />
+                    <Button
+                        variant="link"
+                        isDestructive
+                        onClick={ () => setAttributes( DEFAULTS ) }
+                        style={ { marginTop: '0.5rem' } }
+                    >
+                        { __( 'Reset all settings to defaults', 'riaco-reviews' ) }
+                    </Button>
                 </PanelBody>
 
                 <PanelBody title={ __( 'Field Visibility', 'riaco-reviews' ) } initialOpen={ true }>
@@ -111,6 +131,21 @@ export default function Edit( { attributes, setAttributes } ) {
                         checked={ showTitle }
                         onChange={ ( value ) => setAttributes( { showTitle: value } ) }
                     />
+                    { showTitle && (
+                        <SelectControl
+                            __next40pxDefaultSize
+                            label={ __( 'Title Heading Level', 'riaco-reviews' ) }
+                            value={ String( headingLevel ) }
+                            options={ [
+                                { label: 'H2', value: '2' },
+                                { label: 'H3', value: '3' },
+                                { label: 'H4', value: '4' },
+                                { label: 'H5', value: '5' },
+                                { label: 'H6', value: '6' },
+                            ] }
+                            onChange={ ( value ) => setAttributes( { headingLevel: parseInt( value, 10 ) } ) }
+                        />
+                    ) }
                     <ToggleControl
                         label={ __( 'Show Star Rating', 'riaco-reviews' ) }
                         checked={ showRating }

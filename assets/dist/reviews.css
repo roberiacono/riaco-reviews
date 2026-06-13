@@ -51,6 +51,21 @@
     padding: 1.75rem;
     margin-bottom: 1.5rem;
     overflow: hidden;
+    transition: box-shadow 0.2s ease, transform 0.2s ease;
+}
+
+.riaco-reviews__card:hover {
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.12);
+    transform: translateY(-2px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .riaco-reviews__card {
+        transition: none;
+    }
+    .riaco-reviews__card:hover {
+        transform: none;
+    }
 }
 
 /* ---- Card Header (title + source) ---------------------- */
@@ -159,13 +174,13 @@
 
 .riaco-reviews__author-handle {
     font-size: 0.8125rem;
-    color: #888888;
+    color: #6b7280;
     display: block;
 }
 
 .riaco-reviews__date {
     font-size: 0.75rem;
-    color: #aaaaaa;
+    color: #6b7280;
     display: block;
 }
 
@@ -188,8 +203,11 @@
     transition: opacity 0.15s ease;
 }
 
-.riaco-reviews__source-link:hover {
+.riaco-reviews__source-link:hover,
+.riaco-reviews__source-link:focus-visible {
     opacity: 1;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }
 
 /* ---- Tag (shadcn badge style) -------------------------- */
@@ -215,8 +233,10 @@
 
 /* ---- Empty state --------------------------------------- */
 .riaco-reviews__empty {
-    color: #888;
+    color: #6b7280;
     font-style: italic;
+    text-align: center;
+    padding: 3rem 1rem;
 }
 
 /* ---- Card Style: Modern -------------------------------- */
@@ -258,7 +278,8 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 0.75rem;
+    flex-wrap: wrap;
+    gap: 0.5rem;
     margin-top: 1rem;
     padding-top: 0.75rem;
     border-top: 1px solid #f0ebe3;
@@ -278,13 +299,16 @@
     flex-shrink: 0;
 }
 
-.riaco-reviews__source-link--modern:hover {
+.riaco-reviews__source-link--modern:hover,
+.riaco-reviews__source-link--modern:focus-visible {
     opacity: 1;
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }
 
 .riaco-reviews__source-name--text {
     font-size: 0.75rem;
-    color: #888;
+    color: #6b7280;
 }
 
 /* ---- Card Style: Minimal ------------------------------- */
@@ -330,18 +354,40 @@
     transition: color 0.15s ease;
 }
 
-a.riaco-reviews__author-link--minimal:hover {
+a.riaco-reviews__author-link--minimal:hover,
+a.riaco-reviews__author-link--minimal:focus-visible {
     color: #111111;
     text-decoration-color: rgba(0, 0, 0, 0.6);
+    outline: 2px solid currentColor;
+    outline-offset: 2px;
 }
 
 .riaco-reviews__date--minimal {
     font-size: 0.75rem;
-    color: #aaaaaa;
+    color: #6b7280;
 }
 
 .riaco-reviews__source--minimal {
     font-size: 0.6875rem;
-    color: #aaaaaa;
+    color: #6b7280;
     display: block;
+}
+
+/* ---- Mobile -------------------------------------------- */
+@media (max-width: 480px) {
+    .riaco-reviews__card {
+        padding: 1.25rem;
+    }
+}
+
+/* ---- Dark mode ----------------------------------------- */
+@media (prefers-color-scheme: dark) {
+    .riaco-reviews {
+        --riaco-card-bg: #1e1e1e;
+        --riaco-card-text: #d1d5db;
+        --riaco-card-border: #374151;
+        --riaco-tag-bg: #374151;
+        --riaco-tag-text: #d1d5db;
+        --riaco-tag-border: #4b5563;
+    }
 }

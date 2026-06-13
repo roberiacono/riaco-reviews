@@ -3,7 +3,7 @@ Contributors: prototipo88
 Tags: reviews, testimonials, star rating, review block, customer reviews
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.0.2
+Stable tag: 1.1.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -234,6 +234,21 @@ Yes. All user-facing strings are wrapped in WordPress i18n functions and the tex
 8. **Frontend — Mobile view** — Single-column layout on a narrow screen, demonstrating the responsive auto-fill column behaviour.
 
 == Changelog ==
+
+= 1.1.0 =
+* **Accessibility:** added `:focus-visible` outlines to all interactive links; improved colour contrast on muted text (date, author handle, source name) to meet WCAG 2.1 AA.
+* **Dark mode:** CSS custom properties now have sensible dark-mode defaults via `prefers-color-scheme: dark` (overrideable via block/shortcode colour controls).
+* **Mobile:** reduced card padding at &lt;480 px; modern card footer now wraps to avoid overflow on narrow screens.
+* **Card hover:** subtle lift effect with `prefers-reduced-motion` guard.
+* **Empty state:** improved padding and alignment for the "No reviews found" message.
+* **Block editor:** added Wide / Full alignment support; new "Title Heading Level" control (H2–H6); help text on the Min Card Width slider; "Reset all settings to defaults" button.
+* **Heading level:** `heading_level` attribute/parameter (default `3`) lets you control the HTML heading tag for review titles across block and shortcode.
+* **Dashboard widget:** new "Reviews Overview" widget on the WP admin dashboard showing published review count and average rating.
+* **Shortcode reference:** contextual help tab on the Reviews list screen listing all `[riaco_reviews]` parameters and defaults.
+* **i18n:** admin media-uploader strings ("Select Avatar", "Use this image", "Select Logo") are now translatable via PHP localisation.
+* **Bug fix:** `strtotime()` truthiness check corrected to `false !== $ts` to handle edge-case epoch dates.
+* **Security:** source logo save capability tightened from `manage_categories` to `manage_options`.
+* **Tooltip:** `title` attribute added to truncated author names and tag badges so full text is accessible on hover.
 
 = 1.0.2 =
 * Added filter-by-tag support: `tag` shortcode attribute and `tagFilter` block attribute let you show only reviews assigned to a specific tag (comma-separated slugs for multiple tags).

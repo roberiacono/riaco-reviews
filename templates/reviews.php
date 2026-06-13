@@ -9,13 +9,13 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template included inside Renderer::render(); all variables are local to that function scope.
 $layout          = $atts['layout'];
 $container_class = 'riaco-reviews riaco-reviews--' . $layout;
 $inner_class     = 'riaco-reviews__' . $layout;
-$style_attr      = ! empty( $atts['custom_style'] ) ? ' style="' . esc_attr( $atts['custom_style'] ) . '"' : '';
 ?>
 <?php do_action( 'riaco_reviews_before_loop', $atts ); ?>
-<div class="<?php echo esc_attr( $container_class ); ?>"<?php echo $style_attr; ?>>
+<div class="<?php echo esc_attr( $container_class ); ?>"<?php if ( ! empty( $atts['custom_style'] ) ) : ?> style="<?php echo esc_attr( $atts['custom_style'] ); ?>"<?php endif; ?>>
     <div class="<?php echo esc_attr( $inner_class ); ?>">
         <?php if ( $reviews->have_posts() ) : ?>
             <?php while ( $reviews->have_posts() ) : $reviews->the_post(); ?>
@@ -59,3 +59,4 @@ $style_attr      = ! empty( $atts['custom_style'] ) ? ' style="' . esc_attr( $at
     </div>
 </div>
 <?php do_action( 'riaco_reviews_after_loop', $atts ); ?>
+<?php // phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound ?>

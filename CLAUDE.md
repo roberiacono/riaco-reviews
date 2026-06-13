@@ -42,7 +42,7 @@ Run this after adding or changing any translatable string. The `.pot` file lives
 
 The plugin initialises on `plugins_loaded` (not `init`), so all services are available when WordPress fires `init`.
 
-`get_service(string $key)` retrieves a registered service by key (e.g. `'postType'`, `'admin'`, `'blocks'`, `'shortcodes'`, `'reviewSource'`, `'reviewTag'`). Returns `null` if the key is not found.
+`get_service(string $key)` retrieves a registered service by key (e.g. `'postType'`, `'admin'`, `'blocks'`, `'shortcodes'`, `'reviewSource'`, `'reviewTag'`, `'dashboard'`). Returns `null` if the key is not found.
 
 **Lifecycle actions fired by `Plugin::init()`** (in order):
 
@@ -81,6 +81,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 | `count` | `6` | |
 | `layout` | `'grid'` | `'grid'` or `'masonry'` — controls card *arrangement* |
 | `card_style` / `cardStyle` | `'default'` | `'default'`, `'modern'`, or `'minimal'` — controls card *visual design* |
+| `heading_level` / `headingLevel` | `3` | HTML heading level for the review title (2–6); clamped and sanitised in `Renderer.php` |
 | `min_width` / `minWidth` | `300` | minimum card width in px; drives the CSS `--riaco-card-min-width` variable |
 | `orderby` | `'date'` | `'date'`, `'rating'`, or `'rand'` |
 | `order` | `'DESC'` | `'ASC'` or `'DESC'` |
@@ -109,7 +110,9 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 - The editor preview uses `ServerSideRender` — the inspector sidebar has panels for Display Settings, Field Visibility, Sort Order, Card Colours, and Typography.
 - `style.scss` is intentionally empty — frontend styles are loaded separately from `assets/dist/reviews.css` via `wp_enqueue_block_style()` in `Blocks::register_block()`. This hook loads the CSS both on the frontend (when the block is present) and inside the editor canvas iframe, which is required for the `ServerSideRender` preview to be styled correctly.
 - `block.json` has no `style` field. `wp_enqueue_block_style()` in `Blocks::register_block()` is the sole owner of frontend style loading; omitting the field prevents WordPress from registering a redundant empty stylesheet.
+- **Align support**: `block.json` declares `"supports": { "align": ["wide", "full"] }`, giving the block Wide and Full alignment options in the block toolbar.
 - **Tag data for the editor**: `Blocks::localize_editor_data()` fires on `enqueue_block_editor_assets` and injects `window.riacoReviewsData = { tags: [...] }` as an inline script before `riaco-reviews-reviews-block-editor-script`. The `edit.js` reads this to populate the "Filter by Tag" `SelectControl` without requiring `show_in_rest` on the taxonomy.
+- **Inspector controls**: Display Settings panel includes a "Reset all settings to defaults" button (uses the `DEFAULTS` constant in `edit.js`) and a help text on the Min Card Width slider. Field Visibility panel shows a "Title Heading Level" `SelectControl` (H2–H6) when Show Title is enabled.
 
 ### Admin JS
 
@@ -118,6 +121,16 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 - **Source logo upload** on the Sources taxonomy term screens (`#riaco_source_image` / `#riaco_source_image_preview`)
 
 Each is a self-contained IIFE using `wp.media`. Enqueued by `Admin::enqueue_assets()` (review post screens) and `ReviewSource::enqueue_assets()` (taxonomy screens); both call `wp_enqueue_media()`. In `Admin::enqueue_assets()`, `wp_enqueue_media()` is gated to `post.php` / `post-new.php` only — the media uploader is not loaded on the list table screen.
+
+**i18n**: Both `Admin::enqueue_assets()` and `ReviewSource::enqueue_assets()` inject a `riacoAdminI18n` global object via `wp_add_inline_script(..., 'before')` containing `selectAvatar`, `useThisImage`, and `selectLogo` as PHP-translated strings. `admin.js` reads these instead of hardcoded English strings, making them extractable by `wp i18n make-pot`.
+
+### Admin help tab
+
+`Admin::add_help_tab()` fires on `current_screen` and adds a "Shortcode Reference" contextual help tab on the Reviews list screen (`edit-riaco_review`). It lists every `[riaco_reviews]` parameter with its default and description in a `<table>`, built by the private `get_help_tab_content()` method.
+
+### Dashboard widget
+
+`Dashboard.php` implements `ServiceInterface` and is registered as `'dashboard'` in `Plugin::load_services()`. Its `add_widget()` registers a `wp_dashboard_widget` ("Reviews Overview") that calls `render_widget()`: shows the published review count (via `wp_count_posts()`), the average rating (direct `$wpdb->get_var()` across `_riaco_review_rating` meta), and a "Manage Reviews" link.
 
 ### CPT & meta
 
@@ -154,24 +167,26 @@ Frontend card styles use BEM with the `.riaco-reviews__` prefix.
 
 **Card DOM order (all styles):**
 
+The title heading element is dynamic: `card.php` sets `$hl = 'h' . absint( $atts['heading_level'] )` and uses it for all three styles. The CSS targets class names, not the element, so any heading level renders correctly.
+
 `default`:
-1. `.riaco-reviews__header` — flex row: `<h3 class="riaco-reviews__title">` (if `show_title`) + `.riaco-reviews__source` (logo, if `show_source`)
+1. `.riaco-reviews__header` — flex row: `<h{heading_level} class="riaco-reviews__title">` (if `show_title`) + `.riaco-reviews__source` (logo, if `show_source`)
 2. `.riaco-reviews__rating` — five `★` spans
-3. `.riaco-reviews__card-tag` — tag badge
+3. `.riaco-reviews__card-tag` — tag badge (has `title` attribute for truncation tooltip)
 4. `.riaco-reviews__body` — review text
-5. `<footer class="riaco-reviews__footer">` — avatar + author name + date
+5. `<footer class="riaco-reviews__footer">` — avatar + author name (has `title` attribute) + date
 
 `modern`:
-1. `<h3 class="riaco-reviews__title--modern">` (if `show_title`)
-2. `.riaco-reviews__modern-header` — flex row: avatar + `.riaco-reviews__author` (name + date) + `.riaco-reviews__rating-compact` (★ + numeric value)
+1. `<h{heading_level} class="riaco-reviews__title--modern">` (if `show_title`)
+2. `.riaco-reviews__modern-header` — flex row: avatar + `.riaco-reviews__author` (name with `title` attr + date) + `.riaco-reviews__rating-compact` (★ + numeric value)
 3. `.riaco-reviews__body` — review text
-4. `.riaco-reviews__modern-footer` — flex row: tag badge (left) + source link/logo (right)
+4. `.riaco-reviews__modern-footer` — flex row with `flex-wrap: wrap`: tag badge (has `title` attr, left) + source link/logo (right)
 
 `minimal`:
-1. `<h3 class="riaco-reviews__title--minimal">` (if `show_title`) — 1.5rem bold title
+1. `<h{heading_level} class="riaco-reviews__title--minimal">` (if `show_title`) — 1.5rem bold title
 2. `.riaco-reviews__rating` — five `★` spans; filled stars use `currentColor` (inherits text colour, never amber)
 3. `.riaco-reviews__body` — review text
-4. `.riaco-reviews__card-tag` — tag badge; `background: transparent` (border only)
+4. `.riaco-reviews__card-tag` — tag badge (has `title` attr); `background: transparent` (border only)
 5. `<footer class="riaco-reviews__footer--minimal">` — author name as `<a>` to `source_url` (falls back to `<span>`) + date (off by default) + source name as small muted text
 
 **Minimal style behaviour notes:**
@@ -188,6 +203,15 @@ Frontend card styles use BEM with the `.riaco-reviews__` prefix.
 | `.riaco-reviews__card--minimal` | Same base card; large title, no avatar or source logo; filled stars use text colour; tag badge has transparent background; footer shows linked author name + source name as small text |
 
 `layout` and `card_style` are orthogonal — any combination is valid.
+
+**Responsive & dark mode:**
+
+- Cards reduce padding to `1.25rem` at `max-width: 480px`.
+- `.riaco-reviews__modern-footer` has `flex-wrap: wrap` so tag + source never overflow narrow cards.
+- Cards have a hover lift effect (`translateY(-2px)` + deeper shadow) guarded by `@media (prefers-reduced-motion: reduce)`.
+- A `@media (prefers-color-scheme: dark)` block sets dark defaults on `.riaco-reviews` CSS custom properties; these are always overrideable by inline style values injected by `Renderer::render()`.
+- All interactive links (`.riaco-reviews__source-link`, `.riaco-reviews__source-link--modern`, `a.riaco-reviews__author-link--minimal`) have `:focus-visible` outlines for keyboard accessibility.
+- Muted text (author handle, date, source name) uses `#6b7280` (WCAG 2.1 AA on white at 4.5:1+).
 
 **CSS custom properties** (with fallback defaults):
 

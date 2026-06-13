@@ -10,8 +10,8 @@
             e.preventDefault();
             if ( mediaFrame ) { mediaFrame.open(); return; }
             mediaFrame = wp.media( {
-                title   : 'Select Avatar',
-                button  : { text: 'Use this image' },
+                title   : riacoAdminI18n.selectAvatar,
+                button  : { text: riacoAdminI18n.useThisImage },
                 multiple: false,
                 library : { type: 'image' },
             } );
@@ -48,8 +48,8 @@
         e.preventDefault();
         if ( mediaFrame ) { mediaFrame.open(); return; }
         mediaFrame = wp.media( {
-            title   : 'Select Logo',
-            button  : { text: 'Use this image' },
+            title   : riacoAdminI18n.selectLogo,
+            button  : { text: riacoAdminI18n.useThisImage },
             multiple: false,
             library : { type: 'image' },
         } );

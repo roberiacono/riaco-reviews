@@ -3,7 +3,9 @@
     "allow": [
       "Read(//opt/lampp/htdocs/dev/wp-content/plugins/riaco-icon-block/src/**)",
       "Read(//opt/lampp/htdocs/dev/wp-content/plugins/riaco-icon-block/build/**)",
-      "Bash(npm run *)"
+      "Bash(npm run *)",
+      "Bash(wp dist-archive *)",
+      "Read(//opt/lampp/htdocs/dev/wp-includes/**)"
     ]
   }
 }

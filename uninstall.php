@@ -6,6 +6,7 @@
 
 if ( ! defined( 'WP_UNINSTALL_PLUGIN' ) ) exit;
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Variables are local to the uninstall script context; no global namespace conflict.
 // Register taxonomies so wp_delete_term() can operate on them.
 register_taxonomy( 'riaco_review_source', 'riaco_review' );
 register_taxonomy( 'riaco_review_tag',    'riaco_review' );
@@ -36,3 +37,4 @@ foreach ( $posts as $post_id ) {
 foreach ( [ 'riaco_reviews_version' ] as $option ) {
     delete_option( $option );
 }
+// phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound

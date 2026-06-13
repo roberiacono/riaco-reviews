@@ -5,7 +5,7 @@ return array(
 		'$schema' => 'https://schemas.wp.org/trunk/block.json',
 		'apiVersion' => 3,
 		'name' => 'riaco-reviews/reviews-block',
-		'version' => '1.0.2',
+		'version' => '1.1.0',
 		'title' => 'RIACO Reviews',
 		'category' => 'widgets',
 		'icon' => 'star-filled',
@@ -14,7 +14,11 @@ return array(
 			
 		),
 		'supports' => array(
-			'html' => false
+			'html' => false,
+			'align' => array(
+				'wide',
+				'full'
+			)
 		),
 		'attributes' => array(
 			'count' => array(
@@ -28,6 +32,10 @@ return array(
 			'cardStyle' => array(
 				'type' => 'string',
 				'default' => 'default'
+			),
+			'headingLevel' => array(
+				'type' => 'integer',
+				'default' => 3
 			),
 			'showAuthorName' => array(
 				'type' => 'boolean',

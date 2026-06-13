@@ -9,7 +9,7 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2026-06-13T22:22:30+00:00\n"
+"POT-Creation-Date: 2026-06-13T22:41:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.12.0\n"
 "X-Domain: riaco-reviews\n"
@@ -39,84 +39,243 @@ msgstr ""
 msgid "https://riacoplugins.com/"
 msgstr ""
 
-#: includes/Admin.php:29
+#: includes/Admin.php:30
+#: includes/Dashboard.php:49
 msgid "Manage Reviews"
 msgstr ""
 
-#: includes/Admin.php:40
+#: includes/Admin.php:41
 msgid "Review Details"
 msgstr ""
 
-#: includes/Admin.php:55
+#: includes/Admin.php:56
 msgid "Author Name"
 msgstr ""
 
-#: includes/Admin.php:60
+#: includes/Admin.php:61
 msgid "Avatar"
 msgstr ""
 
-#: includes/Admin.php:66
+#: includes/Admin.php:67
 #: includes/ReviewSource.php:88
 #: includes/ReviewSource.php:111
 msgid "Upload Image"
 msgstr ""
 
-#: includes/Admin.php:70
+#: includes/Admin.php:71
 #: includes/ReviewSource.php:91
 #: includes/ReviewSource.php:115
 msgid "Remove"
 msgstr ""
 
-#: includes/Admin.php:79
-#: src/reviews-block/edit.js:204
+#: includes/Admin.php:80
+#: src/reviews-block/edit.js:239
 msgid "Star Rating"
 msgstr ""
 
-#: includes/Admin.php:91
-#: includes/Admin.php:152
+#: includes/Admin.php:83
+msgid "None"
+msgstr ""
+
+#: includes/Admin.php:93
+#: includes/Admin.php:158
 msgid "Review Date"
 msgstr ""
 
-#: includes/Admin.php:96
+#: includes/Admin.php:98
 msgid "Source URL"
 msgstr ""
 
-#: includes/Admin.php:100
+#: includes/Admin.php:102
 msgid "Link to the original review."
 msgstr ""
 
-#: includes/Admin.php:147
+#: includes/Admin.php:153
 #: includes/PostType.php:20
 msgid "Review"
 msgstr ""
 
-#: includes/Admin.php:148
+#: includes/Admin.php:154
 msgid "Author"
 msgstr ""
 
-#: includes/Admin.php:149
-#: src/reviews-block/edit.js:155
+#: includes/Admin.php:155
+#: src/reviews-block/edit.js:190
 msgid "Rating"
 msgstr ""
 
-#: includes/Admin.php:150
+#: includes/Admin.php:156
 #: includes/ReviewSource.php:35
 msgid "Source"
 msgstr ""
 
-#: includes/Admin.php:151
+#: includes/Admin.php:157
 #: includes/ReviewTag.php:20
 msgid "Tag"
 msgstr ""
 
-#: includes/Admin.php:153
+#: includes/Admin.php:159
 msgid "Added"
 msgstr ""
 
+#: includes/Admin.php:236
+#: includes/ReviewSource.php:194
+msgid "Select Avatar"
+msgstr ""
+
+#: includes/Admin.php:237
+#: includes/ReviewSource.php:195
+msgid "Use this image"
+msgstr ""
+
+#: includes/Admin.php:238
+#: includes/ReviewSource.php:196
+msgid "Select Logo"
+msgstr ""
+
 #. translators: 1: plugin name 2: opening <a> tag 3: closing </a> tag
-#: includes/Admin.php:244
+#: includes/Admin.php:259
 #, php-format
 msgid "If you like %1$s please leave us a %2$s★★★★★%3$s rating. A huge thanks in advance!"
+msgstr ""
+
+#: includes/Admin.php:272
+msgid "Shortcode Reference"
+msgstr ""
+
+#: includes/Admin.php:279
+msgid "Number of reviews to display."
+msgstr ""
+
+#: includes/Admin.php:280
+msgid "Layout style: <code>grid</code> or <code>masonry</code>."
+msgstr ""
+
+#: includes/Admin.php:281
+msgid "Card design: <code>default</code>, <code>modern</code>, or <code>minimal</code>."
+msgstr ""
+
+#: includes/Admin.php:282
+msgid "Sort field: <code>date</code>, <code>rating</code>, or <code>rand</code>."
+msgstr ""
+
+#: includes/Admin.php:283
+msgid "Sort direction: <code>ASC</code> or <code>DESC</code>."
+msgstr ""
+
+#: includes/Admin.php:284
+msgid "Tag slug to filter by. Comma-separate multiple slugs."
+msgstr ""
+
+#: includes/Admin.php:285
+msgid "HTML heading level for the review title: <code>2</code>–<code>6</code>."
+msgstr ""
+
+#: includes/Admin.php:286
+msgid "Show review title."
+msgstr ""
+
+#: includes/Admin.php:287
+msgid "Show author name."
+msgstr ""
+
+#: includes/Admin.php:288
+msgid "Show author avatar."
+msgstr ""
+
+#: includes/Admin.php:289
+msgid "Show review date."
+msgstr ""
+
+#: includes/Admin.php:290
+msgid "Show star rating."
+msgstr ""
+
+#: includes/Admin.php:291
+msgid "Show source logo."
+msgstr ""
+
+#: includes/Admin.php:292
+msgid "Show tag badge."
+msgstr ""
+
+#: includes/Admin.php:293
+msgid "Card drop shadow."
+msgstr ""
+
+#: includes/Admin.php:294
+msgid "Minimum card width in px."
+msgstr ""
+
+#: includes/Admin.php:295
+msgid "Card background colour (hex, e.g. <code>#ffffff</code>)."
+msgstr ""
+
+#: includes/Admin.php:296
+msgid "Review text colour (hex)."
+msgstr ""
+
+#: includes/Admin.php:297
+msgid "Card border colour (hex)."
+msgstr ""
+
+#: includes/Admin.php:298
+msgid "Star rating colour (hex)."
+msgstr ""
+
+#: includes/Admin.php:299
+msgid "Tag badge background colour (hex)."
+msgstr ""
+
+#: includes/Admin.php:300
+msgid "Tag badge text colour (hex)."
+msgstr ""
+
+#: includes/Admin.php:301
+msgid "Review text size in rem (e.g. <code>1</code>)."
+msgstr ""
+
+#: includes/Admin.php:302
+msgid "Line height (e.g. <code>1.7</code>)."
+msgstr ""
+
+#: includes/Admin.php:305
+msgid "Usage:"
+msgstr ""
+
+#: includes/Admin.php:306
+msgid "<strong>Example:</strong> <code>[riaco_reviews count=\"9\" layout=\"masonry\" card_style=\"modern\" tag=\"wordpress\"]</code>"
+msgstr ""
+
+#: includes/Admin.php:309
+msgid "Parameter"
+msgstr ""
+
+#: includes/Admin.php:310
+#: src/reviews-block/edit.js:97
+msgid "Default"
+msgstr ""
+
+#: includes/Admin.php:311
+msgid "Description"
+msgstr ""
+
+#: includes/Admin.php:317
+msgid "empty"
+msgstr ""
+
+#: includes/Dashboard.php:18
+msgid "Reviews Overview"
+msgstr ""
+
+#: includes/Dashboard.php:33
+msgid "published review"
+msgid_plural "published reviews"
+msgstr[0] ""
+msgstr[1] ""
+
+#: includes/Dashboard.php:40
+msgid "average rating"
 msgstr ""
 
 #: includes/PostType.php:19
@@ -222,162 +381,170 @@ msgid "Manage Tags"
 msgstr ""
 
 #. translators: %d: star rating number from 1 to 5
-#: templates/partials/card.php:70
-#: templates/partials/card.php:122
-#: templates/partials/card.php:200
+#: templates/partials/card.php:71
+#: templates/partials/card.php:125
+#: templates/partials/card.php:206
 #, php-format
 msgid "%d out of 5 stars"
 msgstr ""
 
-#: src/reviews-block/edit.js:44
+#: src/reviews-block/edit.js:55
 msgid "— All Tags —"
 msgstr ""
 
-#: src/reviews-block/edit.js:51
+#: src/reviews-block/edit.js:62
 msgid "Display Settings"
 msgstr ""
 
-#: src/reviews-block/edit.js:54
+#: src/reviews-block/edit.js:65
 msgid "Number of Reviews"
 msgstr ""
 
-#: src/reviews-block/edit.js:62
+#: src/reviews-block/edit.js:73
 msgid "Filter by Tag"
 msgstr ""
 
-#: src/reviews-block/edit.js:67
+#: src/reviews-block/edit.js:78
 msgid "No tags found. Create tags under Reviews → Tags."
 msgstr ""
 
-#: src/reviews-block/edit.js:73
+#: src/reviews-block/edit.js:84
 msgid "Layout"
 msgstr ""
 
-#: src/reviews-block/edit.js:76
+#: src/reviews-block/edit.js:87
 msgid "Grid"
 msgstr ""
 
-#: src/reviews-block/edit.js:77
+#: src/reviews-block/edit.js:88
 msgid "Masonry"
 msgstr ""
 
-#: src/reviews-block/edit.js:83
+#: src/reviews-block/edit.js:94
 msgid "Card Style"
 msgstr ""
 
-#: src/reviews-block/edit.js:86
-msgid "Default"
-msgstr ""
-
-#: src/reviews-block/edit.js:87
+#: src/reviews-block/edit.js:98
 msgid "Modern"
 msgstr ""
 
-#: src/reviews-block/edit.js:88
+#: src/reviews-block/edit.js:99
 msgid "Minimal"
 msgstr ""
 
-#: src/reviews-block/edit.js:93
+#: src/reviews-block/edit.js:104
 msgid "Card Shadow"
 msgstr ""
 
-#: src/reviews-block/edit.js:99
+#: src/reviews-block/edit.js:110
 msgid "Min Card Width (px)"
 msgstr ""
 
-#: src/reviews-block/edit.js:108
+#: src/reviews-block/edit.js:111
+msgid "Minimum column width. More columns appear as the container widens."
+msgstr ""
+
+#: src/reviews-block/edit.js:124
+msgid "Reset all settings to defaults"
+msgstr ""
+
+#: src/reviews-block/edit.js:128
 msgid "Field Visibility"
 msgstr ""
 
-#: src/reviews-block/edit.js:110
+#: src/reviews-block/edit.js:130
 msgid "Show Title"
 msgstr ""
 
-#: src/reviews-block/edit.js:115
+#: src/reviews-block/edit.js:137
+msgid "Title Heading Level"
+msgstr ""
+
+#: src/reviews-block/edit.js:150
 msgid "Show Star Rating"
 msgstr ""
 
-#: src/reviews-block/edit.js:120
+#: src/reviews-block/edit.js:155
 msgid "Show Author Name"
 msgstr ""
 
-#: src/reviews-block/edit.js:125
+#: src/reviews-block/edit.js:160
 msgid "Show Avatar"
 msgstr ""
 
-#: src/reviews-block/edit.js:130
+#: src/reviews-block/edit.js:165
 msgid "Show Date"
 msgstr ""
 
-#: src/reviews-block/edit.js:136
+#: src/reviews-block/edit.js:171
 msgid "Show Source Logo"
 msgstr ""
 
-#: src/reviews-block/edit.js:142
+#: src/reviews-block/edit.js:177
 msgid "Show Tag"
 msgstr ""
 
-#: src/reviews-block/edit.js:148
+#: src/reviews-block/edit.js:183
 msgid "Sort Order"
 msgstr ""
 
-#: src/reviews-block/edit.js:151
+#: src/reviews-block/edit.js:186
 msgid "Order By"
 msgstr ""
 
-#: src/reviews-block/edit.js:154
+#: src/reviews-block/edit.js:189
 msgid "Date"
 msgstr ""
 
-#: src/reviews-block/edit.js:156
+#: src/reviews-block/edit.js:191
 msgid "Random"
 msgstr ""
 
-#: src/reviews-block/edit.js:163
+#: src/reviews-block/edit.js:198
 msgid "Direction"
 msgstr ""
 
-#: src/reviews-block/edit.js:166
+#: src/reviews-block/edit.js:201
 msgid "Newest First"
 msgstr ""
 
-#: src/reviews-block/edit.js:167
+#: src/reviews-block/edit.js:202
 msgid "Oldest First"
 msgstr ""
 
-#: src/reviews-block/edit.js:174
+#: src/reviews-block/edit.js:209
 msgid "Card Colours"
 msgstr ""
 
-#: src/reviews-block/edit.js:177
+#: src/reviews-block/edit.js:212
 msgid "Card Background"
 msgstr ""
 
-#: src/reviews-block/edit.js:186
+#: src/reviews-block/edit.js:221
 msgid "Card Text"
 msgstr ""
 
-#: src/reviews-block/edit.js:195
+#: src/reviews-block/edit.js:230
 msgid "Card Border / Accent"
 msgstr ""
 
-#: src/reviews-block/edit.js:213
+#: src/reviews-block/edit.js:248
 msgid "Tag Background"
 msgstr ""
 
-#: src/reviews-block/edit.js:222
+#: src/reviews-block/edit.js:257
 msgid "Tag Text"
 msgstr ""
 
-#: src/reviews-block/edit.js:231
+#: src/reviews-block/edit.js:266
 msgid "Typography"
 msgstr ""
 
-#: src/reviews-block/edit.js:234
+#: src/reviews-block/edit.js:269
 msgid "Review Text Size (rem)"
 msgstr ""
 
-#: src/reviews-block/edit.js:247
+#: src/reviews-block/edit.js:282
 msgid "Line Height"
 msgstr ""
 

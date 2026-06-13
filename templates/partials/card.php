@@ -10,12 +10,14 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
+// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template included inside Renderer::render(); all variables are local to that function scope.
 $rating      = max( 0, min( 5, (int) $meta['rating'] ) );
 $review_text = get_the_content();
 $post_title  = get_the_title();
 $has_avatar  = $atts['show_avatar'] && ! empty( $meta['author_avatar'] );
 $has_source  = $atts['show_source'] && ! empty( $meta['source_image'] );
 $show_title  = $atts['show_title'] && ! empty( $post_title );
+$hl          = 'h' . absint( $atts['heading_level'] );
 
 if ( 'modern' === $atts['card_style'] ) :
     $has_modern_source = $atts['show_source'] && ( ! empty( $meta['source_image'] ) || ! empty( $meta['source_name'] ) ) && ! empty( $meta['source_url'] );
@@ -25,7 +27,7 @@ if ( 'modern' === $atts['card_style'] ) :
 <article class="riaco-reviews__card riaco-reviews__card--modern">
 
     <?php if ( $show_title ) : ?>
-        <h3 class="riaco-reviews__title riaco-reviews__title--modern"><?php echo esc_html( $post_title ); ?></h3>
+        <<?php echo esc_attr( $hl ); ?> class="riaco-reviews__title riaco-reviews__title--modern"><?php echo esc_html( $post_title ); ?></<?php echo esc_attr( $hl ); ?>>
     <?php endif; ?>
 
     <div class="riaco-reviews__modern-header">
@@ -52,7 +54,7 @@ if ( 'modern' === $atts['card_style'] ) :
         <?php if ( $atts['show_author_name'] || $atts['show_date'] ) : ?>
             <div class="riaco-reviews__author">
                 <?php if ( $atts['show_author_name'] && ! empty( $meta['author_name'] ) ) : ?>
-                    <span class="riaco-reviews__author-name"><?php echo esc_html( $meta['author_name'] ); ?></span>
+                    <span class="riaco-reviews__author-name" title="<?php echo esc_attr( $meta['author_name'] ); ?>"><?php echo esc_html( $meta['author_name'] ); ?></span>
                 <?php endif; ?>
                 <?php if ( $atts['show_date'] && ! empty( $meta['review_date'] ) ) : ?>
                     <?php $ts = strtotime( $meta['review_date'] ); ?>
@@ -83,7 +85,7 @@ if ( 'modern' === $atts['card_style'] ) :
         <div class="riaco-reviews__modern-footer">
 
             <?php if ( $has_modern_tag ) : ?>
-                <div class="riaco-reviews__card-tag"><?php echo esc_html( $meta['tag_name'] ); ?></div>
+                <div class="riaco-reviews__card-tag" title="<?php echo esc_attr( $meta['tag_name'] ); ?>"><?php echo esc_html( $meta['tag_name'] ); ?></div>
             <?php else : ?>
                 <span></span>
             <?php endif; ?>
@@ -116,7 +118,7 @@ if ( 'modern' === $atts['card_style'] ) :
 <article class="riaco-reviews__card riaco-reviews__card--minimal">
 
     <?php if ( $show_title ) : ?>
-        <h3 class="riaco-reviews__title riaco-reviews__title--minimal"><?php echo esc_html( $post_title ); ?></h3>
+        <<?php echo esc_attr( $hl ); ?> class="riaco-reviews__title riaco-reviews__title--minimal"><?php echo esc_html( $post_title ); ?></<?php echo esc_attr( $hl ); ?>>
     <?php endif; ?>
 
     <?php if ( $atts['show_rating'] && $rating > 0 ) : ?>
@@ -133,7 +135,7 @@ if ( 'modern' === $atts['card_style'] ) :
     </div>
 
     <?php if ( $atts['show_tag'] && ! empty( $meta['tag_name'] ) ) : ?>
-        <div class="riaco-reviews__card-tag"><?php echo esc_html( $meta['tag_name'] ); ?></div>
+        <div class="riaco-reviews__card-tag" title="<?php echo esc_attr( $meta['tag_name'] ); ?>"><?php echo esc_html( $meta['tag_name'] ); ?></div>
     <?php endif; ?>
 
     <?php if ( $has_minimal_footer ) : ?>
@@ -177,7 +179,7 @@ if ( 'modern' === $atts['card_style'] ) :
     <?php if ( $show_title || $has_source ) : ?>
         <div class="riaco-reviews__header">
             <?php if ( $show_title ) : ?>
-                <h3 class="riaco-reviews__title"><?php echo esc_html( $post_title ); ?></h3>
+                <<?php echo esc_attr( $hl ); ?> class="riaco-reviews__title"><?php echo esc_html( $post_title ); ?></<?php echo esc_attr( $hl ); ?>>
             <?php endif; ?>
 
             <?php if ( $has_source ) : ?>
@@ -210,7 +212,7 @@ if ( 'modern' === $atts['card_style'] ) :
     <?php endif; ?>
 
     <?php if ( $atts['show_tag'] && ! empty( $meta['tag_name'] ) ) : ?>
-        <div class="riaco-reviews__card-tag">
+        <div class="riaco-reviews__card-tag" title="<?php echo esc_attr( $meta['tag_name'] ); ?>">
             <?php echo esc_html( $meta['tag_name'] ); ?>
         </div>
     <?php endif; ?>
@@ -244,7 +246,7 @@ if ( 'modern' === $atts['card_style'] ) :
             <?php if ( $atts['show_author_name'] || $atts['show_date'] ) : ?>
                 <div class="riaco-reviews__author">
                     <?php if ( $atts['show_author_name'] && ! empty( $meta['author_name'] ) ) : ?>
-                        <span class="riaco-reviews__author-name"><?php echo esc_html( $meta['author_name'] ); ?></span>
+                        <span class="riaco-reviews__author-name" title="<?php echo esc_attr( $meta['author_name'] ); ?>"><?php echo esc_html( $meta['author_name'] ); ?></span>
                     <?php endif; ?>
                     <?php if ( $atts['show_date'] && ! empty( $meta['review_date'] ) ) : ?>
                         <?php $ts = strtotime( $meta['review_date'] ); ?>
@@ -262,3 +264,4 @@ if ( 'modern' === $atts['card_style'] ) :
 
 </article>
 <?php endif; ?>
+<?php // phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound ?>

@@ -11,6 +11,7 @@ class Renderer {
             'count'             => 6,
             'layout'            => 'grid',
             'card_style'        => 'default',
+            'heading_level'     => 3,
             'show_author_name'  => true,
             'show_avatar'       => true,
             'show_date'         => false,
@@ -35,6 +36,8 @@ class Renderer {
 
         // Sanitize display options
         $atts['count']  = max( 1, absint( $atts['count'] ) );
+        $heading_level  = absint( $atts['heading_level'] );
+        $atts['heading_level'] = ( $heading_level >= 2 && $heading_level <= 6 ) ? $heading_level : 3;
 
         $allowed_layouts     = apply_filters( 'riaco_reviews_layouts',         [ 'grid', 'masonry' ] );
         $allowed_card_styles = apply_filters( 'riaco_reviews_card_styles',     [ 'default', 'modern', 'minimal' ] );
@@ -117,7 +120,7 @@ class Renderer {
         ];
 
         if ( $atts['orderby'] === 'rating' ) {
-            $query_args['meta_query'] = [
+            $query_args['meta_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query -- required for rating-based ordering; meta_key index mitigates impact.
                 'relation'     => 'OR',
                 'riaco_rating' => [
                     'key'     => '_riaco_review_rating',
@@ -132,7 +135,7 @@ class Renderer {
         }
 
         if ( ! empty( $atts['tag'] ) ) {
-            $query_args['tax_query'] = [ [
+            $query_args['tax_query'] = [ [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query -- required for tag filtering; taxonomy tables are indexed.
                 'taxonomy' => 'riaco_review_tag',
                 'field'    => 'slug',
                 'terms'    => explode( ',', $atts['tag'] ),

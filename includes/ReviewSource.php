@@ -145,7 +145,7 @@ class ReviewSource implements ServiceInterface {
             : '';
 
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_source_image_save' ) ) return;
-        if ( ! current_user_can( 'manage_categories' ) ) return;
+        if ( ! current_user_can( 'manage_options' ) ) return;
 
         if ( isset( $_POST['riaco_source_image'] ) ) {
             update_term_meta( $term_id, '_riaco_source_image', esc_url_raw( wp_unslash( $_POST['riaco_source_image'] ) ) );
@@ -174,9 +174,10 @@ class ReviewSource implements ServiceInterface {
     }
 
     public function enqueue_assets( string $hook ): void {
-        $taxonomy      = isset( $_GET['taxonomy'] ) ? sanitize_key( wp_unslash( $_GET['taxonomy'] ) ) : '';
-        $on_tax_screen = in_array( $hook, [ 'edit-tags.php', 'term.php' ], true )
-            && $taxonomy === 'riaco_review_source';
+        $screen        = get_current_screen();
+        $on_tax_screen = $screen
+            && in_array( $hook, [ 'edit-tags.php', 'term.php' ], true )
+            && 'riaco_review_source' === $screen->taxonomy;
 
         if ( ! $on_tax_screen ) return;
 
@@ -187,6 +188,15 @@ class ReviewSource implements ServiceInterface {
             [],
             $this->version,
             true
+        );
+        wp_add_inline_script(
+            'riaco-reviews-admin',
+            'var riacoAdminI18n = ' . wp_json_encode( [
+                'selectAvatar' => __( 'Select Avatar', 'riaco-reviews' ),
+                'useThisImage' => __( 'Use this image', 'riaco-reviews' ),
+                'selectLogo'   => __( 'Select Logo',   'riaco-reviews' ),
+            ] ) . ';',
+            'before'
         );
     }
 }

@@ -22,6 +22,7 @@ class Admin implements ServiceInterface {
         add_action( 'admin_enqueue_scripts',                                               [ $this, 'enqueue_assets' ] );
         add_filter( 'plugin_action_links_' . plugin_basename( $this->file ),              [ $this, 'action_links' ] );
         add_filter( 'admin_footer_text',                                                   [ $this, 'footer_text' ] );
+        add_action( 'current_screen',                                                      [ $this, 'add_help_tab' ] );
     }
 
     public function action_links( array $links ): array {
@@ -197,7 +198,7 @@ class Admin implements ServiceInterface {
                 $date = get_post_meta( $post_id, '_riaco_review_date', true );
                 if ( $date ) {
                     $ts = strtotime( $date );
-                    echo $ts ? esc_html( wp_date( get_option( 'date_format' ), $ts ) ) : '—';
+                    echo false !== $ts ? esc_html( wp_date( get_option( 'date_format' ), $ts ) ) : '—';
                 } else {
                     echo '—';
                 }
@@ -229,6 +230,15 @@ class Admin implements ServiceInterface {
             RIACO_REVIEWS_VERSION,
             true
         );
+        wp_add_inline_script(
+            'riaco-reviews-admin',
+            'var riacoAdminI18n = ' . wp_json_encode( [
+                'selectAvatar' => __( 'Select Avatar', 'riaco-reviews' ),
+                'useThisImage' => __( 'Use this image', 'riaco-reviews' ),
+                'selectLogo'   => __( 'Select Logo',   'riaco-reviews' ),
+            ] ) . ';',
+            'before'
+        );
     }
 
     public function footer_text( string $text ): string {
@@ -251,6 +261,67 @@ class Admin implements ServiceInterface {
             '<a href="' . esc_url( 'https://wordpress.org/support/plugin/riaco-reviews/reviews/' ) . '" target="_blank" rel="noopener noreferrer">',
             '</a>'
         ) );
+    }
+
+    public function add_help_tab(): void {
+        $screen = get_current_screen();
+        if ( ! $screen || $screen->id !== 'edit-riaco_review' ) return;
+
+        $screen->add_help_tab( [
+            'id'      => 'riaco-shortcode-reference',
+            'title'   => __( 'Shortcode Reference', 'riaco-reviews' ),
+            'content' => $this->get_help_tab_content(),
+        ] );
+    }
+
+    private function get_help_tab_content(): string {
+        $rows = [
+            [ 'count',             '6',        __( 'Number of reviews to display.', 'riaco-reviews' ) ],
+            [ 'layout',            'grid',      __( 'Layout style: <code>grid</code> or <code>masonry</code>.', 'riaco-reviews' ) ],
+            [ 'card_style',        'default',   __( 'Card design: <code>default</code>, <code>modern</code>, or <code>minimal</code>.', 'riaco-reviews' ) ],
+            [ 'orderby',           'date',      __( 'Sort field: <code>date</code>, <code>rating</code>, or <code>rand</code>.', 'riaco-reviews' ) ],
+            [ 'order',             'DESC',      __( 'Sort direction: <code>ASC</code> or <code>DESC</code>.', 'riaco-reviews' ) ],
+            [ 'tag',               '',          __( 'Tag slug to filter by. Comma-separate multiple slugs.', 'riaco-reviews' ) ],
+            [ 'heading_level',     '3',         __( 'HTML heading level for the review title: <code>2</code>–<code>6</code>.', 'riaco-reviews' ) ],
+            [ 'show_title',        '1',         __( 'Show review title.', 'riaco-reviews' ) ],
+            [ 'show_author_name',  '1',         __( 'Show author name.', 'riaco-reviews' ) ],
+            [ 'show_avatar',       '1',         __( 'Show author avatar.', 'riaco-reviews' ) ],
+            [ 'show_date',         '0',         __( 'Show review date.', 'riaco-reviews' ) ],
+            [ 'show_rating',       '1',         __( 'Show star rating.', 'riaco-reviews' ) ],
+            [ 'show_source',       '1',         __( 'Show source logo.', 'riaco-reviews' ) ],
+            [ 'show_tag',          '1',         __( 'Show tag badge.', 'riaco-reviews' ) ],
+            [ 'show_shadow',       '1',         __( 'Card drop shadow.', 'riaco-reviews' ) ],
+            [ 'min_width',         '280',       __( 'Minimum card width in px.', 'riaco-reviews' ) ],
+            [ 'card_bg',           '',          __( 'Card background colour (hex, e.g. <code>#ffffff</code>).', 'riaco-reviews' ) ],
+            [ 'card_text_color',   '',          __( 'Review text colour (hex).', 'riaco-reviews' ) ],
+            [ 'card_border_color', '',          __( 'Card border colour (hex).', 'riaco-reviews' ) ],
+            [ 'star_color',        '',          __( 'Star rating colour (hex).', 'riaco-reviews' ) ],
+            [ 'tag_bg',            '',          __( 'Tag badge background colour (hex).', 'riaco-reviews' ) ],
+            [ 'tag_text_color',    '',          __( 'Tag badge text colour (hex).', 'riaco-reviews' ) ],
+            [ 'font_size',         '',          __( 'Review text size in rem (e.g. <code>1</code>).', 'riaco-reviews' ) ],
+            [ 'line_height',       '',          __( 'Line height (e.g. <code>1.7</code>).', 'riaco-reviews' ) ],
+        ];
+
+        $html = '<p><strong>' . esc_html__( 'Usage:', 'riaco-reviews' ) . '</strong> <code>[riaco_reviews]</code></p>';
+        $html .= '<p>' . wp_kses( __( '<strong>Example:</strong> <code>[riaco_reviews count="9" layout="masonry" card_style="modern" tag="wordpress"]</code>', 'riaco-reviews' ), [ 'strong' => [], 'code' => [] ] ) . '</p>';
+        $html .= '<table class="widefat striped" style="max-width:720px;">';
+        $html .= '<thead><tr>';
+        $html .= '<th>' . esc_html__( 'Parameter', 'riaco-reviews' ) . '</th>';
+        $html .= '<th>' . esc_html__( 'Default', 'riaco-reviews' ) . '</th>';
+        $html .= '<th>' . esc_html__( 'Description', 'riaco-reviews' ) . '</th>';
+        $html .= '</tr></thead><tbody>';
+
+        foreach ( $rows as [ $param, $default, $desc ] ) {
+            $html .= '<tr>';
+            $html .= '<td><code>' . esc_html( $param ) . '</code></td>';
+            $html .= '<td>' . ( '' !== $default ? '<code>' . esc_html( $default ) . '</code>' : '<em>' . esc_html__( 'empty', 'riaco-reviews' ) . '</em>' ) . '</td>';
+            $html .= '<td>' . wp_kses( $desc, [ 'code' => [] ] ) . '</td>';
+            $html .= '</tr>';
+        }
+
+        $html .= '</tbody></table>';
+
+        return $html;
     }
 
     private function get_meta( int $post_id ): array {
