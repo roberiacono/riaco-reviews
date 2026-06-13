@@ -146,17 +146,25 @@ class Renderer {
 
         $reviews = new \WP_Query( $query_args );
 
-        // Pre-warm term meta cache for all source terms in one query to avoid N+1 inside the loop.
+        // Pre-warm term meta cache for all source and tag terms to avoid N+1 inside the loop.
         if ( $reviews->have_posts() ) {
             $source_term_ids = [];
+            $tag_term_ids    = [];
             foreach ( $reviews->posts as $p ) {
-                $terms = get_the_terms( $p->ID, 'riaco_review_source' );
-                if ( $terms && ! is_wp_error( $terms ) ) {
-                    $source_term_ids[] = (int) $terms[0]->term_id;
+                $s_terms = get_the_terms( $p->ID, 'riaco_review_source' );
+                if ( $s_terms && ! is_wp_error( $s_terms ) ) {
+                    $source_term_ids[] = (int) $s_terms[0]->term_id;
+                }
+                $t_terms = get_the_terms( $p->ID, 'riaco_review_tag' );
+                if ( $t_terms && ! is_wp_error( $t_terms ) ) {
+                    $tag_term_ids[] = (int) $t_terms[0]->term_id;
                 }
             }
             if ( $source_term_ids ) {
                 update_termmeta_cache( array_unique( $source_term_ids ) );
+            }
+            if ( $tag_term_ids ) {
+                update_termmeta_cache( array_unique( $tag_term_ids ) );
             }
         }
 

@@ -34,6 +34,8 @@ $inner_class     = 'riaco-reviews__' . $layout;
                     'source_name'   => $source_term ? $source_term->name : '',
                     'source_url'    => get_post_meta( $post_id, '_riaco_review_source_url',    true ),
                     'tag_name'      => $tag_term ? $tag_term->name : '',
+                    'tag_url'       => $tag_term ? get_term_meta( $tag_term->term_id, '_riaco_tag_url',  true ) : '',
+                    'tag_type'      => $tag_term ? get_term_meta( $tag_term->term_id, '_riaco_tag_type', true ) : '',
                 ];
                 $meta = apply_filters( 'riaco_reviews_card_meta', $meta, $post_id, $atts );
                 do_action( 'riaco_reviews_before_card', $post_id, $meta, $atts );

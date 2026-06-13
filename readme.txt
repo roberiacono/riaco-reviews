@@ -44,7 +44,7 @@ Every review is a native WordPress post with its own star rating, author, avatar
 * Review date (separate from the publish date — enter the date the customer left the review)
 * Source platform — assign a platform like "Google", "Trustpilot", or "WordPress.org" with its logo
 * Source URL — link to the original review on the external platform
-* Product / subject tag — label each review with what it refers to
+* Product / subject tag — label each review with what it refers to; set a URL and schema.org type per tag for structured data
 
 **Visibility Toggles**
 
@@ -89,6 +89,15 @@ Override directly from the block editor or shortcode attributes:
 * Custom admin list table with columns for author, rating, source logo, tag, and review date
 * Media-uploader integration for author avatars and source logos
 
+**JSON-LD Structured Data**
+
+* Automatically outputs schema.org `Review` structured data in a `<script type="application/ld+json">` tag in the page footer — no setup required.
+* Each review card produces one `Review` object with `reviewBody`, `reviewRating`, `author`, `datePublished`, `url`, and `itemReviewed`.
+* `itemReviewed` is driven by the tag assigned to the review: set a URL and a schema.org type (Product, SoftwareApplication, LocalBusiness, Organization, Book, Movie, Course, Event, or the generic Thing) on each tag in **Reviews → Tags**.
+* Reviews without a tag fall back to the review headline as `itemReviewed.name` with type `Thing`.
+* Multiple reviews on the same page (from one or more blocks/shortcodes) are combined into a single `@graph` array — one `<script>` tag regardless of how many shortcodes are on the page.
+* Use the `riaco_reviews_json_ld_data` filter to modify or suppress the structured data for individual reviews.
+
 **Developer-Friendly**
 
 * `riaco_reviews_atts` — filter display attributes before rendering
@@ -101,6 +110,7 @@ Override directly from the block editor or shortcode attributes:
 * `riaco_reviews_layouts` / `riaco_reviews_card_styles` / `riaco_reviews_orderby_options` — register custom values for layout, card style, and sort order
 * `riaco_reviews_init` / `riaco_reviews_loaded` — plugin lifecycle actions for third-party extensions
 * `riaco_reviews_block_render_atts` — map additional Gutenberg block attributes into the render pipeline
+* `riaco_reviews_json_ld_data` — modify or suppress the structured data object for a single review before it is collected
 
 = Perfect For =
 
@@ -206,6 +216,19 @@ Yes, using the `riaco_reviews_query_args` filter. This gives you access to the f
     return $args;
 }, 10, 2 );`
 
+= Does this plugin output JSON-LD structured data for rich results? =
+
+Yes. The plugin automatically outputs schema.org `Review` structured data in the page footer for every review rendered by a block or shortcode. No configuration is required — the data is picked up by Google and other search engines automatically.
+
+To get the most out of rich results, go to **Reviews → Tags**, edit each tag, and set:
+
+* **Product / Subject URL** — the canonical URL of the thing being reviewed (e.g. your plugin's WordPress.org listing page).
+* **Schema.org Type** — the type of thing being reviewed. Use `Product` for physical or digital products, `SoftwareApplication` for apps and plugins, `LocalBusiness` for shops and services, etc. Leave it as `Thing` if unsure.
+
+Reviews that share the same tag but have different star ratings each produce a separate `Review` object — this is expected and valid. You can validate the structured data with [Google's Rich Results Test](https://search.google.com/test/rich-results).
+
+To suppress or modify the structured data for a specific review, use the `riaco_reviews_json_ld_data` filter (return `false` to suppress).
+
 = Can I use a custom card template? =
 
 Yes. Use the `riaco_reviews_card_template_path` filter to return the path to your own PHP template file. The filter receives the default path, the card style slug, the post ID, and the meta array, so you can switch templates per style or per review.
@@ -236,6 +259,11 @@ Yes. All user-facing strings are wrapped in WordPress i18n functions and the tex
 == Changelog ==
 
 = 1.1.0 =
+* Initial release.
+* **JSON-LD structured data:** the plugin now outputs schema.org `Review` structured data automatically in the page footer for every rendered review, enabling Google rich results with no configuration.
+* **Tag metadata:** two new fields on the **Reviews → Tags** edit screen — "Product / Subject URL" and "Schema.org Type" — let you specify what each tag refers to so `itemReviewed` in the structured data is as accurate as possible.
+* `riaco_reviews_json_ld_data` filter: modify or suppress the JSON-LD object for individual reviews before output.
+* Multiple blocks/shortcodes on the same page produce a single `<script>` tag with a `@graph` array rather than one script per shortcode.
 * **Accessibility:** added `:focus-visible` outlines to all interactive links; improved colour contrast on muted text (date, author handle, source name) to meet WCAG 2.1 AA.
 * **Dark mode:** CSS custom properties now have sensible dark-mode defaults via `prefers-color-scheme: dark` (overrideable via block/shortcode colour controls).
 * **Mobile:** reduced card padding at &lt;480 px; modern card footer now wraps to avoid overflow on narrow screens.
@@ -254,8 +282,10 @@ Yes. All user-facing strings are wrapped in WordPress i18n functions and the tex
 * Added filter-by-tag support: `tag` shortcode attribute and `tagFilter` block attribute let you show only reviews assigned to a specific tag (comma-separated slugs for multiple tags).
 * Block editor: new "Filter by Tag" dropdown in the Display Settings panel, populated from existing tags without requiring REST API access.
 
+= 1.0.1 =
+* Fix performance bugs
+
 = 1.0.0 =
-* Initial release.
 * Custom post type `riaco_review` with dedicated admin list table (Author, Rating, Source, Tag, Review Date columns).
 * Gutenberg block with server-side rendering and live editor preview.
 * Shortcode `[riaco_reviews]` with full attribute support.

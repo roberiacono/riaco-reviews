@@ -8,9 +8,18 @@ use RIACO\Reviews\Interfaces\ServiceInterface;
 
 class ReviewTag implements ServiceInterface {
 
+    private const ALLOWED_TYPES = [
+        'Thing', 'Product', 'SoftwareApplication', 'LocalBusiness',
+        'Organization', 'Book', 'Movie', 'Course', 'Event',
+    ];
+
     public function register(): void {
-        add_action( 'init',                   [ $this, 'register_taxonomy' ] );
-        add_action( 'save_post_riaco_review', [ $this, 'save_term_assignment' ] );
+        add_action( 'init',                                    [ $this, 'register_taxonomy' ] );
+        add_action( 'save_post_riaco_review',                  [ $this, 'save_term_assignment' ] );
+        add_action( 'riaco_review_tag_add_form_fields',        [ $this, 'add_term_meta_fields' ] );
+        add_action( 'riaco_review_tag_edit_form_fields',       [ $this, 'edit_term_meta_fields' ] );
+        add_action( 'created_riaco_review_tag',                [ $this, 'save_term_meta' ] );
+        add_action( 'edited_riaco_review_tag',                 [ $this, 'save_term_meta' ] );
     }
 
     public function register_taxonomy(): void {
@@ -61,6 +70,78 @@ class ReviewTag implements ServiceInterface {
             </a>
         </div>
         <?php
+    }
+
+    public function add_term_meta_fields( string $taxonomy ): void {
+        ?>
+        <div class="form-field">
+            <label for="riaco_tag_url"><?php esc_html_e( 'Product / Subject URL', 'riaco-reviews' ); ?></label>
+            <input type="url" id="riaco_tag_url" name="riaco_tag_url" class="regular-text" value="">
+            <p class="description"><?php esc_html_e( 'URL of the product or subject being reviewed (used for JSON-LD structured data).', 'riaco-reviews' ); ?></p>
+        </div>
+        <div class="form-field">
+            <label for="riaco_tag_type"><?php esc_html_e( 'Schema.org Type', 'riaco-reviews' ); ?></label>
+            <select id="riaco_tag_type" name="riaco_tag_type">
+                <?php foreach ( self::ALLOWED_TYPES as $type ) : ?>
+                    <option value="<?php echo esc_attr( $type ); ?>"><?php echo esc_html( $type ); ?></option>
+                <?php endforeach; ?>
+            </select>
+            <p class="description"><?php esc_html_e( 'Schema.org type for the reviewed item. Use "Thing" if unsure.', 'riaco-reviews' ); ?></p>
+            <?php wp_nonce_field( 'riaco_tag_meta_save', 'riaco_tag_meta_nonce', false ); ?>
+        </div>
+        <?php
+    }
+
+    public function edit_term_meta_fields( \WP_Term $term ): void {
+        $url  = get_term_meta( $term->term_id, '_riaco_tag_url',  true );
+        $type = get_term_meta( $term->term_id, '_riaco_tag_type', true );
+        if ( ! $type ) {
+            $type = 'Thing';
+        }
+        ?>
+        <tr class="form-field">
+            <th><label for="riaco_tag_url"><?php esc_html_e( 'Product / Subject URL', 'riaco-reviews' ); ?></label></th>
+            <td>
+                <input type="url" id="riaco_tag_url" name="riaco_tag_url"
+                       class="regular-text" value="<?php echo esc_attr( $url ); ?>">
+                <p class="description"><?php esc_html_e( 'URL of the product or subject being reviewed (used for JSON-LD structured data).', 'riaco-reviews' ); ?></p>
+            </td>
+        </tr>
+        <tr class="form-field">
+            <th><label for="riaco_tag_type"><?php esc_html_e( 'Schema.org Type', 'riaco-reviews' ); ?></label></th>
+            <td>
+                <select id="riaco_tag_type" name="riaco_tag_type">
+                    <?php foreach ( self::ALLOWED_TYPES as $t ) : ?>
+                        <option value="<?php echo esc_attr( $t ); ?>" <?php selected( $type, $t ); ?>>
+                            <?php echo esc_html( $t ); ?>
+                        </option>
+                    <?php endforeach; ?>
+                </select>
+                <p class="description"><?php esc_html_e( 'Schema.org type for the reviewed item. Use "Thing" if unsure.', 'riaco-reviews' ); ?></p>
+                <?php wp_nonce_field( 'riaco_tag_meta_save', 'riaco_tag_meta_nonce', false ); ?>
+            </td>
+        </tr>
+        <?php
+    }
+
+    public function save_term_meta( int $term_id ): void {
+        $nonce = isset( $_POST['riaco_tag_meta_nonce'] )
+            ? sanitize_text_field( wp_unslash( $_POST['riaco_tag_meta_nonce'] ) )
+            : '';
+
+        if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_tag_meta_save' ) ) return;
+        if ( ! current_user_can( 'manage_options' ) ) return;
+
+        if ( isset( $_POST['riaco_tag_url'] ) ) {
+            update_term_meta( $term_id, '_riaco_tag_url', esc_url_raw( wp_unslash( $_POST['riaco_tag_url'] ) ) );
+        }
+
+        if ( isset( $_POST['riaco_tag_type'] ) ) {
+            $type = sanitize_text_field( wp_unslash( $_POST['riaco_tag_type'] ) );
+            if ( in_array( $type, self::ALLOWED_TYPES, true ) ) {
+                update_term_meta( $term_id, '_riaco_tag_type', $type );
+            }
+        }
     }
 
     public function save_term_assignment( int $post_id ): void {

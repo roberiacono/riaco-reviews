@@ -42,7 +42,7 @@ Run this after adding or changing any translatable string. The `.pot` file lives
 
 The plugin initialises on `plugins_loaded` (not `init`), so all services are available when WordPress fires `init`.
 
-`get_service(string $key)` retrieves a registered service by key (e.g. `'postType'`, `'admin'`, `'blocks'`, `'shortcodes'`, `'reviewSource'`, `'reviewTag'`, `'dashboard'`). Returns `null` if the key is not found.
+`get_service(string $key)` retrieves a registered service by key (e.g. `'postType'`, `'admin'`, `'blocks'`, `'shortcodes'`, `'reviewSource'`, `'reviewTag'`, `'dashboard'`, `'jsonLd'`). Returns `null` if the key is not found.
 
 **Lifecycle actions fired by `Plugin::init()`** (in order):
 
@@ -64,7 +64,7 @@ Templates live in `templates/` — `reviews.php` is the loop wrapper, `templates
 
 `reviews.php` builds a `$meta` array per post that includes post-meta fields **and** taxonomy data resolved in the loop: it resolves the `riaco_review_source` term to get `source_image` and `source_name` (via `get_term_meta`), fetches `source_url` from post meta, and collects `riaco_review_tag` terms for the tag badge.
 
-**Term meta cache warming** — `WP_Query` pre-warms the post meta and term caches for all posts in the result set, but WordPress does not automatically warm term meta. To prevent N+1 queries from `get_term_meta()` calls inside the loop, `Renderer::render()` calls `update_termmeta_cache()` on the deduplicated list of source term IDs immediately after the query runs and before `ob_start()`.
+**Term meta cache warming** — `WP_Query` pre-warms the post meta and term caches for all posts in the result set, but WordPress does not automatically warm term meta. To prevent N+1 queries from `get_term_meta()` calls inside the loop, `Renderer::render()` calls `update_termmeta_cache()` on the deduplicated list of source term IDs **and** tag term IDs immediately after the query runs and before `ob_start()`. Both taxonomies are collected in a single pre-loop pass.
 
 **Display attributes** — all default to `true` unless noted:
 
@@ -154,7 +154,16 @@ Both taxonomies are flat (non-hierarchical), registered on `riaco_review`, with 
 
 `riaco_review_source` — source/platform (e.g. "WordPress.org", "G2"). Term meta `_riaco_source_image` stores the logo URL (supports SVG — unlocked for `manage_options` users via `upload_mimes` + `wp_check_filetype_and_ext` filters in `ReviewSource.php`). Managed in **Reviews → Sources**. The logo is displayed in the card header alongside the review title (`.riaco-reviews__source`, inside a flex row), optionally linked to `_riaco_review_source_url`.
 
-`riaco_review_tag` — the product or subject the review refers to. No extra term meta — just the term name. Managed in **Reviews → Tags**. Implemented in `ReviewTag.php`. Displayed on the frontend card as a neutral pill badge (`.riaco-reviews__card-tag`, shadcn-inspired: `border-radius: 9999px`, zinc-100 background, `font-weight: 500`, no uppercase); toggled via `show_tag` / `showTag`.
+`riaco_review_tag` — the product or subject the review refers to. Managed in **Reviews → Tags**. Implemented in `ReviewTag.php`. Displayed on the frontend card as a neutral pill badge (`.riaco-reviews__card-tag`, shadcn-inspired: `border-radius: 9999px`, zinc-100 background, `font-weight: 500`, no uppercase); toggled via `show_tag` / `showTag`.
+
+Term meta stored on `riaco_review_tag` terms:
+
+| Meta key | Notes |
+|---|---|
+| `_riaco_tag_url` | URL of the product / subject being reviewed; used in JSON-LD `itemReviewed.url` |
+| `_riaco_tag_type` | schema.org type for the reviewed item; one of `Thing` (default), `Product`, `SoftwareApplication`, `LocalBusiness`, `Organization`, `Book`, `Movie`, `Course`, `Event` |
+
+Both fields are editable on the Add/Edit Tag screens in the admin. `_riaco_tag_url` is sanitized with `esc_url_raw()`; `_riaco_tag_type` is validated against the allowed list before saving.
 
 ### CSS
 
@@ -267,6 +276,27 @@ All hooks follow the `riaco_reviews_*` naming convention. Filters return the (po
 | Hook | Type | Args | Purpose |
 |---|---|---|---|
 | `riaco_reviews_block_render_atts` | filter | `$atts, $attributes` | Map additional block attributes (added via WP core's `register_block_type_args` + `editor.BlockEdit` JS filter) into the snake_case `$atts` array that reaches `Renderer::render()`. |
+
+### JSON-LD structured data (`JsonLd.php`)
+
+`JsonLd` implements `ServiceInterface` and is registered as `'jsonLd'`. It hooks into `riaco_reviews_after_card` to **accumulate** schema.org `Review` objects (one per rendered card), then outputs a single `<script type="application/ld+json">` block in `wp_footer`. If only one review is collected the payload is a bare `Review` object; for multiple reviews it wraps them in a `@graph` array. This approach handles pages with multiple blocks or shortcodes correctly — all reviews land in one script tag.
+
+The `$meta` keys used for JSON-LD output:
+
+| `$meta` key | JSON-LD field |
+|---|---|
+| `rating` | `reviewRating.ratingValue` (omitted if 0) |
+| `author_name` | `author.name` |
+| `review_date` | `datePublished` |
+| `source_url` | `url` (top-level review URL) |
+| `tag_name` | `itemReviewed.name` (falls back to post title) |
+| `tag_type` | `itemReviewed.@type` (falls back to `'Thing'`) |
+| `tag_url` | `itemReviewed.url` (omitted if empty) |
+| `post_content` | `reviewBody` (tags stripped via `wp_strip_all_tags()`) |
+
+| Hook | Type | Args | Purpose |
+|---|---|---|---|
+| `riaco_reviews_json_ld_data` | filter | `$data, $post_id, $meta, $atts` | Modify or suppress (return falsy) a single review's JSON-LD object before it is collected. |
 
 ### Admin meta box (`Admin.php`)
 

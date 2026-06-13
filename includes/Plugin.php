@@ -12,6 +12,7 @@ use RIACO\Reviews\Blocks;
 use RIACO\Reviews\ReviewSource;
 use RIACO\Reviews\ReviewTag;
 use RIACO\Reviews\Dashboard;
+use RIACO\Reviews\JsonLd;
 
 class Plugin {
 
@@ -46,6 +47,7 @@ class Plugin {
         $this->set_service( 'reviewSource', new ReviewSource( $this->file, $this->version ) );
         $this->set_service( 'reviewTag',  new ReviewTag() );
         $this->set_service( 'dashboard',  new Dashboard() );
+        $this->set_service( 'jsonLd',     new JsonLd() );
     }
 
     public function set_service( string $key, $service ): void {
