@@ -1,5 +1,6 @@
 import { useBlockProps, InspectorControls, ColorPalette } from '@wordpress/block-editor';
 import ServerSideRender from '@wordpress/server-side-render';
+import blockMeta from './block.json';
 import {
     PanelBody,
     RangeControl,
@@ -39,14 +40,12 @@ export default function Edit( { attributes, setAttributes } ) {
         productTextColor,
     } = attributes;
 
-    const DEFAULTS = {
-        count: 6, layout: 'grid', cardStyle: 'default', headingLevel: 3,
-        showAuthorName: true, showAvatar: true, showDate: false, showRating: true,
-        showSource: true, showProduct: true, showTitle: true, showShadow: true,
-        minWidth: 280, orderby: 'date', order: 'DESC', productFilter: '',
-        cardBg: '', cardTextColor: '', cardBorderColor: '', starColor: '',
-        fontSize: '', lineHeight: '', productBg: '', productTextColor: '',
-    };
+    const DEFAULTS = Object.fromEntries(
+        Object.entries( blockMeta.attributes ).map( ( [ key, def ] ) => [
+            key,
+            'default' in def ? def.default : '',
+        ] )
+    );
 
     const blockProps = useBlockProps( { className: 'riaco-reviews-ssr-wrap' } );
 

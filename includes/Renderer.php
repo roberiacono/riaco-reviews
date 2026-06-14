@@ -6,33 +6,37 @@ if ( ! defined( 'ABSPATH' ) ) exit;
 
 class Renderer {
 
-    public static function render( array $atts ): string {
-        $atts = wp_parse_args( $atts, [
-            'count'             => 6,
-            'layout'            => 'grid',
-            'card_style'        => 'default',
-            'heading_level'     => 3,
-            'show_author_name'  => true,
-            'show_avatar'       => true,
-            'show_date'         => false,
-            'show_rating'       => true,
-            'show_source'       => true,
-            'show_product'      => true,
-            'show_title'        => true,
-            'show_shadow'       => true,
-            'min_width'         => 300,
-            'orderby'           => 'date',
-            'order'             => 'DESC',
-            'product'           => '',
-            'card_bg'           => '',
-            'card_text_color'   => '',
-            'card_border_color' => '',
-            'star_color'        => '',
-            'font_size'         => '',
-            'line_height'       => '',
-            'product_bg'        => '',
+    public static function defaults(): array {
+        return [
+            'count'              => 6,
+            'layout'             => 'grid',
+            'card_style'         => 'default',
+            'heading_level'      => 3,
+            'show_author_name'   => true,
+            'show_avatar'        => true,
+            'show_date'          => true,
+            'show_rating'        => true,
+            'show_source'        => true,
+            'show_product'       => true,
+            'show_title'         => true,
+            'show_shadow'        => true,
+            'min_width'          => 300,
+            'orderby'            => 'date',
+            'order'              => 'DESC',
+            'product'            => '',
+            'card_bg'            => '',
+            'card_text_color'    => '',
+            'card_border_color'  => '',
+            'star_color'         => '',
+            'font_size'          => '',
+            'line_height'        => '',
+            'product_bg'         => '',
             'product_text_color' => '',
-        ] );
+        ];
+    }
+
+    public static function render( array $atts ): string {
+        $atts = wp_parse_args( $atts, self::defaults() );
 
         // Sanitize display options
         $atts['count']  = max( 1, absint( $atts['count'] ) );
@@ -101,7 +105,7 @@ class Renderer {
             $style_parts[] = '--riaco-line-height:' . $atts['line_height'];
         }
         $min_width = absint( $atts['min_width'] );
-        if ( $min_width > 0 && $min_width !== 280 ) {
+        if ( $min_width > 0 && $min_width !== 300 ) {
             $style_parts[] = '--riaco-card-min-width:' . $min_width . 'px';
         }
         if ( ! $atts['show_shadow'] ) {

@@ -16,7 +16,7 @@
 /* ---- Grid Layout ---------------------------------------- */
 .riaco-reviews--grid .riaco-reviews__grid {
     display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(var(--riaco-card-min-width, 280px), 1fr));
+    grid-template-columns: repeat(auto-fill, minmax(var(--riaco-card-min-width, 300px), 1fr));
     gap: 1.5rem;
     align-items: stretch;
 }
@@ -32,7 +32,7 @@
 
 /* ---- Masonry Layout ------------------------------------ */
 .riaco-reviews--masonry .riaco-reviews__masonry {
-    column-width: var(--riaco-card-min-width, 280px);
+    column-width: var(--riaco-card-min-width, 300px);
     column-gap: 1.5rem;
 }
 

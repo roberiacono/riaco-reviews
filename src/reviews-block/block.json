@@ -39,7 +39,7 @@
         },
         "showDate": {
             "type": "boolean",
-            "default": false
+            "default": true
         },
         "showRating": {
             "type": "boolean",
@@ -63,7 +63,7 @@
         },
         "minWidth": {
             "type": "integer",
-            "default": 280
+            "default": 300
         },
         "orderby": {
             "type": "string",

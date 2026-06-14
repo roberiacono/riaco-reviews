@@ -22,33 +22,9 @@ class Shortcodes implements ServiceInterface {
     }
 
     public function render_shortcode( $atts ): string {
-        $atts = shortcode_atts( [
-            'count'             => 6,
-            'layout'            => 'grid',
-            'card_style'        => 'default',
-            'heading_level'     => 3,
-            'show_title'        => 1,
-            'show_author_name'  => 1,
-            'show_avatar'       => 1,
-            'show_date'         => 0,
-            'show_rating'       => 1,
-            'show_source'       => 1,
-            'show_product'       => 1,
-            'show_shadow'        => 1,
-            'orderby'            => 'date',
-            'order'              => 'DESC',
-            'product'            => '',
-            'tag'                => '',
-            'min_width'          => 280,
-            'card_bg'            => '',
-            'card_text_color'    => '',
-            'card_border_color'  => '',
-            'star_color'         => '',
-            'product_bg'         => '',
-            'product_text_color' => '',
-            'font_size'          => '',
-            'line_height'        => '',
-        ], $atts, 'riaco_reviews' );
+        $sc_defaults = array_map( fn( $v ) => is_bool( $v ) ? (int) $v : $v, Renderer::defaults() );
+        $sc_defaults['tag'] = '';
+        $atts = shortcode_atts( $sc_defaults, $atts, 'riaco_reviews' );
 
         // Backward compat: old shortcodes may still use tag= or tag_bg= / tag_text_color=.
         if ( ! empty( $atts['tag'] ) && empty( $atts['product'] ) ) {

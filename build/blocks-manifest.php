@@ -47,7 +47,7 @@ return array(
 			),
 			'showDate' => array(
 				'type' => 'boolean',
-				'default' => false
+				'default' => true
 			),
 			'showRating' => array(
 				'type' => 'boolean',
@@ -71,7 +71,7 @@ return array(
 			),
 			'minWidth' => array(
 				'type' => 'integer',
-				'default' => 280
+				'default' => 300
 			),
 			'orderby' => array(
 				'type' => 'string',
