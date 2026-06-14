@@ -78,22 +78,27 @@ class Plugin {
     private function migrate_tag_to_product(): void {
         global $wpdb;
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
         $wpdb->update(
             $wpdb->term_taxonomy,
             [ 'taxonomy' => 'riaco_review_product' ],
             [ 'taxonomy' => 'riaco_review_tag' ]
         );
 
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
         $wpdb->query(
             "UPDATE {$wpdb->termmeta}
              SET meta_key = '_riaco_product_url'
              WHERE meta_key = '_riaco_tag_url'"
         );
+        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
         $wpdb->query(
             "UPDATE {$wpdb->termmeta}
              SET meta_key = '_riaco_product_type'
              WHERE meta_key = '_riaco_tag_type'"
         );
+
+        wp_cache_flush();
     }
 
     public function on_activation(): void {
