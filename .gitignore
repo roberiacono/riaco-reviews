@@ -2,9 +2,10 @@
 node_modules/
 
 # Build artifacts (keep build/ committed — block JS/CSS is shipped)
-# but exclude coverage reports and test DBs
+# but exclude coverage reports and test artefacts
 build/coverage/
 build/coverage.xml
+.phpunit.result.cache
 
 # Environment / secrets
 .env
