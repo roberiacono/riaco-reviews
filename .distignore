@@ -19,9 +19,6 @@ bin/
 
 # JavaScript / PHP toolchain
 node_modules/
-vendor/
-composer.json
-composer.lock
 package.json
 package-lock.json
 

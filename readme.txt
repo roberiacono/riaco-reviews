@@ -12,7 +12,7 @@ Display beautiful customer reviews and testimonials in Grid or Masonry layouts w
 
 == Description ==
 
-**RIACO Reviews** lets you manual collect, manage, and display customer reviews and testimonials anywhere on your WordPress site — no page builder required. Add the Reviews block in the Gutenberg editor and get a live preview instantly, or drop in the `[riaco_reviews]` shortcode on any page or widget area.
+**RIACO Reviews** lets you manually collect, manage, and display customer reviews and testimonials anywhere on your WordPress site — no page builder required. Add the Reviews block in the Gutenberg editor and get a live preview instantly, or drop in the `[riaco_reviews]` shortcode on any page or widget area.
 
 Every review is a native WordPress post with its own star rating, author, avatar, review date, source platform, and product. Display options, layout, card style, and colours are all configurable directly from the block inspector panel — no CSS editing required.
 
