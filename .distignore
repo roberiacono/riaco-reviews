@@ -1,9 +1,33 @@
+# Dev tooling & config
 .claude/
 .claude
 .distignore
+.env
+.env.testing
+.env.testing.example
 .git
 .gitignore
 CLAUDE.md
-composer.lock
+phpunit.xml.dist
+
+# Build inputs (only the build/ output is needed in dist)
+src/
+
+# Test suite
+tests/
+bin/
+
+# JavaScript / PHP toolchain
 node_modules/
+vendor/
+composer.json
+composer.lock
+package.json
 package-lock.json
+
+# CI
+.github/
+
+# OS noise
+.DS_Store
+Thumbs.db

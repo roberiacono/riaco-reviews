@@ -1,1 +1,24 @@
-node_modules
+# Dependencies
+node_modules/
+
+# Build artifacts (keep build/ committed — block JS/CSS is shipped)
+# but exclude coverage reports and test DBs
+build/coverage/
+build/coverage.xml
+
+# Environment / secrets
+.env
+.env.testing
+.env.local
+
+# OS & editor noise
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# WordPress test suite (installed locally via bin/install-wp-tests.sh)
+/tmp/wordpress/
+/tmp/wordpress-tests-lib/

@@ -5,7 +5,24 @@
       "Read(//opt/lampp/htdocs/dev/wp-content/plugins/riaco-icon-block/build/**)",
       "Bash(npm run *)",
       "Bash(wp dist-archive *)",
-      "Read(//opt/lampp/htdocs/dev/wp-includes/**)"
+      "Read(//opt/lampp/htdocs/dev/wp-includes/**)",
+      "Bash(chmod +x /opt/lampp/htdocs/dev/wp-content/plugins/riaco-reviews/bin/install-wp-tests.sh)",
+      "Bash(mysql -u root --password='' -e \"CREATE DATABASE IF NOT EXISTS wp_test;\")",
+      "Bash(/opt/lampp/bin/mysql -u root --password='' -e \"CREATE DATABASE IF NOT EXISTS wp_test;\")",
+      "Bash(grep -E 'DB_|db_' /tmp/wordpress-tests-lib/wp-tests-config.php | head -10)",
+      "Read(//tmp/wordpress-tests-lib/**)",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage)",
+      "Bash(composer dump-autoload *)",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --filter \"RendererTest\")",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --filter \"test_min_width\")",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --filter \"BlocksTest|test_min_width\")",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --filter \"PluginTest|test_min_width_custom\")",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --filter \"RendererIntegrationTest|test_min_width_custom\")",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --filter \"SecurityTest|test_min_width_custom\")",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --filter \"DashboardTest|test_min_width_custom\")",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --filter \"JsonLdTest|test_min_width_custom\")",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --testsuite unit)",
+      "Bash(WP_TESTS_DIR=/tmp/wordpress-tests-lib vendor/bin/phpunit --no-coverage --testsuite \"unit,integration\")"
     ]
   }
 }
