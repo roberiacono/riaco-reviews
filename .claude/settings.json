@@ -26,7 +26,7 @@
       "Read(//tmp/tmp.1H4cTWloeG/riaco-reviews/**)",
       "Bash(composer install *)",
       "Read(//tmp/tmp.1H4cTWloeG/**)",
-      "Bash(zip -r /home/robi/Downloads/riaco-reviews-1.2.0.zip riaco-reviews/)",
+      "Bash(zip -r /home/robi/Downloads/riaco-reviews-1.2.1.zip riaco-reviews/)",
       "Read(//home/robi/Downloads/**)",
       "Bash(rm -rf /tmp/tmp.1H4cTWloeG)"
     ],

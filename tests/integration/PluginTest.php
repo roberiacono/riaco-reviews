@@ -66,11 +66,11 @@ class PluginTest extends WP_UnitTestCase {
         $plugin = new Plugin( RIACO_REVIEWS_FILE, RIACO_REVIEWS_VERSION );
         $plugin->init();
 
-        $this->assertSame( '1.2.0', get_option( 'riaco_reviews_db_version' ) );
+        $this->assertSame( '1.2.1', get_option( 'riaco_reviews_db_version' ) );
     }
 
     public function test_maybe_upgrade_does_not_re_run_when_current(): void {
-        update_option( 'riaco_reviews_db_version', '1.2.0' );
+        update_option( 'riaco_reviews_db_version', '1.2.1' );
 
         // Track wpdb updates via a query counter.
         global $wpdb;
@@ -80,7 +80,7 @@ class PluginTest extends WP_UnitTestCase {
         $plugin->init();
 
         // No term_taxonomy UPDATE should have run.
-        $this->assertSame( '1.2.0', get_option( 'riaco_reviews_db_version' ) );
+        $this->assertSame( '1.2.1', get_option( 'riaco_reviews_db_version' ) );
     }
 
     // -------------------------------------------------------------------------

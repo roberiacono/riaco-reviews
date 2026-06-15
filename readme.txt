@@ -3,7 +3,7 @@ Contributors: prototipo88
 Tags: reviews, testimonials, star rating, review block, customer reviews
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.2.0
+Stable tag: 1.2.1
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -257,6 +257,9 @@ Yes. All user-facing strings are wrapped in WordPress i18n functions and the tex
 8. **Frontend — Mobile view** — Single-column layout on a narrow screen, demonstrating the responsive auto-fill column behaviour.
 
 == Changelog ==
+
+= 1.2.1 =
+* Bug fixes and minor improvements.
 
 = 1.2.0 =
 * **Taxonomy rename:** `riaco_review_tag` renamed to `riaco_review_product`; the admin menu now shows **Reviews → Products** instead of Tags.

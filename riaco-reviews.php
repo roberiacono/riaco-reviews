@@ -2,7 +2,7 @@
 /**
  * Plugin Name: RIACO Reviews – Customer Reviews & Testimonials
  * Description: Collect, manage, and display customer reviews with Grid and Masonry layouts via blocks and shortcodes.
- * Version: 1.2.0
+ * Version: 1.2.1
  * Requires at least: 6.0
  * Requires PHP: 7.4
  * Author: Roberto Iacono
@@ -16,7 +16,7 @@
 
 if ( ! defined( 'ABSPATH' ) ) exit;
 
-define( 'RIACO_REVIEWS_VERSION', '1.2.0' );
+define( 'RIACO_REVIEWS_VERSION', '1.2.1' );
 define( 'RIACO_REVIEWS_FILE',    __FILE__ );
 define( 'RIACO_REVIEWS_DIR',     plugin_dir_path( __FILE__ ) );
 define( 'RIACO_REVIEWS_URL',     plugin_dir_url( __FILE__ ) );
