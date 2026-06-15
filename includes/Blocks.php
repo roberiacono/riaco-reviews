@@ -57,41 +57,31 @@ class Blocks implements ServiceInterface {
     }
 
     public function render( array $attributes ): string {
-        // Backward compat: old saved blocks may still store the tag-era attribute names.
-        $product_filter = $attributes['productFilter']
-            ?? ( isset( $attributes['tagFilter'] ) ? $attributes['tagFilter'] : '' );
-        $show_product   = $attributes['showProduct']
-            ?? ( isset( $attributes['showTag'] ) ? $attributes['showTag'] : true );
-        $product_bg     = $attributes['productBg']
-            ?? ( isset( $attributes['tagBg'] ) ? $attributes['tagBg'] : '' );
-        $product_text   = $attributes['productTextColor']
-            ?? ( isset( $attributes['tagTextColor'] ) ? $attributes['tagTextColor'] : '' );
-
         $atts = [
-            'count'             => $attributes['count']            ?? 6,
-            'layout'            => $attributes['layout']           ?? 'grid',
-            'card_style'        => $attributes['cardStyle']        ?? 'default',
-            'heading_level'     => $attributes['headingLevel']     ?? 3,
-            'show_author_name'  => $attributes['showAuthorName']   ?? true,
-            'show_avatar'       => $attributes['showAvatar']       ?? true,
-            'show_date'         => $attributes['showDate']         ?? false,
-            'show_rating'       => $attributes['showRating']       ?? true,
-            'show_source'       => $attributes['showSource']       ?? true,
-            'show_product'      => $show_product,
-            'show_title'        => $attributes['showTitle']        ?? true,
-            'show_shadow'       => $attributes['showShadow']       ?? true,
-            'min_width'         => $attributes['minWidth']         ?? 280,
-            'orderby'           => $attributes['orderby']          ?? 'date',
-            'order'             => $attributes['order']            ?? 'DESC',
-            'product'           => $product_filter,
-            'card_bg'           => $attributes['cardBg']           ?? '',
-            'card_text_color'   => $attributes['cardTextColor']    ?? '',
-            'card_border_color' => $attributes['cardBorderColor']  ?? '',
-            'star_color'        => $attributes['starColor']        ?? '',
-            'font_size'         => $attributes['fontSize']         ?? '',
-            'line_height'       => $attributes['lineHeight']       ?? '',
-            'product_bg'        => $product_bg,
-            'product_text_color' => $product_text,
+            'count'              => $attributes['count']            ?? 6,
+            'layout'             => $attributes['layout']           ?? 'grid',
+            'card_style'         => $attributes['cardStyle']        ?? 'default',
+            'heading_level'      => $attributes['headingLevel']     ?? 3,
+            'show_author_name'   => $attributes['showAuthorName']   ?? true,
+            'show_avatar'        => $attributes['showAvatar']       ?? true,
+            'show_date'          => $attributes['showDate']         ?? false,
+            'show_rating'        => $attributes['showRating']       ?? true,
+            'show_source'        => $attributes['showSource']       ?? true,
+            'show_product'       => $attributes['showProduct']      ?? true,
+            'show_title'         => $attributes['showTitle']        ?? true,
+            'show_shadow'        => $attributes['showShadow']       ?? true,
+            'min_width'          => $attributes['minWidth']         ?? 280,
+            'orderby'            => $attributes['orderby']          ?? 'date',
+            'order'              => $attributes['order']            ?? 'DESC',
+            'product'            => $attributes['productFilter']    ?? '',
+            'card_bg'            => $attributes['cardBg']           ?? '',
+            'card_text_color'    => $attributes['cardTextColor']    ?? '',
+            'card_border_color'  => $attributes['cardBorderColor']  ?? '',
+            'star_color'         => $attributes['starColor']        ?? '',
+            'font_size'          => $attributes['fontSize']         ?? '',
+            'line_height'        => $attributes['lineHeight']       ?? '',
+            'product_bg'         => $attributes['productBg']        ?? '',
+            'product_text_color' => $attributes['productTextColor'] ?? '',
         ];
 
         $atts = apply_filters( 'riaco_reviews_block_render_atts', $atts, $attributes );

@@ -23,13 +23,7 @@ class Shortcodes implements ServiceInterface {
 
     public function render_shortcode( $atts ): string {
         $sc_defaults = array_map( fn( $v ) => is_bool( $v ) ? (int) $v : $v, Renderer::defaults() );
-        $sc_defaults['tag'] = '';
         $atts = shortcode_atts( $sc_defaults, $atts, 'riaco_reviews' );
-
-        // Backward compat: old shortcodes may still use tag= or tag_bg= / tag_text_color=.
-        if ( ! empty( $atts['tag'] ) && empty( $atts['product'] ) ) {
-            $atts['product'] = $atts['tag'];
-        }
 
         $this->enqueue_assets();
 

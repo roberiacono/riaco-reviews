@@ -32,7 +32,6 @@ class Plugin {
     }
 
     public function init(): void {
-        $this->maybe_upgrade();
         $this->load_services();
         do_action( 'riaco_reviews_init', $this );
         $this->register();
@@ -65,40 +64,6 @@ class Plugin {
                 $service->register();
             }
         }
-    }
-
-    private function maybe_upgrade(): void {
-        $db_version = get_option( 'riaco_reviews_db_version', '0' );
-        if ( version_compare( $db_version, '1.2.0', '<' ) ) {
-            $this->migrate_tag_to_product();
-            update_option( 'riaco_reviews_db_version', '1.2.0' );
-        }
-    }
-
-    private function migrate_tag_to_product(): void {
-        global $wpdb;
-
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $wpdb->update(
-            $wpdb->term_taxonomy,
-            [ 'taxonomy' => 'riaco_review_product' ],
-            [ 'taxonomy' => 'riaco_review_tag' ]
-        );
-
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $wpdb->query(
-            "UPDATE {$wpdb->termmeta}
-             SET meta_key = '_riaco_product_url'
-             WHERE meta_key = '_riaco_tag_url'"
-        );
-        // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
-        $wpdb->query(
-            "UPDATE {$wpdb->termmeta}
-             SET meta_key = '_riaco_product_type'
-             WHERE meta_key = '_riaco_tag_type'"
-        );
-
-        wp_cache_flush();
     }
 
     public function on_activation(): void {

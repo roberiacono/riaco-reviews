@@ -9,13 +9,19 @@ use RIACO\Reviews\Interfaces\ServiceInterface;
 class Dashboard implements ServiceInterface {
 
     public function register(): void {
-        add_action( 'wp_dashboard_setup', [ $this, 'add_widget' ] );
-        add_action( 'save_post_riaco_review', [ $this, 'clear_rating_cache' ] );
-        add_action( 'before_delete_post',     [ $this, 'clear_rating_cache' ] );
+        add_action( 'wp_dashboard_setup',       [ $this, 'add_widget' ] );
+        add_action( 'save_post_riaco_review',   [ $this, 'clear_rating_cache' ] );
+        add_action( 'before_delete_post',       [ $this, 'clear_rating_cache_for_post' ] );
     }
 
     public function clear_rating_cache(): void {
         wp_cache_delete( 'riaco_avg_rating', 'riaco_reviews' );
+    }
+
+    public function clear_rating_cache_for_post( int $post_id ): void {
+        if ( 'riaco_review' === get_post_type( $post_id ) ) {
+            $this->clear_rating_cache();
+        }
     }
 
     public function add_widget(): void {
@@ -74,7 +80,7 @@ class Dashboard implements ServiceInterface {
                AND p.post_status = 'publish'"
         );
 
-        wp_cache_set( $cache_key, null === $avg ? 'null' : $avg, 'riaco_reviews', HOUR_IN_SECONDS );
+        wp_cache_set( $cache_key, null === $avg ? 'null' : $avg, 'riaco_reviews', 0 );
 
         return null !== $avg ? (float) $avg : null;
     }
