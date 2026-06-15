@@ -11,8 +11,7 @@ CLAUDE.md
 phpunit.xml.dist
 .phpunit.result.cache
 
-# Build inputs (only the build/ output is needed in dist)
-src/
+
 
 # Test suite
 tests/
@@ -20,7 +19,6 @@ bin/
 
 # JavaScript / PHP toolchain
 node_modules/
-package.json
 package-lock.json
 
 # CI
