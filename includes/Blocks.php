@@ -70,7 +70,7 @@ class Blocks implements ServiceInterface {
             'show_product'       => $attributes['showProduct']      ?? true,
             'show_title'         => $attributes['showTitle']        ?? true,
             'show_shadow'        => $attributes['showShadow']       ?? true,
-            'min_width'          => $attributes['minWidth']         ?? 280,
+            'min_width'          => $attributes['minWidth']         ?? 300,
             'orderby'            => $attributes['orderby']          ?? 'date',
             'order'              => $attributes['order']            ?? 'DESC',
             'product'            => $attributes['productFilter']    ?? '',

@@ -132,6 +132,11 @@ Each is a self-contained IIFE using `wp.media`. Enqueued by `Admin::enqueue_asse
 
 `Dashboard.php` implements `ServiceInterface` and is registered as `'dashboard'` in `Plugin::load_services()`. Its `add_widget()` registers a `wp_dashboard_widget` ("Reviews Overview") that calls `render_widget()`: shows the published review count (via `wp_count_posts()`), the average rating (direct `$wpdb->get_var()` across `_riaco_review_rating` meta), and a "Manage Reviews" link.
 
+**Average rating cache** — `get_average_rating()` stores the result in the object cache under key `riaco_avg_rating` / group `riaco_reviews` with TTL `0` (indefinite). The cache is invalidated by event rather than time:
+
+- `save_post_riaco_review` → `clear_rating_cache()`: covers create, update, trash, and untrash (all go through `wp_insert_post`).
+- `before_delete_post` → `clear_rating_cache_for_post()`: scoped to `riaco_review` posts via a `get_post_type()` guard before calling `clear_rating_cache()`; other post type deletions are ignored.
+
 ### CPT & meta
 
 Post type: `riaco_review`. Review body = `post_content`; headline = `post_title`.
@@ -152,7 +157,7 @@ All review data is stored as `wp_postmeta` with underscore-prefixed keys:
 
 Both taxonomies are flat (non-hierarchical), registered on `riaco_review`, with a custom `meta_box_cb` that renders a single-select dropdown in the review editor.
 
-`riaco_review_source` — source/platform (e.g. "WordPress.org", "G2"). Term meta `_riaco_source_image` stores the logo URL (supports SVG — unlocked for `manage_options` users via `upload_mimes` + `wp_check_filetype_and_ext` filters in `ReviewSource.php`). Managed in **Reviews → Sources**. The logo is displayed in the card header alongside the review title (`.riaco-reviews__source`, inside a flex row), optionally linked to `_riaco_review_source_url`.
+`riaco_review_source` — source/platform (e.g. "WordPress.org", "G2"). Term meta `_riaco_source_image` stores the logo URL. Managed in **Reviews → Sources**. The logo is displayed in the card header alongside the review title (`.riaco-reviews__source`, inside a flex row), optionally linked to `_riaco_review_source_url`.
 
 `riaco_review_product` — the product or subject the review refers to. Managed in **Reviews → Products**. Implemented in `ReviewProduct.php`. Displayed on the frontend card as a neutral pill badge (`.riaco-reviews__card-product`, shadcn-inspired: `border-radius: 9999px`, zinc-100 background, `font-weight: 500`, no uppercase); toggled via `show_product` / `showProduct`.
 
@@ -171,8 +176,8 @@ Frontend card styles use BEM with the `.riaco-reviews__` prefix.
 
 **Layouts:**
 
-- **Grid** — `grid-template-columns: repeat(auto-fill, minmax(var(--riaco-card-min-width, 280px), 1fr))`. No fixed breakpoints; column count adjusts automatically to the container width and the configured min card width.
-- **Masonry** — `column-width: var(--riaco-card-min-width, 280px)` with `break-inside: avoid` on cards. Same adaptive behaviour as grid.
+- **Grid** — `grid-template-columns: repeat(auto-fill, minmax(var(--riaco-card-min-width, 300px), 1fr))`. No fixed breakpoints; column count adjusts automatically to the container width and the configured min card width.
+- **Masonry** — `column-width: var(--riaco-card-min-width, 300px)` with `break-inside: avoid` on cards. Same adaptive behaviour as grid.
 
 **Card DOM order (all styles):**
 
@@ -235,7 +240,7 @@ The title heading element is dynamic: `card.php` sets `$hl = 'h' . absint( $atts
 | `--riaco-product-border` | `#e4e4e7` | product badge border |
 | `--riaco-font-size` | `0.9375rem` | review text size |
 | `--riaco-line-height` | `1.7` | review text line height |
-| `--riaco-card-min-width` | `280px` | grid column / masonry column width floor |
+| `--riaco-card-min-width` | `300px` | grid column / masonry column width floor |
 | `--riaco-card-shadow` | `0 2px 12px rgba(0,0,0,0.07)` | card drop shadow; set to `none` when `show_shadow` is false |
 
 ## Developer hooks

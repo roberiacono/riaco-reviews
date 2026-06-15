@@ -27,7 +27,7 @@ if ( 'modern' === $atts['card_style'] ) :
 <article class="riaco-reviews__card riaco-reviews__card--modern">
 
     <?php if ( $show_title ) : ?>
-        <<?php echo esc_attr( $hl ); ?> class="riaco-reviews__title riaco-reviews__title--modern"><?php echo esc_html( $post_title ); ?></<?php echo esc_attr( $hl ); ?>>
+        <<?php echo esc_html( $hl ); ?> class="riaco-reviews__title riaco-reviews__title--modern"><?php echo esc_html( $post_title ); ?></<?php echo esc_html( $hl ); ?>>
     <?php endif; ?>
 
     <div class="riaco-reviews__modern-header">
@@ -118,7 +118,7 @@ if ( 'modern' === $atts['card_style'] ) :
 <article class="riaco-reviews__card riaco-reviews__card--minimal">
 
     <?php if ( $show_title ) : ?>
-        <<?php echo esc_attr( $hl ); ?> class="riaco-reviews__title riaco-reviews__title--minimal"><?php echo esc_html( $post_title ); ?></<?php echo esc_attr( $hl ); ?>>
+        <<?php echo esc_html( $hl ); ?> class="riaco-reviews__title riaco-reviews__title--minimal"><?php echo esc_html( $post_title ); ?></<?php echo esc_html( $hl ); ?>>
     <?php endif; ?>
 
     <?php if ( $atts['show_rating'] && $rating > 0 ) : ?>
@@ -179,7 +179,7 @@ if ( 'modern' === $atts['card_style'] ) :
     <?php if ( $show_title || $has_source ) : ?>
         <div class="riaco-reviews__header">
             <?php if ( $show_title ) : ?>
-                <<?php echo esc_attr( $hl ); ?> class="riaco-reviews__title"><?php echo esc_html( $post_title ); ?></<?php echo esc_attr( $hl ); ?>>
+                <<?php echo esc_html( $hl ); ?> class="riaco-reviews__title"><?php echo esc_html( $post_title ); ?></<?php echo esc_html( $hl ); ?>>
             <?php endif; ?>
 
             <?php if ( $has_source ) : ?>

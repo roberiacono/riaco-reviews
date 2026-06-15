@@ -210,8 +210,8 @@ class Admin implements ServiceInterface {
     }
 
     public function enqueue_assets( string $hook ): void {
-        global $post_type;
-        if ( $post_type !== 'riaco_review' ) return;
+        $screen = get_current_screen();
+        if ( ! $screen || 'riaco_review' !== $screen->post_type ) return;
 
         wp_enqueue_style(
             'riaco-reviews-admin',
