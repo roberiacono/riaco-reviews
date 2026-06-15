@@ -61,7 +61,7 @@ class Shortcodes implements ServiceInterface {
             'riaco-reviews',
             plugin_dir_url( $this->file ) . 'assets/dist/reviews.css',
             [],
-            $this->version
+            RIACO_REVIEWS_VERSION
         );
     }
 }

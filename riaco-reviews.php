@@ -21,6 +21,15 @@ define( 'RIACO_REVIEWS_FILE',    __FILE__ );
 define( 'RIACO_REVIEWS_DIR',     plugin_dir_path( __FILE__ ) );
 define( 'RIACO_REVIEWS_URL',     plugin_dir_url( __FILE__ ) );
 
+if ( ! file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
+    add_action( 'admin_notices', function() {
+        echo '<div class="notice notice-error"><p>'
+            . esc_html__( 'RIACO Reviews: Composer dependencies are missing. Please run composer install in the plugin directory.', 'riaco-reviews' )
+            . '</p></div>';
+    } );
+    return;
+}
+
 require __DIR__ . '/vendor/autoload.php';
 
 use RIACO\Reviews\Plugin;

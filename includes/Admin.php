@@ -109,7 +109,7 @@ class Admin implements ServiceInterface {
 
     public function save_meta( int $post_id ): void {
         $nonce = isset( $_POST['riaco_review_meta_nonce'] )
-            ? sanitize_text_field( wp_unslash( $_POST['riaco_review_meta_nonce'] ) )
+            ? wp_unslash( $_POST['riaco_review_meta_nonce'] )
             : '';
 
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_review_meta' ) ) return;
@@ -286,12 +286,12 @@ class Admin implements ServiceInterface {
             [ 'show_title',        '1',         __( 'Show review title.', 'riaco-reviews' ) ],
             [ 'show_author_name',  '1',         __( 'Show author name.', 'riaco-reviews' ) ],
             [ 'show_avatar',       '1',         __( 'Show author avatar.', 'riaco-reviews' ) ],
-            [ 'show_date',         '0',         __( 'Show review date.', 'riaco-reviews' ) ],
+            [ 'show_date',         '1',         __( 'Show review date.', 'riaco-reviews' ) ],
             [ 'show_rating',       '1',         __( 'Show star rating.', 'riaco-reviews' ) ],
             [ 'show_source',       '1',         __( 'Show source logo.', 'riaco-reviews' ) ],
             [ 'show_product',       '1',         __( 'Show product badge.', 'riaco-reviews' ) ],
             [ 'show_shadow',       '1',         __( 'Card drop shadow.', 'riaco-reviews' ) ],
-            [ 'min_width',         '280',       __( 'Minimum card width in px.', 'riaco-reviews' ) ],
+            [ 'min_width',         '300',       __( 'Minimum card width in px.', 'riaco-reviews' ) ],
             [ 'card_bg',           '',          __( 'Card background colour (hex, e.g. <code>#ffffff</code>).', 'riaco-reviews' ) ],
             [ 'card_text_color',   '',          __( 'Review text colour (hex).', 'riaco-reviews' ) ],
             [ 'card_border_color', '',          __( 'Card border colour (hex).', 'riaco-reviews' ) ],

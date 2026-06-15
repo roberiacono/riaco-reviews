@@ -72,12 +72,17 @@ class Dashboard implements ServiceInterface {
         }
 
         $avg = $wpdb->get_var( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery -- AVG aggregate cannot be expressed with WP_Query.
-            "SELECT AVG(CAST(pm.meta_value AS DECIMAL(10,2)))
-             FROM {$wpdb->postmeta} pm
-             INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
-             WHERE pm.meta_key = '_riaco_review_rating'
-               AND p.post_type = 'riaco_review'
-               AND p.post_status = 'publish'"
+            $wpdb->prepare(
+                "SELECT AVG(CAST(pm.meta_value AS DECIMAL(10,2)))
+                 FROM {$wpdb->postmeta} pm
+                 INNER JOIN {$wpdb->posts} p ON p.ID = pm.post_id
+                 WHERE pm.meta_key = %s
+                   AND p.post_type = %s
+                   AND p.post_status = %s",
+                '_riaco_review_rating',
+                'riaco_review',
+                'publish'
+            )
         );
 
         wp_cache_set( $cache_key, null === $avg ? 'null' : $avg, 'riaco_reviews', 0 );

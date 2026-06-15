@@ -9,6 +9,7 @@
 .gitignore
 CLAUDE.md
 phpunit.xml.dist
+.phpunit.result.cache
 
 # Build inputs (only the build/ output is needed in dist)
 src/

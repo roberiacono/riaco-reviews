@@ -37,4 +37,7 @@ foreach ( $posts as $post_id ) {
 foreach ( [ 'riaco_reviews_version', 'riaco_reviews_db_version' ] as $option ) {
     delete_option( $option );
 }
+
+// Clear persistent object cache entries (covers Redis/Memcached with TTL 0).
+wp_cache_delete( 'riaco_avg_rating', 'riaco_reviews' );
 // phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound

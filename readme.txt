@@ -129,7 +129,7 @@ Basic usage:
 
 All parameters:
 
-`[riaco_reviews count="6" layout="grid" card_style="default" orderby="date" order="DESC" product="" show_title="1" show_author_name="1" show_avatar="1" show_date="0" show_rating="1" show_source="1" show_product="1" show_shadow="1" min_width="280"]`
+`[riaco_reviews count="6" layout="grid" card_style="default" orderby="date" order="DESC" product="" show_title="1" show_author_name="1" show_avatar="1" show_date="1" show_rating="1" show_source="1" show_product="1" show_shadow="1" min_width="300"]`
 
 Colour and typography:
 
@@ -181,11 +181,11 @@ Yes. From the block editor Inspector sidebar, open the **Card Colours** or **Typ
 
 = Does the layout respond to different screen sizes? =
 
-Yes. Both the Grid and Masonry layouts use CSS `auto-fill` / `column-width` with a configurable minimum card width (default 280 px). Columns are added or removed automatically based on the available container width — no fixed breakpoints are used.
+Yes. Both the Grid and Masonry layouts use CSS `auto-fill` / `column-width` with a configurable minimum card width (default 300 px). Columns are added or removed automatically based on the available container width — no fixed breakpoints are used.
 
 = Can I show or hide specific fields (avatar, date, rating, etc.)? =
 
-Yes. Every field has an individual show/hide toggle — available both in the block editor Inspector sidebar and as shortcode attributes (`show_avatar`, `show_date`, `show_rating`, etc.). For example, to show the review date: `[riaco_reviews show_date="1"]`.
+Yes. Every field has an individual show/hide toggle — available both in the block editor Inspector sidebar and as shortcode attributes (`show_avatar`, `show_date`, `show_rating`, etc.). For example, to hide the review date: `[riaco_reviews show_date="0"]`.
 
 = Can I sort reviews by star rating? =
 
@@ -206,8 +206,6 @@ For multiple products (show reviews matching any of them), pass a comma-separate
 `[riaco_reviews product="plugin-one,plugin-two"]`
 
 In the block editor, open the **Display Settings** panel and choose a product from the **Filter by Product** dropdown. Selecting "— All Products —" removes the filter.
-
-The old `tag=` shortcode attribute still works for backward compatibility with existing shortcodes.
 
 = Can I filter the reviews query to show only certain reviews? =
 

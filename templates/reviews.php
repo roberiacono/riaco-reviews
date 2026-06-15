@@ -47,7 +47,14 @@ $inner_class     = 'riaco-reviews__' . $layout;
                     $meta
                 );
                 if ( is_file( $card_template ) ) {
-                    include $card_template;
+                    $real       = realpath( $card_template );
+                    $plugin_dir = realpath( RIACO_REVIEWS_DIR );
+                    $theme_dir  = realpath( get_theme_root() );
+                    $in_plugin  = $real && $plugin_dir && strpos( $real, $plugin_dir ) === 0;
+                    $in_theme   = $real && $theme_dir  && strpos( $real, $theme_dir )  === 0;
+                    if ( $in_plugin || $in_theme ) {
+                        include $real;
+                    }
                 }
                 do_action( 'riaco_reviews_after_card', $post_id, $meta, $atts );
                 ?>
