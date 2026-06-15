@@ -139,7 +139,7 @@ class RendererIntegrationTest extends WP_UnitTestCase {
 
     public function test_card_template_path_filter_uses_custom_template(): void {
         // Write a temporary custom template.
-        $custom_tpl = sys_get_temp_dir() . '/riaco_custom_card.php';
+        $custom_tpl = get_theme_root() . '/riaco_custom_card.php';
         file_put_contents( $custom_tpl, '<div class="custom-template">Custom!</div>' );
 
         PluginTestFactory::create_review();

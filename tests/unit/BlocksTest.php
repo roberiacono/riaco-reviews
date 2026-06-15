@@ -45,17 +45,17 @@ class BlocksTest extends WP_UnitTestCase {
         $this->assertSame( 3, $captured['count'] );
     }
 
-    public function test_legacy_tag_filter_maps_to_product(): void {
+    public function test_product_filter_maps_to_product(): void {
         $captured = null;
         add_filter( 'riaco_reviews_atts', function ( $atts ) use ( &$captured ) {
             $captured = $atts;
             return $atts;
         } );
 
-        $this->blocks->render( [ 'tagFilter' => 'some-tag' ] );
+        $this->blocks->render( [ 'productFilter' => 'some-product' ] );
 
         $this->assertNotNull( $captured );
-        $this->assertSame( 'some-tag', $captured['product'] );
+        $this->assertSame( 'some-product', $captured['product'] );
     }
 
     public function test_riaco_reviews_block_render_atts_filter_fires(): void {

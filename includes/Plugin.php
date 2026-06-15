@@ -33,10 +33,19 @@ class Plugin {
 
     public function init(): void {
         $this->load_services();
+        $this->maybe_upgrade();
         do_action( 'riaco_reviews_init', $this );
         $this->register();
         $this->loaded = true;
         do_action( 'riaco_reviews_loaded', $this );
+    }
+
+    private function maybe_upgrade(): void {
+        $stored = get_option( 'riaco_reviews_db_version', '' );
+        if ( $stored === $this->version ) {
+            return;
+        }
+        update_option( 'riaco_reviews_db_version', $this->version );
     }
 
     public function load_services(): void {
