@@ -35,7 +35,7 @@ class JsonLd implements ServiceInterface {
             ];
         }
 
-        echo '<script type="application/ld+json">' . wp_json_encode( $payload, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE ) . '</script>' . "\n";
+        echo '<script type="application/ld+json">' . wp_json_encode( $payload ) . '</script>' . "\n";
     }
 
     private function build( int $post_id, array $meta ): array {
