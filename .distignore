@@ -21,6 +21,9 @@ bin/
 node_modules/
 package-lock.json
 
+# Composer vendor (no production PHP deps — all packages are require-dev)
+vendor/
+
 # CI
 .github/
 

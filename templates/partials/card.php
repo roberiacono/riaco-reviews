@@ -58,7 +58,7 @@ if ( 'modern' === $atts['card_style'] ) :
                 <?php endif; ?>
                 <?php if ( $atts['show_date'] && ! empty( $meta['review_date'] ) ) : ?>
                     <?php $ts = strtotime( $meta['review_date'] ); ?>
-                    <?php if ( $ts ) : ?>
+                    <?php if ( false !== $ts ) : ?>
                         <time class="riaco-reviews__date" datetime="<?php echo esc_attr( $meta['review_date'] ); ?>">
                             <?php echo esc_html( wp_date( get_option( 'date_format' ), $ts ) ); ?>
                         </time>
@@ -71,7 +71,7 @@ if ( 'modern' === $atts['card_style'] ) :
             <?php /* translators: %d: star rating number from 1 to 5 */ ?>
             <div class="riaco-reviews__rating-compact" aria-label="<?php echo esc_attr( sprintf( __( '%d out of 5 stars', 'riaco-reviews' ), $rating ) ); ?>">
                 <span class="riaco-reviews__star riaco-reviews__star--filled" aria-hidden="true">★</span>
-                <span class="riaco-reviews__rating-value"><?php echo esc_html( number_format( $rating, 1, '.', '' ) ); ?></span>
+                <span class="riaco-reviews__rating-value"><?php echo esc_html( number_format_i18n( $rating, 1 ) ); ?></span>
             </div>
         <?php endif; ?>
 
@@ -250,7 +250,7 @@ if ( 'modern' === $atts['card_style'] ) :
                     <?php endif; ?>
                     <?php if ( $atts['show_date'] && ! empty( $meta['review_date'] ) ) : ?>
                         <?php $ts = strtotime( $meta['review_date'] ); ?>
-                        <?php if ( $ts ) : ?>
+                        <?php if ( false !== $ts ) : ?>
                             <time class="riaco-reviews__date" datetime="<?php echo esc_attr( $meta['review_date'] ); ?>">
                                 <?php echo esc_html( wp_date( get_option( 'date_format' ), $ts ) ); ?>
                             </time>

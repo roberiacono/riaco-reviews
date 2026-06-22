@@ -21,21 +21,21 @@ define( 'RIACO_REVIEWS_FILE',    __FILE__ );
 define( 'RIACO_REVIEWS_DIR',     plugin_dir_path( __FILE__ ) );
 define( 'RIACO_REVIEWS_URL',     plugin_dir_url( __FILE__ ) );
 
-if ( ! file_exists( __DIR__ . '/vendor/autoload.php' ) ) {
-    add_action( 'admin_notices', function() {
-        echo '<div class="notice notice-error"><p>'
-            . esc_html__( 'RIACO Reviews: Composer dependencies are missing. Please run composer install in the plugin directory.', 'riaco-reviews' )
-            . '</p></div>';
-    } );
-    return;
-}
-
-require __DIR__ . '/vendor/autoload.php';
+spl_autoload_register( function ( $class ) {
+    if ( strpos( $class, 'RIACO\\Reviews\\' ) !== 0 ) {
+        return;
+    }
+    $relative = substr( $class, strlen( 'RIACO\\Reviews\\' ) );
+    $file = __DIR__ . '/includes/' . str_replace( '\\', '/', $relative ) . '.php';
+    if ( file_exists( $file ) ) {
+        require $file;
+    }
+} );
 
 use RIACO\Reviews\Plugin;
 
-$plugin = new Plugin( __FILE__, RIACO_REVIEWS_VERSION );
-$plugin->load();
+$riaco_reviews_plugin = new Plugin( __FILE__, RIACO_REVIEWS_VERSION );
+$riaco_reviews_plugin->load();
 
-register_activation_hook( __FILE__, [ $plugin, 'on_activation' ] );
+register_activation_hook( __FILE__, [ $riaco_reviews_plugin, 'on_activation' ] );
 register_deactivation_hook( __FILE__, 'flush_rewrite_rules' );

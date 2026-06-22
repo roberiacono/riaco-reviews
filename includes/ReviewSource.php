@@ -125,7 +125,7 @@ class ReviewSource implements ServiceInterface {
 
     public function save_term_assignment( int $post_id ): void {
         $nonce = isset( $_POST['riaco_source_meta_box_nonce'] )
-            ? wp_unslash( $_POST['riaco_source_meta_box_nonce'] )
+            ? sanitize_text_field( wp_unslash( $_POST['riaco_source_meta_box_nonce'] ) )
             : '';
 
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_source_meta_box' ) ) return;
@@ -141,7 +141,7 @@ class ReviewSource implements ServiceInterface {
 
     public function save_image_meta( int $term_id ): void {
         $nonce = isset( $_POST['riaco_source_image_nonce'] )
-            ? wp_unslash( $_POST['riaco_source_image_nonce'] )
+            ? sanitize_text_field( wp_unslash( $_POST['riaco_source_image_nonce'] ) )
             : '';
 
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_source_image_save' ) ) return;

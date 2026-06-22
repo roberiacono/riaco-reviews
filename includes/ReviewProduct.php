@@ -126,7 +126,7 @@ class ReviewProduct implements ServiceInterface {
 
     public function save_term_meta( int $term_id ): void {
         $nonce = isset( $_POST['riaco_product_meta_nonce'] )
-            ? wp_unslash( $_POST['riaco_product_meta_nonce'] )
+            ? sanitize_text_field( wp_unslash( $_POST['riaco_product_meta_nonce'] ) )
             : '';
 
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_product_meta_save' ) ) return;
@@ -146,7 +146,7 @@ class ReviewProduct implements ServiceInterface {
 
     public function save_term_assignment( int $post_id ): void {
         $nonce = isset( $_POST['riaco_product_meta_box_nonce'] )
-            ? wp_unslash( $_POST['riaco_product_meta_box_nonce'] )
+            ? sanitize_text_field( wp_unslash( $_POST['riaco_product_meta_box_nonce'] ) )
             : '';
 
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_product_meta_box' ) ) return;

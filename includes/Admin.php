@@ -109,7 +109,7 @@ class Admin implements ServiceInterface {
 
     public function save_meta( int $post_id ): void {
         $nonce = isset( $_POST['riaco_review_meta_nonce'] )
-            ? wp_unslash( $_POST['riaco_review_meta_nonce'] )
+            ? sanitize_text_field( wp_unslash( $_POST['riaco_review_meta_nonce'] ) )
             : '';
 
         if ( ! $nonce || ! wp_verify_nonce( $nonce, 'riaco_review_meta' ) ) return;
