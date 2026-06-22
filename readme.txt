@@ -3,7 +3,7 @@ Contributors: prototipo88
 Tags: reviews, testimonials, star rating, review block, customer reviews
 Requires at least: 6.0
 Tested up to: 7.0
-Stable tag: 1.2.1
+Stable tag: 1.2.2
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -257,6 +257,12 @@ Yes. All user-facing strings are wrapped in WordPress i18n functions and the tex
 8. **Frontend — Mobile view** — Single-column layout on a narrow screen, demonstrating the responsive auto-fill column behaviour.
 
 == Changelog ==
+
+= 1.2.2 =
+* Security: added `sanitize_text_field()` around nonce values read from `$_POST` in Admin, ReviewSource, and ReviewProduct — resolves PHPCS `InputNotSanitized` warnings.
+* Fix: renamed the global `$plugin` variable to `$riaco_reviews_plugin` to avoid naming conflicts with other plugins.
+* Fix: corrected `strtotime()` truthiness guard in all three card-style templates from `if ($ts)` to `if (false !== $ts)` — reviews dated 1970-01-01 now display their date correctly on the frontend.
+* Fix: replaced `number_format()` with `number_format_i18n()` for the compact star-rating value in the Modern card style.
 
 = 1.2.1 =
 * Bug fixes and minor improvements.
